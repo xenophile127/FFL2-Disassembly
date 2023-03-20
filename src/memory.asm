@@ -874,9 +874,10 @@ wMusicVolumeEnvelopeChannel1:
 wMusicVolumeEnvelopePointerChannel1:
     ds 1                                               ;; cb2f
 .high:
-    ds 2                                               ;; cb30
+    ds 1                                               ;; cb30
 
-;wMusicLoopCounter2Channel1 is apparently unused
+wMusicLoopCounter2Channel1:
+    ds 1                                               ;; cb31
 
 wSoundEffectDurationChannel3:
     ds 1                                               ;; cb32
@@ -920,7 +921,10 @@ wMusicNotePitchChannel3:
     ds 2                                               ;; cb41
 
 wMusicEndedOnChannel3:
-    ds 7                                               ;; cb43
+    ds 6                                               ;; cb43
+
+wMusicLoopCounter2Channel3:
+    ds 1                                               ;; cb49
 
 wSoundEffectDurationChannel4:
     ds 17                                              ;; cb4a
