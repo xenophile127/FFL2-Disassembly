@@ -1374,7 +1374,7 @@ call_0d_4579:
     ldh  [rOBP1], A                                    ;; 0d:5021 $e0 $49
     ld   [wC702], A                                    ;; 0d:5023 $ea $02 $c7
     call call_0d_502c                                  ;; 0d:5026 $cd $2c $50
-    jp   jp_00_000b                                    ;; 0d:5029 $c3 $0b $00
+    jp   pop_all                                       ;; 0d:5029 $c3 $0b $00
 
 call_0d_502c:
     ld   A, [wD910]                                    ;; 0d:502c $fa $10 $d9
@@ -1383,7 +1383,7 @@ call_0d_502c:
     and  A, $7f                                        ;; 0d:5034 $e6 $7f
     add  A, A                                          ;; 0d:5036 $87
     ld   HL, data_0d_6700                              ;; 0d:5037 $21 $00 $67
-    rst  rst_00_0000                                   ;; 0d:503a $c7
+    rst  add_hl_a                                      ;; 0d:503a $c7
     call call_0d_5235                                  ;; 0d:503b $cd $35 $52
     ld   C, A                                          ;; 0d:503e $4f
     call call_0d_5235                                  ;; 0d:503f $cd $35 $52
@@ -1396,7 +1396,7 @@ call_0d_502c:
     and  A, $01                                        ;; 0d:504c $e6 $01
     ld   H, A                                          ;; 0d:504e $67
     ld   BC, data_0d_6000                              ;; 0d:504f $01 $00 $60
-    call call_00_005d                                  ;; 0d:5052 $cd $5d $00
+    call mul_hl_16_add_bc                              ;; 0d:5052 $cd $5d $00
     ld   DE, $8000                                     ;; 0d:5055 $11 $00 $80
     ld   A, $04                                        ;; 0d:5058 $3e $04
     ld   BC, $200                                      ;; 0d:505a $01 $00 $02
@@ -1450,7 +1450,7 @@ call_0d_50a6:
     and  A, $7f                                        ;; 0d:50ad $e6 $7f
     add  A, A                                          ;; 0d:50af $87
     ld   HL, data_0d_6800                              ;; 0d:50b0 $21 $00 $68
-    rst  rst_00_0000                                   ;; 0d:50b3 $c7
+    rst  add_hl_a                                      ;; 0d:50b3 $c7
     call call_0d_5227                                  ;; 0d:50b4 $cd $27 $52
     call call_0d_5205                                  ;; 0d:50b7 $cd $05 $52
 .jr_0d_50ba:
@@ -1549,7 +1549,7 @@ call_0d_50e7:
 .jr_0d_515a:
     ld   HL, wCC00                                     ;; 0d:515a $21 $00 $cc
     ld   B, $a0                                        ;; 0d:515d $06 $a0
-    call call_00_006c                                  ;; 0d:515f $cd $6c $00
+    call memclear                                      ;; 0d:515f $cd $6c $00
     ld   HL, wD93F                                     ;; 0d:5162 $21 $3f $d9
     ld   A, [HL+]                                      ;; 0d:5165 $2a
     ldh  [hFF90], A                                    ;; 0d:5166 $e0 $90
@@ -1655,7 +1655,7 @@ call_0d_51d6:
     dec  C                                             ;; 0d:51ed $0d
     jr   NZ, .jr_0d_51e1                               ;; 0d:51ee $20 $f1
     ld   A, $03                                        ;; 0d:51f0 $3e $03
-    rst  rst_00_0000                                   ;; 0d:51f2 $c7
+    rst  add_hl_a                                      ;; 0d:51f2 $c7
     ld   A, E                                          ;; 0d:51f3 $7b
     add  A, $09                                        ;; 0d:51f4 $c6 $09
     ld   E, A                                          ;; 0d:51f6 $5f
@@ -1728,7 +1728,7 @@ jr_0d_523b:
 call_0d_5240:
     ld   A, [wD974]                                    ;; 0d:5240 $fa $74 $d9
     ld   HL, wD933                                     ;; 0d:5243 $21 $33 $d9
-    rst  rst_00_0000                                   ;; 0d:5246 $c7
+    rst  add_hl_a                                      ;; 0d:5246 $c7
     ld   A, [HL]                                       ;; 0d:5247 $7e
     add  A, A                                          ;; 0d:5248 $87
     add  A, A                                          ;; 0d:5249 $87
@@ -1769,7 +1769,7 @@ jp_0d_525b:
     ld   A, [HL]                                       ;; 0d:5278 $7e
     push HL                                            ;; 0d:5279 $e5
     ld   HL, data_0d_6400                              ;; 0d:527a $21 $00 $64
-    rst  rst_00_0000                                   ;; 0d:527d $c7
+    rst  add_hl_a                                      ;; 0d:527d $c7
     ld   A, [HL]                                       ;; 0d:527e $7e
     and  A, $f0                                        ;; 0d:527f $e6 $f0
     swap A                                             ;; 0d:5281 $cb $37
@@ -1793,7 +1793,7 @@ jp_0d_525b:
     add  A, A                                          ;; 0d:529a $87
     add  A, B                                          ;; 0d:529b $80
     ld   HL, data_0d_6540                              ;; 0d:529c $21 $40 $65
-    rst  rst_00_0000                                   ;; 0d:529f $c7
+    rst  add_hl_a                                      ;; 0d:529f $c7
     ld   DE, wD933                                     ;; 0d:52a0 $11 $33 $d9
     ld   B, $03                                        ;; 0d:52a3 $06 $03
     call call_00_0080                                  ;; 0d:52a5 $cd $80 $00
@@ -1804,12 +1804,12 @@ jp_0d_525b:
     ldh  [hFF90], A                                    ;; 0d:52ad $e0 $90
     add  A, A                                          ;; 0d:52af $87
     ld   HL, wD927                                     ;; 0d:52b0 $21 $27 $d9
-    rst  rst_00_0000                                   ;; 0d:52b3 $c7
+    rst  add_hl_a                                      ;; 0d:52b3 $c7
     ld   C, [HL]                                       ;; 0d:52b4 $4e
     srl  C                                             ;; 0d:52b5 $cb $39
     ldh  A, [hFF90]                                    ;; 0d:52b7 $f0 $90
     ld   HL, wD933                                     ;; 0d:52b9 $21 $33 $d9
-    rst  rst_00_0000                                   ;; 0d:52bc $c7
+    rst  add_hl_a                                      ;; 0d:52bc $c7
     ld   A, [HL]                                       ;; 0d:52bd $7e
     sub  A, C                                          ;; 0d:52be $91
     ld   [DE], A                                       ;; 0d:52bf $12
@@ -1827,7 +1827,7 @@ jp_0d_525b:
     inc  HL                                            ;; 0d:52d2 $23
     push HL                                            ;; 0d:52d3 $e5
     ld   HL, data_0d_6550                              ;; 0d:52d4 $21 $50 $65
-    rst  rst_00_0000                                   ;; 0d:52d7 $c7
+    rst  add_hl_a                                      ;; 0d:52d7 $c7
     ld   A, [HL]                                       ;; 0d:52d8 $7e
     pop  HL                                            ;; 0d:52d9 $e1
     ld   [DE], A                                       ;; 0d:52da $12
@@ -1846,7 +1846,7 @@ call_0d_52e0:
     inc  HL                                            ;; 0d:52eb $23
     push HL                                            ;; 0d:52ec $e5
     ld   HL, data_0d_6500                              ;; 0d:52ed $21 $00 $65
-    rst  rst_00_0000                                   ;; 0d:52f0 $c7
+    rst  add_hl_a                                      ;; 0d:52f0 $c7
     ld   A, [HL]                                       ;; 0d:52f1 $7e
     and  A, $f0                                        ;; 0d:52f2 $e6 $f0
     swap A                                             ;; 0d:52f4 $cb $37
@@ -1865,12 +1865,12 @@ jp_0d_5302:
     ldh  A, [hFF90]                                    ;; 0d:5302 $f0 $90
     add  A, A                                          ;; 0d:5304 $87
     ld   HL, wD921                                     ;; 0d:5305 $21 $21 $d9
-    rst  rst_00_0000                                   ;; 0d:5308 $c7
+    rst  add_hl_a                                      ;; 0d:5308 $c7
     ld   A, [HL]                                       ;; 0d:5309 $7e
     add  A, A                                          ;; 0d:530a $87
     add  A, [HL]                                       ;; 0d:530b $86
     ld   HL, data_0d_6510                              ;; 0d:530c $21 $10 $65
-    rst  rst_00_0000                                   ;; 0d:530f $c7
+    rst  add_hl_a                                      ;; 0d:530f $c7
     ld   A, [HL+]                                      ;; 0d:5310 $2a
     push AF                                            ;; 0d:5311 $f5
     ld   C, [HL]                                       ;; 0d:5312 $4e
@@ -1879,14 +1879,14 @@ jp_0d_5302:
     ldh  A, [hFF90]                                    ;; 0d:5315 $f0 $90
     add  A, A                                          ;; 0d:5317 $87
     ld   HL, wD92E                                     ;; 0d:5318 $21 $2e $d9
-    rst  rst_00_0000                                   ;; 0d:531b $c7
+    rst  add_hl_a                                      ;; 0d:531b $c7
     ld   D, [HL]                                       ;; 0d:531c $56
     ld   HL, wD922                                     ;; 0d:531d $21 $22 $d9
-    rst  rst_00_0000                                   ;; 0d:5320 $c7
+    rst  add_hl_a                                      ;; 0d:5320 $c7
     ld   H, [HL]                                       ;; 0d:5321 $66
     ld   L, D                                          ;; 0d:5322 $6a
     call call_00_0150                                  ;; 0d:5323 $cd $50 $01
-    call call_00_005d                                  ;; 0d:5326 $cd $5d $00
+    call mul_hl_16_add_bc                              ;; 0d:5326 $cd $5d $00
     ld   C, D                                          ;; 0d:5329 $4a
     ld   B, $00                                        ;; 0d:532a $06 $00
     sla  C                                             ;; 0d:532c $cb $21
@@ -1910,13 +1910,13 @@ call_0d_533e:
     pop  AF                                            ;; 0d:5346 $f1
     call call_0d_5350                                  ;; 0d:5347 $cd $50 $53
     call call_0d_60ce                                  ;; 0d:534a $cd $ce $60
-    jp   jp_00_000b                                    ;; 0d:534d $c3 $0b $00
+    jp   pop_all                                       ;; 0d:534d $c3 $0b $00
 
 call_0d_5350:
     and  A, $3f                                        ;; 0d:5350 $e6 $3f
     add  A, A                                          ;; 0d:5352 $87
     ld   HL, .data_0d_5eb5                             ;; 0d:5353 $21 $b5 $5e
-    rst  rst_00_0000                                   ;; 0d:5356 $c7
+    rst  add_hl_a                                      ;; 0d:5356 $c7
     ld   A, [HL+]                                      ;; 0d:5357 $2a
     ld   H, [HL]                                       ;; 0d:5358 $66
     ld   L, A                                          ;; 0d:5359 $6f
@@ -2383,7 +2383,7 @@ jp_0d_60be:
 call_0d_60c6:
     ld   B, $a0                                        ;; 0d:60c6 $06 $a0
     ld   HL, wCC00                                     ;; 0d:60c8 $21 $00 $cc
-    jp   call_00_006c                                  ;; 0d:60cb $c3 $6c $00
+    jp   memclear                                      ;; 0d:60cb $c3 $6c $00
 
 call_0d_60ce:
     call call_0d_60c6                                  ;; 0d:60ce $cd $c6 $60

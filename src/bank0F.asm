@@ -1101,7 +1101,7 @@ data_0f_527b:
     call call_00_009c                                  ;; 0f:60b6 $cd $9c $00
     ld   HL, wCC00                                     ;; 0f:60b9 $21 $00 $cc
     ld   B, $a0                                        ;; 0f:60bc $06 $a0
-    call call_00_006c                                  ;; 0f:60be $cd $6c $00
+    call memclear                                      ;; 0f:60be $cd $6c $00
     rst  rst_00_0010                                   ;; 0f:60c1 $d7
     ld   A, $cc                                        ;; 0f:60c2 $3e $cc
     rst  rst_00_0018                                   ;; 0f:60c4 $df
@@ -1216,7 +1216,7 @@ call_0f_6166:
     jr   NZ, .jr_0f_616b                               ;; 0f:6174 $20 $f5
     pop  HL                                            ;; 0f:6176 $e1
     ld   A, $20                                        ;; 0f:6177 $3e $20
-    rst  rst_00_0000                                   ;; 0f:6179 $c7
+    rst  add_hl_a                                      ;; 0f:6179 $c7
     dec  B                                             ;; 0f:617a $05
     jr   NZ, .jr_0f_6169                               ;; 0f:617b $20 $ec
     jp   call_00_017a                                  ;; 0f:617d $c3 $7a $01
@@ -1225,10 +1225,10 @@ call_0f_6180:
     ldh  A, [hFF90]                                    ;; 0f:6180 $f0 $90
     add  A, A                                          ;; 0f:6182 $87
     ld   HL, wD92D                                     ;; 0f:6183 $21 $2d $d9
-    rst  rst_00_0000                                   ;; 0f:6186 $c7
+    rst  add_hl_a                                      ;; 0f:6186 $c7
     ld   D, [HL]                                       ;; 0f:6187 $56
     ld   HL, wD927                                     ;; 0f:6188 $21 $27 $d9
-    rst  rst_00_0000                                   ;; 0f:618b $c7
+    rst  add_hl_a                                      ;; 0f:618b $c7
     ld   C, [HL]                                       ;; 0f:618c $4e
     inc  HL                                            ;; 0f:618d $23
     ld   B, [HL]                                       ;; 0f:618e $46
@@ -1277,7 +1277,7 @@ call_0f_61ca:
     push BC                                            ;; 0f:61cb $c5
     push DE                                            ;; 0f:61cc $d5
     ld   HL, wD936                                     ;; 0f:61cd $21 $36 $d9
-    rst  rst_00_0000                                   ;; 0f:61d0 $c7
+    rst  add_hl_a                                      ;; 0f:61d0 $c7
     ld   E, [HL]                                       ;; 0f:61d1 $5e
     inc  HL                                            ;; 0f:61d2 $23
     inc  HL                                            ;; 0f:61d3 $23
@@ -1286,7 +1286,7 @@ call_0f_61ca:
     ld   BC, $9800                                     ;; 0f:61d6 $01 $00 $98
     ld   H, C                                          ;; 0f:61d9 $61
     ld   D, C                                          ;; 0f:61da $51
-    call call_00_0065                                  ;; 0f:61db $cd $65 $00
+    call mul_hl_32_add_de                              ;; 0f:61db $cd $65 $00
     add  HL, BC                                        ;; 0f:61de $09
     pop  DE                                            ;; 0f:61df $d1
     pop  BC                                            ;; 0f:61e0 $c1
@@ -1321,13 +1321,13 @@ call_0f_61ed:
     jr   NC, .jr_0f_623c                               ;; 0f:6203 $30 $37
     ldh  [hFF90], A                                    ;; 0f:6205 $e0 $90
     ld   HL, data_0f_62a2                              ;; 0f:6207 $21 $a2 $62
-    rst  rst_00_0000                                   ;; 0f:620a $c7
+    rst  add_hl_a                                      ;; 0f:620a $c7
     ld   A, [HL]                                       ;; 0f:620b $7e
     ldh  [hFF91], A                                    ;; 0f:620c $e0 $91
     call call_0f_6240                                  ;; 0f:620e $cd $40 $62
     ld   HL, data_0f_629e                              ;; 0f:6211 $21 $9e $62
     ldh  A, [hFF90]                                    ;; 0f:6214 $f0 $90
-    rst  rst_00_0000                                   ;; 0f:6216 $c7
+    rst  add_hl_a                                      ;; 0f:6216 $c7
     ld   D, [HL]                                       ;; 0f:6217 $56
 .jr_0f_6218:
     ldh  A, [rLY]                                      ;; 0f:6218 $f0 $44
@@ -1489,7 +1489,7 @@ call_0f_62e9:
     push HL                                            ;; 0f:62ec $e5
     ld   A, C                                          ;; 0f:62ed $79
     ld   HL, wD90D                                     ;; 0f:62ee $21 $0d $d9
-    rst  rst_00_0000                                   ;; 0f:62f1 $c7
+    rst  add_hl_a                                      ;; 0f:62f1 $c7
     ld   A, [HL]                                       ;; 0f:62f2 $7e
     and  A, A                                          ;; 0f:62f3 $a7
     jp   NZ, .jp_0f_63e3                               ;; 0f:62f4 $c2 $e3 $63
@@ -1498,7 +1498,7 @@ call_0f_62e9:
     ld   A, C                                          ;; 0f:62f9 $79
     ldh  [hFF90], A                                    ;; 0f:62fa $e0 $90
     ld   HL, wD986                                     ;; 0f:62fc $21 $86 $d9
-    rst  rst_00_0000                                   ;; 0f:62ff $c7
+    rst  add_hl_a                                      ;; 0f:62ff $c7
     ld   A, [HL]                                       ;; 0f:6300 $7e
     and  A, A                                          ;; 0f:6301 $a7
     jp   NZ, .jp_0f_63e3                               ;; 0f:6302 $c2 $e3 $63
@@ -1508,7 +1508,7 @@ call_0f_62e9:
     ldh  A, [hFF90]                                    ;; 0f:630d $f0 $90
     add  A, A                                          ;; 0f:630f $87
     ld   HL, wD927                                     ;; 0f:6310 $21 $27 $d9
-    rst  rst_00_0000                                   ;; 0f:6313 $c7
+    rst  add_hl_a                                      ;; 0f:6313 $c7
     ld   A, [HL+]                                      ;; 0f:6314 $2a
     ldh  [hFF91], A                                    ;; 0f:6315 $e0 $91
     ld   A, [HL]                                       ;; 0f:6317 $7e
@@ -1523,14 +1523,14 @@ call_0f_62e9:
     ld   D, H                                          ;; 0f:6327 $54
     ld   L, C                                          ;; 0f:6328 $69
     ld   H, $00                                        ;; 0f:6329 $26 $00
-    call call_00_0065                                  ;; 0f:632b $cd $65 $00
+    call mul_hl_32_add_de                              ;; 0f:632b $cd $65 $00
     call call_0f_6450                                  ;; 0f:632e $cd $50 $64
 .jr_0f_6331:
     rst  rst_00_0010                                   ;; 0f:6331 $d7
     call call_0f_6439                                  ;; 0f:6332 $cd $39 $64
     call call_0f_642e                                  ;; 0f:6335 $cd $2e $64
     ld   A, $20                                        ;; 0f:6338 $3e $20
-    rst  rst_00_0000                                   ;; 0f:633a $c7
+    rst  add_hl_a                                      ;; 0f:633a $c7
     call call_0f_6440                                  ;; 0f:633b $cd $40 $64
     rst  rst_00_0010                                   ;; 0f:633e $d7
     call call_0f_6449                                  ;; 0f:633f $cd $49 $64
@@ -1548,7 +1548,7 @@ call_0f_62e9:
     jp   NZ, .jp_0f_63e3                               ;; 0f:6358 $c2 $e3 $63
     ldh  A, [hFF90]                                    ;; 0f:635b $f0 $90
     ld   HL, wD933                                     ;; 0f:635d $21 $33 $d9
-    rst  rst_00_0000                                   ;; 0f:6360 $c7
+    rst  add_hl_a                                      ;; 0f:6360 $c7
     ld   A, [HL]                                       ;; 0f:6361 $7e
     add  A, A                                          ;; 0f:6362 $87
     add  A, A                                          ;; 0f:6363 $87
@@ -1557,11 +1557,11 @@ call_0f_62e9:
     ld   E, A                                          ;; 0f:6367 $5f
     ldh  A, [hFF90]                                    ;; 0f:6368 $f0 $90
     ld   HL, wD939                                     ;; 0f:636a $21 $39 $d9
-    rst  rst_00_0000                                   ;; 0f:636d $c7
+    rst  add_hl_a                                      ;; 0f:636d $c7
     ld   D, [HL]                                       ;; 0f:636e $56
     add  A, A                                          ;; 0f:636f $87
     ld   HL, wD928                                     ;; 0f:6370 $21 $28 $d9
-    rst  rst_00_0000                                   ;; 0f:6373 $c7
+    rst  add_hl_a                                      ;; 0f:6373 $c7
     ld   A, [HL]                                       ;; 0f:6374 $7e
     srl  A                                             ;; 0f:6375 $cb $3f
     add  A, D                                          ;; 0f:6377 $82
@@ -1602,14 +1602,14 @@ call_0f_62e9:
     srl  A                                             ;; 0f:63ac $cb $3f
     add  A, A                                          ;; 0f:63ae $87
     ld   HL, wD946                                     ;; 0f:63af $21 $46 $d9
-    rst  rst_00_0000                                   ;; 0f:63b2 $c7
+    rst  add_hl_a                                      ;; 0f:63b2 $c7
     ld   C, A                                          ;; 0f:63b3 $4f
     ld   A, E                                          ;; 0f:63b4 $7b
     sub  A, D                                          ;; 0f:63b5 $92
     ld   [HL], A                                       ;; 0f:63b6 $77
     ld   A, C                                          ;; 0f:63b7 $79
     ld   HL, wD94E                                     ;; 0f:63b8 $21 $4e $d9
-    rst  rst_00_0000                                   ;; 0f:63bb $c7
+    rst  add_hl_a                                      ;; 0f:63bb $c7
     ld   A, E                                          ;; 0f:63bc $7b
     add  A, D                                          ;; 0f:63bd $82
     ld   [HL], A                                       ;; 0f:63be $77
@@ -1630,7 +1630,7 @@ call_0f_62e9:
     jr   NZ, .jr_0f_63c6                               ;; 0f:63d1 $20 $f3
     ld   HL, wCC00                                     ;; 0f:63d3 $21 $00 $cc
     ld   B, $28                                        ;; 0f:63d6 $06 $28
-    call call_00_006c                                  ;; 0f:63d8 $cd $6c $00
+    call memclear                                      ;; 0f:63d8 $cd $6c $00
     rst  rst_00_0010                                   ;; 0f:63db $d7
     ld   A, $cc                                        ;; 0f:63dc $3e $cc
     rst  rst_00_0018                                   ;; 0f:63de $df
@@ -1693,7 +1693,7 @@ call_0f_642e:
     ldh  A, [hFF91]                                    ;; 0f:642f $f0 $91
     ld   B, A                                          ;; 0f:6431 $47
     ld   A, $ff                                        ;; 0f:6432 $3e $ff
-    call call_00_006d                                  ;; 0f:6434 $cd $6d $00
+    call memset                                        ;; 0f:6434 $cd $6d $00
     pop  HL                                            ;; 0f:6437 $e1
     ret                                                ;; 0f:6438 $c9
 
@@ -1751,7 +1751,7 @@ call_0f_6471:
     push HL                                            ;; 0f:6474 $e5
     ldh  A, [hFF90]                                    ;; 0f:6475 $f0 $90
     ld   HL, wD986                                     ;; 0f:6477 $21 $86 $d9
-    rst  rst_00_0000                                   ;; 0f:647a $c7
+    rst  add_hl_a                                      ;; 0f:647a $c7
     ld   [HL], $00                                     ;; 0f:647b $36 $00
     call call_0f_61ca                                  ;; 0f:647d $cd $ca $61
     ld   DE, rNR41                                     ;; 0f:6480 $11 $20 $ff
@@ -1759,10 +1759,10 @@ call_0f_6471:
     call call_0f_6440                                  ;; 0f:6484 $cd $40 $64
     ldh  A, [hFF90]                                    ;; 0f:6487 $f0 $90
     ld   HL, wD936                                     ;; 0f:6489 $21 $36 $d9
-    rst  rst_00_0000                                   ;; 0f:648c $c7
+    rst  add_hl_a                                      ;; 0f:648c $c7
     ld   A, [HL]                                       ;; 0f:648d $7e
     ld   HL, $9800                                     ;; 0f:648e $21 $00 $98
-    rst  rst_00_0000                                   ;; 0f:6491 $c7
+    rst  add_hl_a                                      ;; 0f:6491 $c7
     call call_0f_6450                                  ;; 0f:6492 $cd $50 $64
     ld   A, $08                                        ;; 0f:6495 $3e $08
     ldh  [hFF91], A                                    ;; 0f:6497 $e0 $91
@@ -1776,7 +1776,7 @@ call_0f_6471:
     call call_0f_6166                                  ;; 0f:64a7 $cd $66 $61
     call call_0f_6439                                  ;; 0f:64aa $cd $39 $64
     ld   A, $20                                        ;; 0f:64ad $3e $20
-    rst  rst_00_0000                                   ;; 0f:64af $c7
+    rst  add_hl_a                                      ;; 0f:64af $c7
     call call_0f_6440                                  ;; 0f:64b0 $cd $40 $64
     ld   HL, hFF91                                     ;; 0f:64b3 $21 $91 $ff
     dec  [HL]                                          ;; 0f:64b6 $35
@@ -1784,16 +1784,16 @@ call_0f_6471:
 .jr_0f_64b9:
     ldh  A, [hFF92]                                    ;; 0f:64b9 $f0 $92
     and  A, A                                          ;; 0f:64bb $a7
-    jp   Z, jp_00_000b                                 ;; 0f:64bc $ca $0b $00
+    jp   Z, pop_all                                    ;; 0f:64bc $ca $0b $00
     call call_0f_64db                                  ;; 0f:64bf $cd $db $64
     call call_0f_6449                                  ;; 0f:64c2 $cd $49 $64
     ld   B, C                                          ;; 0f:64c5 $41
     ld   A, $ff                                        ;; 0f:64c6 $3e $ff
     rst  rst_00_0010                                   ;; 0f:64c8 $d7
-    call call_00_006d                                  ;; 0f:64c9 $cd $6d $00
+    call memset                                        ;; 0f:64c9 $cd $6d $00
     call call_0f_6449                                  ;; 0f:64cc $cd $49 $64
     ld   A, $20                                        ;; 0f:64cf $3e $20
-    rst  rst_00_0000                                   ;; 0f:64d1 $c7
+    rst  add_hl_a                                      ;; 0f:64d1 $c7
     call call_0f_6450                                  ;; 0f:64d2 $cd $50 $64
     ld   HL, hFF92                                     ;; 0f:64d5 $21 $92 $ff
     dec  [HL]                                          ;; 0f:64d8 $35
@@ -1804,7 +1804,7 @@ call_0f_64db:
     ldh  A, [hFF90]                                    ;; 0f:64dc $f0 $90
     add  A, A                                          ;; 0f:64de $87
     ld   HL, wD927                                     ;; 0f:64df $21 $27 $d9
-    rst  rst_00_0000                                   ;; 0f:64e2 $c7
+    rst  add_hl_a                                      ;; 0f:64e2 $c7
     ld   C, [HL]                                       ;; 0f:64e3 $4e
     inc  HL                                            ;; 0f:64e4 $23
     ld   B, [HL]                                       ;; 0f:64e5 $46

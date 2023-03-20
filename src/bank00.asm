@@ -7,7 +7,7 @@ INCLUDE "include/constants.inc"
 
 SECTION "bank00", ROM0[$0000]
 
-rst_00_0000:
+add_hl_a:
     push BC                                            ;; 00:0000 $c5
     ld   B, $00                                        ;; 00:0001 $06 $00
     ld   C, A                                          ;; 00:0003 $4f
@@ -19,7 +19,7 @@ rst_00_0000:
 rst_00_0008:
     jp   jp_00_0908                                    ;; 00:0008 $c3 $08 $09
 
-jp_00_000b:
+pop_all:
     pop  HL                                            ;; 00:000b $e1
     pop  DE                                            ;; 00:000c $d1
     pop  BC                                            ;; 00:000d $c1
@@ -62,10 +62,10 @@ isrLCDC:
     jp   wC706                                         ;; 00:0048 $c3 $06 $c7
     db   $87                                           ;; 00:004b ?
 
-call_00_004c:
+mul_a_32:
     add  A, A                                          ;; 00:004c $87
 
-call_00_004d:
+mul_a_16:
     add  A, A                                          ;; 00:004d $87
     add  A, A                                          ;; 00:004e $87
     add  A, A                                          ;; 00:004f $87
@@ -80,41 +80,41 @@ isrSerial:
     ret                                                ;; 00:0059 $c9
     db   $29, $29                                      ;; 00:005a ??
 
-call_00_005c:
+mul_hl_32_add_bc:
     add  HL, HL                                        ;; 00:005c $29
 
-call_00_005d:
+mul_hl_16_add_bc:
     add  HL, HL                                        ;; 00:005d $29
 
-call_00_005e:
+mul_hl_8_add_bc:
     add  HL, HL                                        ;; 00:005e $29
     add  HL, HL                                        ;; 00:005f $29
     add  HL, HL                                        ;; 00:0060 $29
     add  HL, BC                                        ;; 00:0061 $09
     ret                                                ;; 00:0062 $c9
 
-call_00_0063:
+mul_hl_128_add_de:
     add  HL, HL                                        ;; 00:0063 $29
     add  HL, HL                                        ;; 00:0064 $29
 
-call_00_0065:
+mul_hl_32_add_de:
     add  HL, HL                                        ;; 00:0065 $29
     add  HL, HL                                        ;; 00:0066 $29
 
-call_00_0067:
+mul_hl_8_add_de:
     add  HL, HL                                        ;; 00:0067 $29
     add  HL, HL                                        ;; 00:0068 $29
     add  HL, HL                                        ;; 00:0069 $29
     add  HL, DE                                        ;; 00:006a $19
     ret                                                ;; 00:006b $c9
 
-call_00_006c:
+memclear:
     xor  A, A                                          ;; 00:006c $af
 
-call_00_006d:
+memset:
     ld   [HL+], A                                      ;; 00:006d $22
     dec  B                                             ;; 00:006e $05
-    jr   NZ, call_00_006d                              ;; 00:006f $20 $fc
+    jr   NZ, memset                                    ;; 00:006f $20 $fc
     ret                                                ;; 00:0071 $c9
 
 call_00_0072:
@@ -161,7 +161,7 @@ call_00_0089:
 
 call_00_0094:
     call call_00_1674                                  ;; 00:0094 $cd $74 $16
-    call call_00_006d                                  ;; 00:0097 $cd $6d $00
+    call memset                                        ;; 00:0097 $cd $6d $00
     jr   jr_00_00b2                                    ;; 00:009a $18 $16
 
 call_00_009c:
@@ -231,7 +231,7 @@ SECTION "entry", ROM0[$0100]
 
 entry:
     nop                                                ;; 00:0100 $00
-    jp   jp_00_0200                                    ;; 00:0101 $c3 $00 $02
+    jp   init                                          ;; 00:0101 $c3 $00 $02
     ds   $30                                           ;; 00:0104
     db   "SAGA2", $00, $00, $00, $00, $00, $00, $00, $00, $00, $00 ;; 00:0134
     db   CART_COMPATIBLE_DMG                           ;; 00:0143
@@ -392,7 +392,7 @@ call_00_01f2:
     db   $00, $00, $00, $00, $00, $00, $00, $00        ;; 00:01f5 ????????
     db   $00, $00, $00                                 ;; 00:01fd ???
 
-jp_00_0200:
+init:
     di                                                 ;; 00:0200 $f3
     ld   SP, wCF00                                     ;; 00:0201 $31 $00 $cf
     ld   A, $80                                        ;; 00:0204 $3e $80
@@ -421,7 +421,7 @@ jp_00_0200:
     push BC                                            ;; 00:0229 $c5
     ld   HL, wC000                                     ;; 00:022a $21 $00 $c0
     ld   B, $a0                                        ;; 00:022d $06 $a0
-    call call_00_006c                                  ;; 00:022f $cd $6c $00
+    call memclear                                      ;; 00:022f $cd $6c $00
     ld   HL, wC100                                     ;; 00:0232 $21 $00 $c1
     ld   BC, $d00                                      ;; 00:0235 $01 $00 $0d
     call call_00_0072                                  ;; 00:0238 $cd $72 $00
@@ -430,7 +430,7 @@ jp_00_0200:
     call call_00_0072                                  ;; 00:023f $cd $72 $00
     ld   HL, hFF80                                     ;; 00:0242 $21 $80 $ff
     ld   B, $7f                                        ;; 00:0245 $06 $7f
-    call call_00_006c                                  ;; 00:0247 $cd $6c $00
+    call memclear                                      ;; 00:0247 $cd $6c $00
     pop  BC                                            ;; 00:024a $c1
     pop  HL                                            ;; 00:024b $e1
     ld   A, $1b                                        ;; 00:024c $3e $1b
@@ -510,9 +510,9 @@ jp_00_0200:
 .jr_00_02d7:
     ld   B, $04                                        ;; 00:02d7 $06 $04
     ld   A, $ff                                        ;; 00:02d9 $3e $ff
-    call call_00_006d                                  ;; 00:02db $cd $6d $00
+    call memset                                        ;; 00:02db $cd $6d $00
     ld   A, $1c                                        ;; 00:02de $3e $1c
-    rst  rst_00_0000                                   ;; 00:02e0 $c7
+    rst  add_hl_a                                      ;; 00:02e0 $c7
     dec  C                                             ;; 00:02e1 $0d
     jr   NZ, .jr_00_02d7                               ;; 00:02e2 $20 $f3
     ld   A, $01                                        ;; 00:02e4 $3e $01
@@ -759,7 +759,7 @@ jp_00_043e:
     push DE                                            ;; 00:043e $d5
     push HL                                            ;; 00:043f $e5
     ld   HL, wC0A0                                     ;; 00:0440 $21 $a0 $c0
-    rst  rst_00_0000                                   ;; 00:0443 $c7
+    rst  add_hl_a                                      ;; 00:0443 $c7
     inc  [HL]                                          ;; 00:0444 $34
     ld   L, [HL]                                       ;; 00:0445 $6e
     ld   H, $40                                        ;; 00:0446 $26 $40
@@ -855,6 +855,8 @@ call_00_04b1:
     pop  BC                                            ;; 00:04bd $c1
     ret                                                ;; 00:04be $c9
 
+; The 3 bytes after this instruction indicate which bank and address to call
+;@FFLFarcall
 call_00_04bf:
     push AF                                            ;; 00:04bf $f5
     push HL                                            ;; 00:04c0 $e5
@@ -966,7 +968,7 @@ jp_00_0536:
     dec  A                                             ;; 00:053d $3d
     ld   B, $80                                        ;; 00:053e $06 $80
     ld   HL, wC380                                     ;; 00:0540 $21 $80 $c3
-    jp   call_00_006d                                  ;; 00:0543 $c3 $6d $00
+    jp   memset                                        ;; 00:0543 $c3 $6d $00
 
 call_00_0546:
     ld   HL, hFF97                                     ;; 00:0546 $21 $97 $ff
@@ -1059,7 +1061,7 @@ call_00_055d:
     ld   A, [DE]                                       ;; 00:05be $1a
     inc  DE                                            ;; 00:05bf $13
     ld   HL, $7e80                                     ;; 00:05c0 $21 $80 $7e
-    rst  rst_00_0000                                   ;; 00:05c3 $c7
+    rst  add_hl_a                                      ;; 00:05c3 $c7
     ldh  A, [hFF91]                                    ;; 00:05c4 $f0 $91
     cp   A, $03                                        ;; 00:05c6 $fe $03
     ld   A, [HL]                                       ;; 00:05c8 $7e
@@ -1089,8 +1091,8 @@ call_00_05d9:
 .jr_00_05e5:
     ld   A, B                                          ;; 00:05e5 $78
     call call_00_05ef                                  ;; 00:05e6 $cd $ef $05
-    call call_00_004c                                  ;; 00:05e9 $cd $4c $00
-    rst  rst_00_0000                                   ;; 00:05ec $c7
+    call mul_a_32                                      ;; 00:05e9 $cd $4c $00
+    rst  add_hl_a                                      ;; 00:05ec $c7
 .jr_00_05ed:
     pop  BC                                            ;; 00:05ed $c1
     ret                                                ;; 00:05ee $c9
@@ -1154,7 +1156,7 @@ call_00_062e:
     srl  A                                             ;; 00:0631 $cb $3f
     srl  A                                             ;; 00:0633 $cb $3f
     ld   HL, wC306                                     ;; 00:0635 $21 $06 $c3
-    rst  rst_00_0000                                   ;; 00:0638 $c7
+    rst  add_hl_a                                      ;; 00:0638 $c7
     ld   A, C                                          ;; 00:0639 $79
     and  A, $07                                        ;; 00:063a $e6 $07
     ld   C, A                                          ;; 00:063c $4f
@@ -1195,7 +1197,7 @@ call_00_0661:
     srl  A                                             ;; 00:0664 $cb $3f
     push AF                                            ;; 00:0666 $f5
     ld   HL, wC2F6                                     ;; 00:0667 $21 $f6 $c2
-    rst  rst_00_0000                                   ;; 00:066a $c7
+    rst  add_hl_a                                      ;; 00:066a $c7
     pop  AF                                            ;; 00:066b $f1
     ld   A, [HL]                                       ;; 00:066c $7e
     ret                                                ;; 00:066d $c9
@@ -1213,7 +1215,7 @@ call_00_0679:
     ld   A, D                                          ;; 00:0679 $7a
     add  A, A                                          ;; 00:067a $87
     ld   HL, wC31D                                     ;; 00:067b $21 $1d $c3
-    rst  rst_00_0000                                   ;; 00:067e $c7
+    rst  add_hl_a                                      ;; 00:067e $c7
     bit  3, E                                          ;; 00:067f $cb $5b
     jr   Z, .jr_00_0684                                ;; 00:0681 $28 $01
     inc  HL                                            ;; 00:0683 $23
@@ -1336,7 +1338,7 @@ jp_00_0711:
 jp_00_0719:
     ld   HL, $13be                                     ;; 00:0719 $21 $be $13
     add  A, A                                          ;; 00:071c $87
-    rst  rst_00_0000                                   ;; 00:071d $c7
+    rst  add_hl_a                                      ;; 00:071d $c7
     ld   E, [HL]                                       ;; 00:071e $5e
     inc  HL                                            ;; 00:071f $23
     ld   D, [HL]                                       ;; 00:0720 $56
@@ -1348,7 +1350,7 @@ jr_00_0724:
     ld   HL, $6560                                     ;; 00:0724 $21 $60 $65
     sub  A, $4e                                        ;; 00:0727 $d6 $4e
     add  A, A                                          ;; 00:0729 $87
-    rst  rst_00_0000                                   ;; 00:072a $c7
+    rst  add_hl_a                                      ;; 00:072a $c7
     ld   A, $0f                                        ;; 00:072b $3e $0f
     call call_00_00d2                                  ;; 00:072d $cd $d2 $00
     inc  HL                                            ;; 00:0730 $23
@@ -1550,7 +1552,7 @@ jp_00_0800:
     jr   .jr_00_0843                                   ;; 00:0846 $18 $fb
     ldh  A, [hFFA1]                                    ;; 00:0848 $f0 $a1
     rst  rst_00_0028                                   ;; 00:084a $ef
-    jp   jp_00_000b                                    ;; 00:084b $c3 $0b $00
+    jp   pop_all                                       ;; 00:084b $c3 $0b $00
 .jr_00_084e:
     push AF                                            ;; 00:084e $f5
     push BC                                            ;; 00:084f $c5
@@ -1601,7 +1603,7 @@ jp_00_0800:
     ld   A, [HL]                                       ;; 00:089b $7e
     dec  A                                             ;; 00:089c $3d
     ld   [wC77C], A                                    ;; 00:089d $ea $7c $c7
-    jp   jp_00_000b                                    ;; 00:08a0 $c3 $0b $00
+    jp   pop_all                                       ;; 00:08a0 $c3 $0b $00
 
 call_00_08a3:
     dec  DE                                            ;; 00:08a3 $1b
@@ -1630,7 +1632,7 @@ call_00_08aa:
     ld   HL, $9cc1                                     ;; 00:08cb $21 $c1 $9c
 .jr_00_08ce:
     ld   A, $ff                                        ;; 00:08ce $3e $ff
-    call call_00_006d                                  ;; 00:08d0 $cd $6d $00
+    call memset                                        ;; 00:08d0 $cd $6d $00
     call call_00_1691                                  ;; 00:08d3 $cd $91 $16
 
 jp_00_08d6:
@@ -1679,7 +1681,7 @@ jp_00_0908:
     xor  A, A                                          ;; 00:090c $af
     ld   [wC7D2], A                                    ;; 00:090d $ea $d2 $c7
     call call_00_0916                                  ;; 00:0910 $cd $16 $09
-    jp   jp_00_000b                                    ;; 00:0913 $c3 $0b $00
+    jp   pop_all                                       ;; 00:0913 $c3 $0b $00
 
 call_00_0916:
     xor  A, A                                          ;; 00:0916 $af
@@ -1800,7 +1802,7 @@ call_00_0916:
     dec  B                                             ;; 00:09d6 $05
     dec  B                                             ;; 00:09d7 $05
     ld   A, B                                          ;; 00:09d8 $78
-    rst  rst_00_0000                                   ;; 00:09d9 $c7
+    rst  add_hl_a                                      ;; 00:09d9 $c7
     jr   .jr_00_09df                                   ;; 00:09da $18 $03
 .jr_00_09dc:
     call call_00_0ae2                                  ;; 00:09dc $cd $e2 $0a
@@ -1872,7 +1874,7 @@ call_00_0a2b:
     push AF                                            ;; 00:0a42 $f5
     ld   A, $ff                                        ;; 00:0a43 $3e $ff
     ld   B, E                                          ;; 00:0a45 $43
-    call call_00_006d                                  ;; 00:0a46 $cd $6d $00
+    call memset                                        ;; 00:0a46 $cd $6d $00
     pop  AF                                            ;; 00:0a49 $f1
     inc  A                                             ;; 00:0a4a $3c
     ld   [HL+], A                                      ;; 00:0a4b $22
@@ -1886,7 +1888,7 @@ call_00_0a52:
     ld   [HL+], A                                      ;; 00:0a52 $22
     ld   B, E                                          ;; 00:0a53 $43
     inc  A                                             ;; 00:0a54 $3c
-    call call_00_006d                                  ;; 00:0a55 $cd $6d $00
+    call memset                                        ;; 00:0a55 $cd $6d $00
     inc  A                                             ;; 00:0a58 $3c
     ld   [HL+], A                                      ;; 00:0a59 $22
     inc  A                                             ;; 00:0a5a $3c
@@ -1902,7 +1904,7 @@ call_00_0a5c:
     inc  HL                                            ;; 00:0a67 $23
     ld   L, [HL]                                       ;; 00:0a68 $6e
     ld   H, $00                                        ;; 00:0a69 $26 $00
-    call call_00_005c                                  ;; 00:0a6b $cd $5c $00
+    call mul_hl_32_add_bc                              ;; 00:0a6b $cd $5c $00
     ld   E, L                                          ;; 00:0a6e $5d
     ld   D, H                                          ;; 00:0a6f $54
     ld   A, [wC79A]                                    ;; 00:0a70 $fa $9a $c7
@@ -1928,7 +1930,7 @@ call_00_0a5c:
     jr   Z, .jr_00_0a9c                                ;; 00:0a94 $28 $06
     ld   D, $d0                                        ;; 00:0a96 $16 $d0
     ld   A, [wC797]                                    ;; 00:0a98 $fa $97 $c7
-    rst  rst_00_0000                                   ;; 00:0a9b $c7
+    rst  add_hl_a                                      ;; 00:0a9b $c7
 .jr_00_0a9c:
     ld   A, [wC79D]                                    ;; 00:0a9c $fa $9d $c7
     sub  A, $02                                        ;; 00:0a9f $d6 $02
@@ -1950,7 +1952,7 @@ call_00_0a5c:
     pop  HL                                            ;; 00:0ab2 $e1
     pop  BC                                            ;; 00:0ab3 $c1
     ld   A, [wC77E]                                    ;; 00:0ab4 $fa $7e $c7
-    rst  rst_00_0000                                   ;; 00:0ab7 $c7
+    rst  add_hl_a                                      ;; 00:0ab7 $c7
     dec  C                                             ;; 00:0ab8 $0d
     jr   NZ, .jr_00_0aa8                               ;; 00:0ab9 $20 $ed
     pop  DE                                            ;; 00:0abb $d1
@@ -1986,7 +1988,7 @@ call_00_0ae2:
     inc  A                                             ;; 00:0aed $3c
 .jr_00_0aee:
     ld   HL, wC800                                     ;; 00:0aee $21 $00 $c8
-    rst  rst_00_0000                                   ;; 00:0af1 $c7
+    rst  add_hl_a                                      ;; 00:0af1 $c7
     ret                                                ;; 00:0af2 $c9
 
 call_00_0af3:
@@ -2191,7 +2193,7 @@ data_00_0cd0:
     ld   DE, wC7D6                                     ;; 00:0cdd $11 $d6 $c7
     ld   A, [DE]                                       ;; 00:0ce0 $1a
     ld   HL, wD400                                     ;; 00:0ce1 $21 $00 $d4
-    rst  rst_00_0000                                   ;; 00:0ce4 $c7
+    rst  add_hl_a                                      ;; 00:0ce4 $c7
     inc  A                                             ;; 00:0ce5 $3c
     ld   [DE], A                                       ;; 00:0ce6 $12
     pop  AF                                            ;; 00:0ce7 $f1
@@ -2228,7 +2230,7 @@ data_00_0d05:
     jr   Z, .jr_00_0d18                                ;; 00:0d0c $28 $0a
     sub  A, $05                                        ;; 00:0d0e $d6 $05
     ld   HL, wC73D                                     ;; 00:0d10 $21 $3d $c7
-    rst  rst_00_0000                                   ;; 00:0d13 $c7
+    rst  add_hl_a                                      ;; 00:0d13 $c7
     ld   E, $c0                                        ;; 00:0d14 $1e $c0
     jr   .jr_00_0d37                                   ;; 00:0d16 $18 $1f
 .jr_00_0d18:
@@ -2264,18 +2266,18 @@ data_00_0d05:
     ld   A, B                                          ;; 00:0d47 $78
     add  A, A                                          ;; 00:0d48 $87
     add  A, A                                          ;; 00:0d49 $87
-    rst  rst_00_0000                                   ;; 00:0d4a $c7
+    rst  add_hl_a                                      ;; 00:0d4a $c7
     ld   A, B                                          ;; 00:0d4b $78
     or   A, E                                          ;; 00:0d4c $b3
     ld   [HL+], A                                      ;; 00:0d4d $22
     push HL                                            ;; 00:0d4e $e5
     ld   A, C                                          ;; 00:0d4f $79
     ld   HL, $6b70                                     ;; 00:0d50 $21 $70 $6b
-    rst  rst_00_0000                                   ;; 00:0d53 $c7
+    rst  add_hl_a                                      ;; 00:0d53 $c7
     ld   A, $0d                                        ;; 00:0d54 $3e $0d
     call call_00_00d2                                  ;; 00:0d56 $cd $d2 $00
     ld   HL, $4300                                     ;; 00:0d59 $21 $00 $43
-    rst  rst_00_0000                                   ;; 00:0d5c $c7
+    rst  add_hl_a                                      ;; 00:0d5c $c7
     ld   A, $01                                        ;; 00:0d5d $3e $01
     call call_00_00d2                                  ;; 00:0d5f $cd $d2 $00
     pop  HL                                            ;; 00:0d62 $e1
@@ -2300,7 +2302,7 @@ data_00_0d05:
     ld   L, B                                          ;; 00:0d7b $68
     ld   H, $00                                        ;; 00:0d7c $26 $00
     ld   DE, $8000                                     ;; 00:0d7e $11 $00 $80
-    call call_00_0063                                  ;; 00:0d81 $cd $63 $00
+    call mul_hl_128_add_de                             ;; 00:0d81 $cd $63 $00
     ld   E, L                                          ;; 00:0d84 $5d
     ld   D, H                                          ;; 00:0d85 $54
     ld   A, C                                          ;; 00:0d86 $79
@@ -2317,7 +2319,7 @@ call_00_0d91:
     ld   A, [HL]                                       ;; 00:0d97 $7e
     call call_00_1648                                  ;; 00:0d98 $cd $48 $16
     ld   HL, $4240                                     ;; 00:0d9b $21 $40 $42
-    rst  rst_00_0000                                   ;; 00:0d9e $c7
+    rst  add_hl_a                                      ;; 00:0d9e $c7
     ld   A, $0f                                        ;; 00:0d9f $3e $0f
     call call_00_00d2                                  ;; 00:0da1 $cd $d2 $00
     ld   E, A                                          ;; 00:0da4 $5f
@@ -2369,7 +2371,7 @@ data_00_0dde:
     ld   [HL], A                                       ;; 00:0de4 $77
     ld   A, C                                          ;; 00:0de5 $79
     call call_00_079f                                  ;; 00:0de6 $cd $9f $07
-    rst  rst_00_0000                                   ;; 00:0de9 $c7
+    rst  add_hl_a                                      ;; 00:0de9 $c7
 
 jr_00_0dea:
     jp   call_00_07aa                                  ;; 00:0dea $c3 $aa $07
@@ -2401,7 +2403,7 @@ call_00_0df0:
 .jr_00_0e1b:
     call call_00_078d                                  ;; 00:0e1b $cd $8d $07
     ld   A, [wC77E]                                    ;; 00:0e1e $fa $7e $c7
-    rst  rst_00_0000                                   ;; 00:0e21 $c7
+    rst  add_hl_a                                      ;; 00:0e21 $c7
     call call_00_07aa                                  ;; 00:0e22 $cd $aa $07
     call call_00_0796                                  ;; 00:0e25 $cd $96 $07
     ld   HL, wC7A3                                     ;; 00:0e28 $21 $a3 $c7
@@ -2430,13 +2432,13 @@ call_00_0e30:
     ld   [HL], $00                                     ;; 00:0e46 $36 $00
     ld   HL, wC7A6                                     ;; 00:0e48 $21 $a6 $c7
     ld   B, $20                                        ;; 00:0e4b $06 $20
-    call call_00_006c                                  ;; 00:0e4d $cd $6c $00
+    call memclear                                      ;; 00:0e4d $cd $6c $00
     call call_00_0546                                  ;; 00:0e50 $cd $46 $05
 .jr_00_0e53:
     call call_00_068f                                  ;; 00:0e53 $cd $8f $06
     call call_00_0e72                                  ;; 00:0e56 $cd $72 $0e
 .jr_00_0e59:
-    jp   jp_00_000b                                    ;; 00:0e59 $c3 $0b $00
+    jp   pop_all                                       ;; 00:0e59 $c3 $0b $00
 
 call_00_0e5c:
     ld   HL, wC764                                     ;; 00:0e5c $21 $64 $c7
@@ -2535,12 +2537,12 @@ data_00_0ec5:
     ld   E, $0b                                        ;; 00:0efc $1e $0b
     call call_00_063e                                  ;; 00:0efe $cd $3e $06
     and  A, A                                          ;; 00:0f01 $a7
-    jp   NZ, jp_00_0200                                ;; 00:0f02 $c2 $00 $02
+    jp   NZ, init                                      ;; 00:0f02 $c2 $00 $02
     ld   DE, $03                                       ;; 00:0f05 $11 $03 $00
     rst  rst_00_0020                                   ;; 00:0f08 $e7
     call call_00_1477                                  ;; 00:0f09 $cd $77 $14
     and  A, A                                          ;; 00:0f0c $a7
-    jp   NZ, jp_00_0200                                ;; 00:0f0d $c2 $00 $02
+    jp   NZ, init                                      ;; 00:0f0d $c2 $00 $02
     ld   HL, wC2A1                                     ;; 00:0f10 $21 $a1 $c2
     ld   A, [HL]                                       ;; 00:0f13 $7e
     inc  A                                             ;; 00:0f14 $3c
@@ -2556,7 +2558,7 @@ data_00_0f2f:
     ld   [wC709], A                                    ;; 00:0f31 $ea $09 $c7
     ld   HL, wC340                                     ;; 00:0f34 $21 $40 $c3
     add  A, A                                          ;; 00:0f37 $87
-    rst  rst_00_0000                                   ;; 00:0f38 $c7
+    rst  add_hl_a                                      ;; 00:0f38 $c7
     xor  A, A                                          ;; 00:0f39 $af
     ld   [HL+], A                                      ;; 00:0f3a $22
     ld   [HL], A                                       ;; 00:0f3b $77
@@ -2569,7 +2571,7 @@ data_00_0f2f:
     add  A, A                                          ;; 00:0f48 $87
     add  A, A                                          ;; 00:0f49 $87
     ld   HL, $6610                                     ;; 00:0f4a $21 $10 $66
-    rst  rst_00_0000                                   ;; 00:0f4d $c7
+    rst  add_hl_a                                      ;; 00:0f4d $c7
     ld   DE, wC280                                     ;; 00:0f4e $11 $80 $c2
     ld   A, $0f                                        ;; 00:0f51 $3e $0f
     ld   B, $04                                        ;; 00:0f53 $06 $04
@@ -2626,7 +2628,7 @@ data_00_0ff2:
     sub  A, $0a                                        ;; 00:100a $d6 $0a
     add  A, A                                          ;; 00:100c $87
     ld   HL, wD906                                     ;; 00:100d $21 $06 $d9
-    rst  rst_00_0000                                   ;; 00:1010 $c7
+    rst  add_hl_a                                      ;; 00:1010 $c7
     ld   A, [HL]                                       ;; 00:1011 $7e
     ld   HL, wD002                                     ;; 00:1012 $21 $02 $d0
     call call_00_05d9                                  ;; 00:1015 $cd $d9 $05
@@ -2634,8 +2636,8 @@ data_00_0ff2:
     jr   .jr_00_102c                                   ;; 00:101a $18 $10
 .jr_00_101c:
     sub  A, $05                                        ;; 00:101c $d6 $05
-    call call_00_004c                                  ;; 00:101e $cd $4c $00
-    rst  rst_00_0000                                   ;; 00:1021 $c7
+    call mul_a_32                                      ;; 00:101e $cd $4c $00
+    rst  add_hl_a                                      ;; 00:1021 $c7
     jr   .jr_00_102a                                   ;; 00:1022 $18 $06
 .jr_00_1024:
     ld   A, [wC709]                                    ;; 00:1024 $fa $09 $c7
@@ -2667,7 +2669,7 @@ data_00_1032:
 .jr_00_1051:
     sub  A, $05                                        ;; 00:1051 $d6 $05
     ld   HL, wC73D                                     ;; 00:1053 $21 $3d $c7
-    rst  rst_00_0000                                   ;; 00:1056 $c7
+    rst  add_hl_a                                      ;; 00:1056 $c7
     jr   .jr_00_1062                                   ;; 00:1057 $18 $09
 .jr_00_1059:
     ld   A, [wC709]                                    ;; 00:1059 $fa $09 $c7
@@ -2682,7 +2684,7 @@ data_00_1032:
     sub  A, $0d                                        ;; 00:106a $d6 $0d
     add  A, A                                          ;; 00:106c $87
     ld   HL, wD906                                     ;; 00:106d $21 $06 $d9
-    rst  rst_00_0000                                   ;; 00:1070 $c7
+    rst  add_hl_a                                      ;; 00:1070 $c7
     jr   .jr_00_1062                                   ;; 00:1071 $18 $ef
 .jr_00_1073:
     sub  A, $11                                        ;; 00:1073 $d6 $11
@@ -2694,7 +2696,7 @@ data_00_1032:
     and  A, A                                          ;; 00:107d $a7
     jp   Z, call_00_1549                               ;; 00:107e $ca $49 $15
     ld   A, $0a                                        ;; 00:1081 $3e $0a
-    rst  rst_00_0000                                   ;; 00:1083 $c7
+    rst  add_hl_a                                      ;; 00:1083 $c7
     jr   .jr_00_1062                                   ;; 00:1084 $18 $dc
 
 data_00_1086:
@@ -2706,11 +2708,11 @@ data_00_1086:
     sub  A, $20                                        ;; 00:108f $d6 $20
     ld   HL, wC71D                                     ;; 00:1091 $21 $1d $c7
     add  A, A                                          ;; 00:1094 $87
-    rst  rst_00_0000                                   ;; 00:1095 $c7
+    rst  add_hl_a                                      ;; 00:1095 $c7
     jr   .jr_00_10a4                                   ;; 00:1096 $18 $0c
 .jr_00_1098:
     ld   HL, wC7E0                                     ;; 00:1098 $21 $e0 $c7
-    rst  rst_00_0000                                   ;; 00:109b $c7
+    rst  add_hl_a                                      ;; 00:109b $c7
     jr   .jr_00_10a4                                   ;; 00:109c $18 $06
 .jr_00_109e:
     ld   A, [wC709]                                    ;; 00:109e $fa $09 $c7
@@ -2725,9 +2727,9 @@ data_00_1086:
     jp   jp_00_1539                                    ;; 00:10b0 $c3 $39 $15
 
 call_00_10b3:
-    call call_00_004c                                  ;; 00:10b3 $cd $4c $00
+    call mul_a_32                                      ;; 00:10b3 $cd $4c $00
     ld   HL, wC21F                                     ;; 00:10b6 $21 $1f $c2
-    rst  rst_00_0000                                   ;; 00:10b9 $c7
+    rst  add_hl_a                                      ;; 00:10b9 $c7
     ret                                                ;; 00:10ba $c9
 
 data_00_10bb:
@@ -2755,7 +2757,7 @@ data_00_10bb:
     sub  A, $60                                        ;; 00:10e8 $d6 $60
     ld   HL, wD906                                     ;; 00:10ea $21 $06 $d9
     add  A, A                                          ;; 00:10ed $87
-    rst  rst_00_0000                                   ;; 00:10ee $c7
+    rst  add_hl_a                                      ;; 00:10ee $c7
     ld   A, [HL+]                                      ;; 00:10ef $2a
     ld   H, [HL]                                       ;; 00:10f0 $66
     ld   L, A                                          ;; 00:10f1 $6f
@@ -2813,7 +2815,7 @@ data_00_10bb:
 .jr_00_1144:
     add  A, A                                          ;; 00:1144 $87
     ld   DE, $6640                                     ;; 00:1145 $11 $40 $66
-    rst  rst_00_0000                                   ;; 00:1148 $c7
+    rst  add_hl_a                                      ;; 00:1148 $c7
     ld   B, $08                                        ;; 00:1149 $06 $08
     ld   A, [HL]                                       ;; 00:114b $7e
     inc  A                                             ;; 00:114c $3c
@@ -2839,7 +2841,7 @@ data_00_1153:
     ld   A, [HL]                                       ;; 00:116c $7e
     inc  [HL]                                          ;; 00:116d $34
     ld   HL, wC71D                                     ;; 00:116e $21 $1d $c7
-    rst  rst_00_0000                                   ;; 00:1171 $c7
+    rst  add_hl_a                                      ;; 00:1171 $c7
     ld   [HL], D                                       ;; 00:1172 $72
     push DE                                            ;; 00:1173 $d5
     ld   B, $01                                        ;; 00:1174 $06 $01
@@ -2871,12 +2873,12 @@ call_00_11a1:
     ld   L, D                                          ;; 00:11a1 $6a
     ld   H, $00                                        ;; 00:11a2 $26 $00
     ld   BC, $4270                                     ;; 00:11a4 $01 $70 $42
-    call call_00_005c                                  ;; 00:11a7 $cd $5c $00
+    call mul_hl_32_add_bc                              ;; 00:11a7 $cd $5c $00
     ld   A, E                                          ;; 00:11aa $7b
 
 call_00_11ab:
     add  A, A                                          ;; 00:11ab $87
-    rst  rst_00_0000                                   ;; 00:11ac $c7
+    rst  add_hl_a                                      ;; 00:11ac $c7
     ld   A, $0f                                        ;; 00:11ad $3e $0f
     rst  rst_00_0028                                   ;; 00:11af $ef
     push AF                                            ;; 00:11b0 $f5
@@ -2928,7 +2930,7 @@ data_00_11d8:
     add  A, A                                          ;; 00:11f3 $87
     add  A, A                                          ;; 00:11f4 $87
     ld   HL, $7840                                     ;; 00:11f5 $21 $40 $78
-    rst  rst_00_0000                                   ;; 00:11f8 $c7
+    rst  add_hl_a                                      ;; 00:11f8 $c7
     ld   B, $04                                        ;; 00:11f9 $06 $04
     jp   jp_00_153e                                    ;; 00:11fb $c3 $3e $15
 
@@ -2961,7 +2963,7 @@ data_00_121e:
     jr   .jr_00_122f                                   ;; 00:1229 $18 $04
 .jr_00_122b:
     ld   HL, wC7E0                                     ;; 00:122b $21 $e0 $c7
-    rst  rst_00_0000                                   ;; 00:122e $c7
+    rst  add_hl_a                                      ;; 00:122e $c7
 .jr_00_122f:
     ld   B, $01                                        ;; 00:122f $06 $01
     ld   A, [HL]                                       ;; 00:1231 $7e
@@ -2969,7 +2971,7 @@ data_00_121e:
     jp   Z, call_00_1549                               ;; 00:1234 $ca $49 $15
     add  A, A                                          ;; 00:1237 $87
     ld   HL, wC2DA                                     ;; 00:1238 $21 $da $c2
-    rst  rst_00_0000                                   ;; 00:123b $c7
+    rst  add_hl_a                                      ;; 00:123b $c7
     ld   A, [HL]                                       ;; 00:123c $7e
     and  A, $0f                                        ;; 00:123d $e6 $0f
     ld   L, A                                          ;; 00:123f $6f
@@ -3011,7 +3013,7 @@ data_00_124b:
 .jr_00_1283:
     ld   HL, wC20F                                     ;; 00:1283 $21 $0f $c2
     add  A, A                                          ;; 00:1286 $87
-    rst  rst_00_0000                                   ;; 00:1287 $c7
+    rst  add_hl_a                                      ;; 00:1287 $c7
     ld   A, [wC709]                                    ;; 00:1288 $fa $09 $c7
     call call_00_05d9                                  ;; 00:128b $cd $d9 $05
     jr   .jr_00_12b0                                   ;; 00:128e $18 $20
@@ -3040,7 +3042,7 @@ data_00_124b:
     ld   HL, wC71D                                     ;; 00:12ab $21 $1d $c7
 .jr_00_12ae:
     add  A, A                                          ;; 00:12ae $87
-    rst  rst_00_0000                                   ;; 00:12af $c7
+    rst  add_hl_a                                      ;; 00:12af $c7
 .jr_00_12b0:
     ld   B, $02                                        ;; 00:12b0 $06 $02
     ld   A, [HL+]                                      ;; 00:12b2 $2a
@@ -3080,7 +3082,7 @@ data_00_12dc:
 data_00_12e1:
     rst  rst_00_0030                                   ;; 00:12e1 $f7
     ld   HL, wC70D                                     ;; 00:12e2 $21 $0d $c7
-    rst  rst_00_0000                                   ;; 00:12e5 $c7
+    rst  add_hl_a                                      ;; 00:12e5 $c7
 
 jp_00_12e6:
     ld   A, [HL]                                       ;; 00:12e6 $7e
@@ -3112,7 +3114,7 @@ call_00_1313:
     add  A, A                                          ;; 00:131c $87
     add  A, C                                          ;; 00:131d $81
     ld   HL, wC745                                     ;; 00:131e $21 $45 $c7
-    rst  rst_00_0000                                   ;; 00:1321 $c7
+    rst  add_hl_a                                      ;; 00:1321 $c7
 .jr_00_1322:
     ld   A, [HL+]                                      ;; 00:1322 $2a
     and  A, [HL]                                       ;; 00:1323 $a6
@@ -3124,7 +3126,7 @@ call_00_1313:
     jr   NZ, .jr_00_1334                               ;; 00:1329 $20 $09
     dec  A                                             ;; 00:132b $3d
     ld   B, $08                                        ;; 00:132c $06 $08
-    call call_00_006d                                  ;; 00:132e $cd $6d $00
+    call memset                                        ;; 00:132e $cd $6d $00
     xor  A, A                                          ;; 00:1331 $af
     ld   [HL], A                                       ;; 00:1332 $77
     ret                                                ;; 00:1333 $c9
@@ -3174,7 +3176,7 @@ data_00_1378:
     ld   HL, wD900                                     ;; 00:1378 $21 $00 $d9
     rst  rst_00_0030                                   ;; 00:137b $f7
     add  A, A                                          ;; 00:137c $87
-    rst  rst_00_0000                                   ;; 00:137d $c7
+    rst  add_hl_a                                      ;; 00:137d $c7
     ld   A, [HL+]                                      ;; 00:137e $2a
     ld   H, [HL]                                       ;; 00:137f $66
     ld   L, A                                          ;; 00:1380 $6f
@@ -3342,7 +3344,7 @@ jp_00_14ac:
     pop  AF                                            ;; 00:14c2 $f1
     rst  rst_00_0028                                   ;; 00:14c3 $ef
     call call_00_150a                                  ;; 00:14c4 $cd $0a $15
-    jp   jp_00_000b                                    ;; 00:14c7 $c3 $0b $00
+    jp   pop_all                                       ;; 00:14c7 $c3 $0b $00
 
 call_00_14ca:
     ld   B, $00                                        ;; 00:14ca $06 $00
@@ -3388,7 +3390,7 @@ call_00_150a:
     call call_00_0546                                  ;; 00:150d $cd $46 $05
     ld   HL, wCC80                                     ;; 00:1510 $21 $80 $cc
     ld   B, $20                                        ;; 00:1513 $06 $20
-    call call_00_006c                                  ;; 00:1515 $cd $6c $00
+    call memclear                                      ;; 00:1515 $cd $6c $00
     rst  rst_00_0010                                   ;; 00:1518 $d7
     ld   A, $cc                                        ;; 00:1519 $3e $cc
     rst  rst_00_0018                                   ;; 00:151b $df
@@ -3418,7 +3420,7 @@ jp_00_1539:
     ld   H, $00                                        ;; 00:1539 $26 $00
 
 jp_00_153b:
-    call call_00_0067                                  ;; 00:153b $cd $67 $00
+    call mul_hl_8_add_de                               ;; 00:153b $cd $67 $00
 
 jp_00_153e:
     ld   A, $0f                                        ;; 00:153e $3e $0f
@@ -3435,7 +3437,7 @@ call_00_1549:
     ret  NZ                                            ;; 00:154d $c0
     dec  A                                             ;; 00:154e $3d
     ld   HL, wC785                                     ;; 00:154f $21 $85 $c7
-    call call_00_006d                                  ;; 00:1552 $cd $6d $00
+    call memset                                        ;; 00:1552 $cd $6d $00
     xor  A, A                                          ;; 00:1555 $af
     ld   [HL], A                                       ;; 00:1556 $77
 
@@ -3574,7 +3576,7 @@ call_00_15f7:
 
 call_00_160c:
     ld   HL, $6b70                                     ;; 00:160c $21 $70 $6b
-    rst  rst_00_0000                                   ;; 00:160f $c7
+    rst  add_hl_a                                      ;; 00:160f $c7
     ld   A, $0d                                        ;; 00:1610 $3e $0d
     call call_00_00d2                                  ;; 00:1612 $cd $d2 $00
     ld   H, $40                                        ;; 00:1615 $26 $40
@@ -3592,7 +3594,7 @@ call_00_1622:
     ld   A, B                                          ;; 00:162b $78
     add  A, A                                          ;; 00:162c $87
     add  A, B                                          ;; 00:162d $80
-    rst  rst_00_0000                                   ;; 00:162e $c7
+    rst  add_hl_a                                      ;; 00:162e $c7
     ld   A, [HL]                                       ;; 00:162f $7e
     cp   A, $ff                                        ;; 00:1630 $fe $ff
     ret  Z                                             ;; 00:1632 $c8
@@ -3601,7 +3603,7 @@ call_00_1622:
     ld   H, [HL]                                       ;; 00:1635 $66
     ld   L, A                                          ;; 00:1636 $6f
     ld   DE, $6f80                                     ;; 00:1637 $11 $80 $6f
-    call call_00_0067                                  ;; 00:163a $cd $67 $00
+    call mul_hl_8_add_de                               ;; 00:163a $cd $67 $00
     ld   A, $0c                                        ;; 00:163d $3e $0c
     call call_00_00d2                                  ;; 00:163f $cd $d2 $00
     pop  HL                                            ;; 00:1642 $e1
@@ -3795,14 +3797,14 @@ call_00_16f9:
     ldh  A, [hFF89]                                    ;; 00:174d $f0 $89
     and  A, $0f                                        ;; 00:174f $e6 $0f
     cp   A, $0f                                        ;; 00:1751 $fe $0f
-    jp   Z, jp_00_0200                                 ;; 00:1753 $ca $00 $02
+    jp   Z, init                                       ;; 00:1753 $ca $00 $02
     ldh  A, [hFF96]                                    ;; 00:1756 $f0 $96
     and  A, A                                          ;; 00:1758 $a7
     call NZ, call_00_176c                              ;; 00:1759 $c4 $6c $17
     ld   HL, hFF9C                                     ;; 00:175c $21 $9c $ff
     dec  [HL]                                          ;; 00:175f $35
 .jr_00_1760:
-    jp   jp_00_000b                                    ;; 00:1760 $c3 $0b $00
+    jp   pop_all                                       ;; 00:1760 $c3 $0b $00
 
 call_00_1763:
     ldh  A, [C]                                        ;; 00:1763 $f2
@@ -3837,7 +3839,7 @@ call_00_176c:
     jp   Z, .jp_00_182a                                ;; 00:1787 $ca $2a $18
     ld   HL, wCC00                                     ;; 00:178a $21 $00 $cc
     ld   B, $80                                        ;; 00:178d $06 $80
-    call call_00_006c                                  ;; 00:178f $cd $6c $00
+    call memclear                                      ;; 00:178f $cd $6c $00
     ld   HL, wC7A6                                     ;; 00:1792 $21 $a6 $c7
     ld   B, $08                                        ;; 00:1795 $06 $08
 .jp_00_1797:
@@ -3893,13 +3895,13 @@ call_00_176c:
     bit  4, A                                          ;; 00:17e7 $cb $67
     jr   Z, .jr_00_17ee                                ;; 00:17e9 $28 $03
     ld   A, $0c                                        ;; 00:17eb $3e $0c
-    rst  rst_00_0000                                   ;; 00:17ed $c7
+    rst  add_hl_a                                      ;; 00:17ed $c7
 .jr_00_17ee:
     ldh  A, [hFF94]                                    ;; 00:17ee $f0 $94
     and  A, $03                                        ;; 00:17f0 $e6 $03
     add  A, A                                          ;; 00:17f2 $87
     add  A, A                                          ;; 00:17f3 $87
-    rst  rst_00_0000                                   ;; 00:17f4 $c7
+    rst  add_hl_a                                      ;; 00:17f4 $c7
     ld   E, L                                          ;; 00:17f5 $5d
     ld   D, H                                          ;; 00:17f6 $54
     pop  HL                                            ;; 00:17f7 $e1
@@ -3959,7 +3961,7 @@ call_00_176c:
     inc  A                                             ;; 00:183a $3c
     jr   NZ, .jr_00_1844                               ;; 00:183b $20 $07
     ld   B, $10                                        ;; 00:183d $06 $10
-    call call_00_006c                                  ;; 00:183f $cd $6c $00
+    call memclear                                      ;; 00:183f $cd $6c $00
     jr   .jr_00_185a                                   ;; 00:1842 $18 $16
 .jr_00_1844:
     call call_00_0526                                  ;; 00:1844 $cd $26 $05
@@ -4083,7 +4085,7 @@ call_00_18c3:
     call call_01_500c                                  ;; 00:18d4 $cd $0c $50
     pop  AF                                            ;; 00:18d7 $f1
     rst  rst_00_0028                                   ;; 00:18d8 $ef
-    jp   jp_00_000b                                    ;; 00:18d9 $c3 $0b $00
+    jp   pop_all                                       ;; 00:18d9 $c3 $0b $00
     db   $f5, $c5, $d5, $e5, $47, $fa, $9a, $c7        ;; 00:18dc ????????
     db   $87, $b0, $ea, $cd, $c7, $3e, $01, $ef        ;; 00:18e4 ????????
     db   $f5, $cd                                      ;; 00:18ec ??
@@ -4093,7 +4095,7 @@ jr_00_18ee:
     ld   D, B                                          ;; 00:18ef $50
     pop  AF                                            ;; 00:18f0 $f1
     rst  rst_00_0028                                   ;; 00:18f1 $ef
-    jp   jp_00_000b                                    ;; 00:18f2 $c3 $0b $00
+    jp   pop_all                                       ;; 00:18f2 $c3 $0b $00
     db   $00, $00, $00, $00, $00, $00, $00, $00        ;; 00:18f5 ????????
     db   $00, $00, $00                                 ;; 00:18fd ???
 
