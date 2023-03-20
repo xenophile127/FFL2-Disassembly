@@ -1636,7 +1636,7 @@ call_0f_62e9:
     ret                                                ;; 0f:63e7 $c9
 .jp_0f_63e8:
     xor  A, A                                          ;; 0f:63e8 $af
-    ldh  [hFFB0], A                                    ;; 0f:63e9 $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 0f:63e9 $e0 $b0
     ld   HL, $9900                                     ;; 0f:63eb $21 $00 $99
     ld   C, $0c                                        ;; 0f:63ee $0e $0c
     call call_0f_61a9                                  ;; 0f:63f0 $cd $a9 $61
@@ -1663,7 +1663,7 @@ call_0f_640f:
     rst  waitForVBlank                                 ;; 0f:6413 $d7
     rst  waitForVBlank                                 ;; 0f:6414 $d7
     ld   A, $27                                        ;; 0f:6415 $3e $27
-    ldh  [hFFB2], A                                    ;; 0f:6417 $e0 $b2
+    ldh  [hSFX], A                                     ;; 0f:6417 $e0 $b2
     ldh  A, [hFF90]                                    ;; 0f:6419 $f0 $90
     ldh  [rSCX], A                                     ;; 0f:641b $e0 $43
     rst  waitForVBlank                                 ;; 0f:641d $d7

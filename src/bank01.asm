@@ -2896,7 +2896,7 @@ call_01_5edc:
 call_01_5efe:
     push AF                                            ;; 01:5efe $f5
     ld   A, $13                                        ;; 01:5eff $3e $13
-    ldh  [hFFB2], A                                    ;; 01:5f01 $e0 $b2
+    ldh  [hSFX], A                                     ;; 01:5f01 $e0 $b2
     ldh  [hFF9F], A                                    ;; 01:5f03 $e0 $9f
     pop  AF                                            ;; 01:5f05 $f1
     ret                                                ;; 01:5f06 $c9
@@ -2904,7 +2904,7 @@ call_01_5efe:
 call_01_5f07:
     push AF                                            ;; 01:5f07 $f5
     ld   A, $37                                        ;; 01:5f08 $3e $37
-    ldh  [hFFB2], A                                    ;; 01:5f0a $e0 $b2
+    ldh  [hSFX], A                                     ;; 01:5f0a $e0 $b2
     pop  AF                                            ;; 01:5f0c $f1
     ret                                                ;; 01:5f0d $c9
 
@@ -3493,7 +3493,7 @@ jp_01_628a:
     jr   C, .jr_01_62f6                                ;; 01:62da $38 $1a
     call call_00_0165                                  ;; 01:62dc $cd $65 $01
     ld   A, $33                                        ;; 01:62df $3e $33
-    ldh  [hFFB2], A                                    ;; 01:62e1 $e0 $b2
+    ldh  [hSFX], A                                     ;; 01:62e1 $e0 $b2
     call call_01_6332                                  ;; 01:62e3 $cd $32 $63
     call call_01_5e35                                  ;; 01:62e6 $cd $35 $5e
     ld   DE, $1c1b                                     ;; 01:62e9 $11 $1b $1c
@@ -3873,7 +3873,7 @@ jp_01_647a:
     ld   A, [DE]                                       ;; 01:6568 $1a
     ld   [HL], A                                       ;; 01:6569 $77
     ld   A, $22                                        ;; 01:656a $3e $22
-    ldh  [hFFB2], A                                    ;; 01:656c $e0 $b2
+    ldh  [hSFX], A                                     ;; 01:656c $e0 $b2
     call call_01_5e35                                  ;; 01:656e $cd $35 $5e
     ld   E, $24                                        ;; 01:6571 $1e $24
     rst  rst_00_0008                                   ;; 01:6573 $cf
@@ -4229,7 +4229,7 @@ call_01_67bc:
     ld   HL, sA781                                     ;; 01:67d6 $21 $81 $a7
     call call_01_681a                                  ;; 01:67d9 $cd $1a $68
     call call_00_01c8                                  ;; 01:67dc $cd $c8 $01
-    ldh  A, [hFFB0]                                    ;; 01:67df $f0 $b0
+    ldh  A, [hCurrentMusic]                            ;; 01:67df $f0 $b0
     ld   [wC31A], A                                    ;; 01:67e1 $ea $1a $c3
     ld   HL, wC37C                                     ;; 01:67e4 $21 $7c $c3
     call call_01_681a                                  ;; 01:67e7 $cd $1a $68
@@ -4287,7 +4287,7 @@ data_01_6832:
 
 jp_01_6838:
     ld   A, $05                                        ;; 01:6838 $3e $05
-    ldh  [hFFB0], A                                    ;; 01:683a $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 01:683a $e0 $b0
     ld   HL, call_01_5000                              ;; 01:683c $21 $00 $50
     ld   DE, $9000                                     ;; 01:683f $11 $00 $90
     ld   BC, $800                                      ;; 01:6842 $01 $00 $08
@@ -4484,7 +4484,7 @@ jp_01_6838:
     jp   NC, .jp_01_68c1                               ;; 01:698f $d2 $c1 $68
     call call_01_6a39                                  ;; 01:6992 $cd $39 $6a
     ld   A, [wC31A]                                    ;; 01:6995 $fa $1a $c3
-    ldh  [hFFB0], A                                    ;; 01:6998 $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 01:6998 $e0 $b0
     scf                                                ;; 01:699a $37
     ret                                                ;; 01:699b $c9
 .jp_01_699c:
@@ -4565,9 +4565,9 @@ jp_01_6838:
 .jp_01_6a16:
     ld   HL, wC70D                                     ;; 01:6a16 $21 $0d $c7
     ld   A, [HL+]                                      ;; 01:6a19 $2a
-    ldh  [hFFB2], A                                    ;; 01:6a1a $e0 $b2
+    ldh  [hSFX], A                                     ;; 01:6a1a $e0 $b2
     ld   A, [HL]                                       ;; 01:6a1c $7e
-    ldh  [hFFB0], A                                    ;; 01:6a1d $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 01:6a1d $e0 $b0
     jr   .jr_01_69be                                   ;; 01:6a1f $18 $9d
 
 call_01_6a21:

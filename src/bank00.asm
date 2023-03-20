@@ -4681,7 +4681,7 @@ call_00_1c61:
     ld   B, A                                          ;; 00:1c96 $47
     jr   Z, .jr_00_1c9d                                ;; 00:1c97 $28 $04
     ld   A, $16                                        ;; 00:1c99 $3e $16
-    ldh  [hFFB2], A                                    ;; 00:1c9b $e0 $b2
+    ldh  [hSFX], A                                     ;; 00:1c9b $e0 $b2
 .jr_00_1c9d:
     ld   A, [wC319]                                    ;; 00:1c9d $fa $19 $c3
     or   A, B                                          ;; 00:1ca0 $b0
@@ -6788,7 +6788,7 @@ call_00_2952:
     ld   A, $2d                                        ;; 00:296d $3e $2d
     ldh  [rOBP0], A                                    ;; 00:296f $e0 $48
     ld   A, $36                                        ;; 00:2971 $3e $36
-    ldh  [hFFB2], A                                    ;; 00:2973 $e0 $b2
+    ldh  [hSFX], A                                     ;; 00:2973 $e0 $b2
     ld   C, $03                                        ;; 00:2975 $0e $03
 .jr_00_2977:
     call call_00_2f7f                                  ;; 00:2977 $cd $7f $2f
@@ -7158,7 +7158,7 @@ call_00_2b14:
     dec  B                                             ;; 00:2b7f $05
     jr   NZ, .jr_00_2b65                               ;; 00:2b80 $20 $e3
     ld   A, $28                                        ;; 00:2b82 $3e $28
-    ldh  [hFFB2], A                                    ;; 00:2b84 $e0 $b2
+    ldh  [hSFX], A                                     ;; 00:2b84 $e0 $b2
     call call_00_2cbe                                  ;; 00:2b86 $cd $be $2c
     ret                                                ;; 00:2b89 $c9
 
@@ -10036,7 +10036,7 @@ jp_00_3cb4:
 
 jp_00_3d98:
     ld   A, $27                                        ;; 00:3d98 $3e $27
-    ldh  [hFFB2], A                                    ;; 00:3d9a $e0 $b2
+    ldh  [hSFX], A                                     ;; 00:3d9a $e0 $b2
     ldh  A, [hFFC2]                                    ;; 00:3d9c $f0 $c2
     ldh  [rSCX], A                                     ;; 00:3d9e $e0 $43
     ld   [wC473], A                                    ;; 00:3da0 $ea $73 $c4
@@ -10113,16 +10113,16 @@ jp_00_3e10:
     jr   NZ, .jr_00_3e28                               ;; 00:3e13 $20 $13
     bit  6, A                                          ;; 00:3e15 $cb $77
     jr   NZ, .jr_00_3e21                               ;; 00:3e17 $20 $08
-    ldh  [hFFB0], A                                    ;; 00:3e19 $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 00:3e19 $e0 $b0
     ld   [wC31A], A                                    ;; 00:3e1b $ea $1a $c3
     jp   jp_00_3c93                                    ;; 00:3e1e $c3 $93 $3c
 .jr_00_3e21:
     sub  A, $40                                        ;; 00:3e21 $d6 $40
-    ldh  [hFFB1], A                                    ;; 00:3e23 $e0 $b1
+    ldh  [hMusicSpecialSongRequest], A                 ;; 00:3e23 $e0 $b1
     jp   jp_00_3c93                                    ;; 00:3e25 $c3 $93 $3c
 .jr_00_3e28:
     sub  A, $80                                        ;; 00:3e28 $d6 $80
-    ldh  [hFFB2], A                                    ;; 00:3e2a $e0 $b2
+    ldh  [hSFX], A                                     ;; 00:3e2a $e0 $b2
     jp   jp_00_3c93                                    ;; 00:3e2c $c3 $93 $3c
 
 jp_00_3e2f:
@@ -10346,7 +10346,7 @@ call_00_3f78:
 
 jp_00_3f87:
     ld   A, $18                                        ;; 00:3f87 $3e $18
-    ldh  [hFFB2], A                                    ;; 00:3f89 $e0 $b2
+    ldh  [hSFX], A                                     ;; 00:3f89 $e0 $b2
     ld   B, $03                                        ;; 00:3f8b $06 $03
 .jr_00_3f8d:
     ldh  A, [rBGP]                                     ;; 00:3f8d $f0 $47

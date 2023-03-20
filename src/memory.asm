@@ -1314,43 +1314,44 @@ hFFA9:
 hFFAA:
     ds 6                                               ;; ffaa
 
-hFFB0:
+; START OF AUDIO ENGINE HRAM
+hCurrentMusic:
     ds 1                                               ;; ffb0
 
-hFFB1:
+hMusicSpecialSongRequest:
     ds 1                                               ;; ffb1
 
-hFFB2:
+hSFX:
     ds 1                                               ;; ffb2
 
-hFFB3:
+hPlayingMusic:
     ds 1                                               ;; ffb3
 
-hFFB4:
+hVibratoVolumeChannelSelection:
     ds 1                                               ;; ffb4
 
-hFFB5:
+hMusicNoteDurationChannel2Copy:
     ds 1                                               ;; ffb5
 
-hFFB6:
+hMusicNoteDurationChannel1Copy:
     ds 1                                               ;; ffb6
 
-hFFB7:
+hMusicNoteDurationChannel3Copy:
     ds 2                                               ;; ffb7
 
-hFFB9:
+hMusicSpecialSongPlaying:
     ds 1                                               ;; ffb9
 
-hFFBA:
+hWaveTablePointer:
     ds 1                                               ;; ffba
-
-hFFBB:
+.high:
     ds 1                                               ;; ffbb
 
-hFFBC:
+hSoundEffectLoopCounterChannel1:
     ds 1                                               ;; ffbc
 
-hFFBD:
+; END OF AUDIO ENGINE HRAM
+hSoundEffectLoopCounterChannel4:
     ds 3                                               ;; ffbd
 
 hFFC0:
