@@ -2948,7 +2948,7 @@ jp_01_5f51:
     call call_01_60aa                                  ;; 01:5f5f $cd $aa $60
 .jp_01_5f62:
     call call_01_5e25                                  ;; 01:5f62 $cd $25 $5e
-    ld   DE, .jr_00_1110                               ;; 01:5f65 $11 $10 $11
+    ld   DE, $1110 ;@=value                               ;; 01:5f65 $11 $10 $11
     call call_01_5e65                                  ;; 01:5f68 $cd $65 $5e
     ld   A, $01                                        ;; 01:5f6b $3e $01
     call call_00_01b9                                  ;; 01:5f6d $cd $b9 $01
