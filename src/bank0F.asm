@@ -1103,7 +1103,7 @@ jp_0f_6098:
     ldh  [rLCDC], A                                    ;; 0f:60a2 $e0 $40
     ld   HL, wD920                                     ;; 0f:60a4 $21 $20 $d9
     ld   BC, $1e0                                      ;; 0f:60a7 $01 $e0 $01
-    call call_00_0072                                  ;; 0f:60aa $cd $72 $00
+    call memclearBig                                   ;; 0f:60aa $cd $72 $00
     ldh  [hFF96], A                                    ;; 0f:60ad $e0 $96
     dec  A                                             ;; 0f:60af $3d
     ld   HL, $9800                                     ;; 0f:60b0 $21 $00 $98
@@ -1111,7 +1111,7 @@ jp_0f_6098:
     call call_00_009c                                  ;; 0f:60b6 $cd $9c $00
     ld   HL, wCC00                                     ;; 0f:60b9 $21 $00 $cc
     ld   B, $a0                                        ;; 0f:60bc $06 $a0
-    call memclear                                      ;; 0f:60be $cd $6c $00
+    call memclearSmall                                 ;; 0f:60be $cd $6c $00
     rst  rst_00_0010                                   ;; 0f:60c1 $d7
     ld   A, $cc                                        ;; 0f:60c2 $3e $cc
     rst  rst_00_0018                                   ;; 0f:60c4 $df
@@ -1627,7 +1627,7 @@ call_0f_62e9:
     jr   NZ, .jr_0f_63c6                               ;; 0f:63d1 $20 $f3
     ld   HL, wCC00                                     ;; 0f:63d3 $21 $00 $cc
     ld   B, $28                                        ;; 0f:63d6 $06 $28
-    call memclear                                      ;; 0f:63d8 $cd $6c $00
+    call memclearSmall                                 ;; 0f:63d8 $cd $6c $00
     rst  rst_00_0010                                   ;; 0f:63db $d7
     ld   A, $cc                                        ;; 0f:63dc $3e $cc
     rst  rst_00_0018                                   ;; 0f:63de $df
@@ -1690,7 +1690,7 @@ call_0f_642e:
     ldh  A, [hFF91]                                    ;; 0f:642f $f0 $91
     ld   B, A                                          ;; 0f:6431 $47
     ld   A, $ff                                        ;; 0f:6432 $3e $ff
-    call memset                                        ;; 0f:6434 $cd $6d $00
+    call memsetSmall                                   ;; 0f:6434 $cd $6d $00
     pop  HL                                            ;; 0f:6437 $e1
     ret                                                ;; 0f:6438 $c9
 
@@ -1787,7 +1787,7 @@ call_0f_6471:
     ld   B, C                                          ;; 0f:64c5 $41
     ld   A, $ff                                        ;; 0f:64c6 $3e $ff
     rst  rst_00_0010                                   ;; 0f:64c8 $d7
-    call memset                                        ;; 0f:64c9 $cd $6d $00
+    call memsetSmall                                   ;; 0f:64c9 $cd $6d $00
     call call_0f_6449                                  ;; 0f:64cc $cd $49 $64
     ld   A, $20                                        ;; 0f:64cf $3e $20
     rst  add_hl_a                                      ;; 0f:64d1 $c7

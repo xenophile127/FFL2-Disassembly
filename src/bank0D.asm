@@ -1568,7 +1568,7 @@ call_0d_50e7:
 .jr_0d_515a:
     ld   HL, wCC00                                     ;; 0d:515a $21 $00 $cc
     ld   B, $a0                                        ;; 0d:515d $06 $a0
-    call memclear                                      ;; 0d:515f $cd $6c $00
+    call memclearSmall                                 ;; 0d:515f $cd $6c $00
     ld   HL, wD93F                                     ;; 0d:5162 $21 $3f $d9
     ld   A, [HL+]                                      ;; 0d:5165 $2a
     ldh  [hFF90], A                                    ;; 0d:5166 $e0 $90
@@ -1815,7 +1815,7 @@ jp_0d_525b:
     rst  add_hl_a                                      ;; 0d:529f $c7
     ld   DE, wD933                                     ;; 0d:52a0 $11 $33 $d9
     ld   B, $03                                        ;; 0d:52a3 $06 $03
-    call call_00_0080                                  ;; 0d:52a5 $cd $80 $00
+    call memcopySmall                                  ;; 0d:52a5 $cd $80 $00
     ld   B, C                                          ;; 0d:52a8 $41
     ld   DE, wD936                                     ;; 0d:52a9 $11 $36 $d9
     xor  A, A                                          ;; 0d:52ac $af
@@ -2526,7 +2526,7 @@ jp_0d_60be:
 call_0d_60c6:
     ld   B, $a0                                        ;; 0d:60c6 $06 $a0
     ld   HL, wCC00                                     ;; 0d:60c8 $21 $00 $cc
-    jp   memclear                                      ;; 0d:60cb $c3 $6c $00
+    jp   memclearSmall                                 ;; 0d:60cb $c3 $6c $00
 
 call_0d_60ce:
     call call_0d_60c6                                  ;; 0d:60ce $cd $c6 $60

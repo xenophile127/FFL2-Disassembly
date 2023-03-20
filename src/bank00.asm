@@ -109,19 +109,19 @@ mul_hl_8_add_de:
     add  HL, DE                                        ;; 00:006a $19
     ret                                                ;; 00:006b $c9
 
-memclear:
+memclearSmall:
     xor  A, A                                          ;; 00:006c $af
 
-memset:
+memsetSmall:
     ld   [HL+], A                                      ;; 00:006d $22
     dec  B                                             ;; 00:006e $05
-    jr   NZ, memset                                    ;; 00:006f $20 $fc
+    jr   NZ, memsetSmall                               ;; 00:006f $20 $fc
     ret                                                ;; 00:0071 $c9
 
-call_00_0072:
+memclearBig:
     xor  A, A                                          ;; 00:0072 $af
 
-call_00_0073:
+memsetBig:
     push AF                                            ;; 00:0073 $f5
     push DE                                            ;; 00:0074 $d5
     ld   E, A                                          ;; 00:0075 $5f
@@ -136,7 +136,8 @@ call_00_0073:
     pop  AF                                            ;; 00:007e $f1
     ret                                                ;; 00:007f $c9
 
-call_00_0080:
+; Copy HL to DE, times B
+memcopySmall:
     push AF                                            ;; 00:0080 $f5
 .jr_00_0081:
     ld   A, [HL+]                                      ;; 00:0081 $2a
@@ -147,7 +148,8 @@ call_00_0080:
     pop  AF                                            ;; 00:0087 $f1
     ret                                                ;; 00:0088 $c9
 
-call_00_0089:
+; Copy HL to DE, times BC
+memcopyLarge:
     push AF                                            ;; 00:0089 $f5
 .jr_00_008a:
     ld   A, [HL+]                                      ;; 00:008a $2a
@@ -162,22 +164,22 @@ call_00_0089:
 
 call_00_0094:
     call call_00_1674                                  ;; 00:0094 $cd $74 $16
-    call memset                                        ;; 00:0097 $cd $6d $00
+    call memsetSmall                                   ;; 00:0097 $cd $6d $00
     jr   jr_00_00b2                                    ;; 00:009a $18 $16
 
 call_00_009c:
     call call_00_1674                                  ;; 00:009c $cd $74 $16
-    call call_00_0073                                  ;; 00:009f $cd $73 $00
+    call memsetBig                                     ;; 00:009f $cd $73 $00
     jr   jr_00_00b2                                    ;; 00:00a2 $18 $0e
 
 call_00_00a4:
     call call_00_1674                                  ;; 00:00a4 $cd $74 $16
-    call call_00_0080                                  ;; 00:00a7 $cd $80 $00
+    call memcopySmall                                  ;; 00:00a7 $cd $80 $00
     jr   jr_00_00b2                                    ;; 00:00aa $18 $06
 
 call_00_00ac:
     call call_00_1674                                  ;; 00:00ac $cd $74 $16
-    call call_00_0089                                  ;; 00:00af $cd $89 $00
+    call memcopyLarge                                  ;; 00:00af $cd $89 $00
 
 jr_00_00b2:
     jp   call_00_1691                                  ;; 00:00b2 $c3 $91 $16
@@ -185,7 +187,7 @@ jr_00_00b2:
 call_00_00b5:
     rst  switchBankSafe                                ;; 00:00b5 $ef
     push AF                                            ;; 00:00b6 $f5
-    call call_00_0080                                  ;; 00:00b7 $cd $80 $00
+    call memcopySmall                                  ;; 00:00b7 $cd $80 $00
     jr   jr_00_00cf                                    ;; 00:00ba $18 $13
     db   $ef, $f5, $cd, $89, $00, $18, $0c             ;; 00:00bc ???????
 
@@ -433,16 +435,16 @@ init:
     push BC                                            ;; 00:0229 $c5
     ld   HL, wC000                                     ;; 00:022a $21 $00 $c0
     ld   B, $a0                                        ;; 00:022d $06 $a0
-    call memclear                                      ;; 00:022f $cd $6c $00
+    call memclearSmall                                 ;; 00:022f $cd $6c $00
     ld   HL, wC100                                     ;; 00:0232 $21 $00 $c1
     ld   BC, $d00                                      ;; 00:0235 $01 $00 $0d
-    call call_00_0072                                  ;; 00:0238 $cd $72 $00
+    call memclearBig                                   ;; 00:0238 $cd $72 $00
     ld   H, $cf                                        ;; 00:023b $26 $cf
     ld   B, $11                                        ;; 00:023d $06 $11
-    call call_00_0072                                  ;; 00:023f $cd $72 $00
+    call memclearBig                                   ;; 00:023f $cd $72 $00
     ld   HL, hFF80                                     ;; 00:0242 $21 $80 $ff
     ld   B, $7f                                        ;; 00:0245 $06 $7f
-    call memclear                                      ;; 00:0247 $cd $6c $00
+    call memclearSmall                                 ;; 00:0247 $cd $6c $00
     pop  BC                                            ;; 00:024a $c1
     pop  HL                                            ;; 00:024b $e1
     ld   A, $1b                                        ;; 00:024c $3e $1b
@@ -469,11 +471,11 @@ init:
     ld   HL, $f2                                       ;; 00:026a $21 $f2 $00
     ld   DE, hFF80                                     ;; 00:026d $11 $80 $ff
     ld   B, $08                                        ;; 00:0270 $06 $08
-    call call_00_0080                                  ;; 00:0272 $cd $80 $00
+    call memcopySmall                                  ;; 00:0272 $cd $80 $00
     ld   HL, $e6                                       ;; 00:0275 $21 $e6 $00
     ld   DE, wC0E0                                     ;; 00:0278 $11 $e0 $c0
     ld   B, $0c                                        ;; 00:027b $06 $0c
-    call call_00_0080                                  ;; 00:027d $cd $80 $00
+    call memcopySmall                                  ;; 00:027d $cd $80 $00
     ld   A, $0e                                        ;; 00:0280 $3e $0e
     rst  switchBankSafe                                ;; 00:0282 $ef
     call call_0e_4003                                  ;; 00:0283 $cd $03 $40
@@ -522,7 +524,7 @@ init:
 .jr_00_02d7:
     ld   B, $04                                        ;; 00:02d7 $06 $04
     ld   A, $ff                                        ;; 00:02d9 $3e $ff
-    call memset                                        ;; 00:02db $cd $6d $00
+    call memsetSmall                                   ;; 00:02db $cd $6d $00
     ld   A, $1c                                        ;; 00:02de $3e $1c
     rst  add_hl_a                                      ;; 00:02e0 $c7
     dec  C                                             ;; 00:02e1 $0d
@@ -1057,7 +1059,7 @@ jp_00_0536:
     dec  A                                             ;; 00:053d $3d
     ld   B, $80                                        ;; 00:053e $06 $80
     ld   HL, wC380                                     ;; 00:0540 $21 $80 $c3
-    jp   memset                                        ;; 00:0543 $c3 $6d $00
+    jp   memsetSmall                                   ;; 00:0543 $c3 $6d $00
 
 call_00_0546:
     ld   HL, hFF97                                     ;; 00:0546 $21 $97 $ff
@@ -1124,7 +1126,7 @@ call_00_055d:
     ld   [DE], A                                       ;; 00:059d $12
     inc  DE                                            ;; 00:059e $13
     ld   B, $04                                        ;; 00:059f $06 $04
-    call call_00_0080                                  ;; 00:05a1 $cd $80 $00
+    call memcopySmall                                  ;; 00:05a1 $cd $80 $00
     ldh  A, [hFF92]                                    ;; 00:05a4 $f0 $92
     and  A, $07                                        ;; 00:05a6 $e6 $07
     inc  A                                             ;; 00:05a8 $3c
@@ -1632,7 +1634,7 @@ jp_00_0800:
     ld   HL, wC800                                     ;; 00:082f $21 $00 $c8
     ld   BC, $300                                      ;; 00:0832 $01 $00 $03
     ld   A, $ff                                        ;; 00:0835 $3e $ff
-    call call_00_0073                                  ;; 00:0837 $cd $73 $00
+    call memsetBig                                     ;; 00:0837 $cd $73 $00
     ld   HL, wC814                                     ;; 00:083a $21 $14 $c8
     call call_00_0796                                  ;; 00:083d $cd $96 $07
     call call_00_07aa                                  ;; 00:0840 $cd $aa $07
@@ -1653,7 +1655,7 @@ jp_00_0800:
     push HL                                            ;; 00:0857 $e5
     ld   HL, hFFA0                                     ;; 00:0858 $21 $a0 $ff
     ld   B, $04                                        ;; 00:085b $06 $04
-    call call_00_0080                                  ;; 00:085d $cd $80 $00
+    call memcopySmall                                  ;; 00:085d $cd $80 $00
     pop  HL                                            ;; 00:0860 $e1
     ld   [HL], D                                       ;; 00:0861 $72
     dec  HL                                            ;; 00:0862 $2b
@@ -1712,7 +1714,7 @@ call_00_08aa:
     ld   B, $a0                                        ;; 00:08b8 $06 $a0
 .jr_00_08ba:
     call call_00_1674                                  ;; 00:08ba $cd $74 $16
-    call call_00_0080                                  ;; 00:08bd $cd $80 $00
+    call memcopySmall                                  ;; 00:08bd $cd $80 $00
     ld   B, $12                                        ;; 00:08c0 $06 $12
     ld   HL, $9d01                                     ;; 00:08c2 $21 $01 $9d
     ldh  A, [hFFA0]                                    ;; 00:08c5 $f0 $a0
@@ -1721,7 +1723,7 @@ call_00_08aa:
     ld   HL, $9cc1                                     ;; 00:08cb $21 $c1 $9c
 .jr_00_08ce:
     ld   A, $ff                                        ;; 00:08ce $3e $ff
-    call memset                                        ;; 00:08d0 $cd $6d $00
+    call memsetSmall                                   ;; 00:08d0 $cd $6d $00
     call call_00_1691                                  ;; 00:08d3 $cd $91 $16
 
 jp_00_08d6:
@@ -1817,7 +1819,7 @@ call_00_0916:
     ld   B, $04                                        ;; 00:095e $06 $04
 .jr_00_0960:
     ld   A, $ff                                        ;; 00:0960 $3e $ff
-    call call_00_0073                                  ;; 00:0962 $cd $73 $00
+    call memsetBig                                     ;; 00:0962 $cd $73 $00
     ld   HL, $b09                                      ;; 00:0965 $21 $09 $0b
     ldh  A, [hFF8B]                                    ;; 00:0968 $f0 $8b
     and  A, A                                          ;; 00:096a $a7
@@ -1832,7 +1834,7 @@ call_00_0916:
 .jr_00_097b:
     ld   DE, wC7A4                                     ;; 00:097b $11 $a4 $c7
     ld   B, $02                                        ;; 00:097e $06 $02
-    call call_00_0080                                  ;; 00:0980 $cd $80 $00
+    call memcopySmall                                  ;; 00:0980 $cd $80 $00
     ld   HL, wC79B                                     ;; 00:0983 $21 $9b $c7
     ld   DE, wC7A1                                     ;; 00:0986 $11 $a1 $c7
     ld   A, [wC7D2]                                    ;; 00:0989 $fa $d2 $c7
@@ -1963,7 +1965,7 @@ call_00_0a2b:
     push AF                                            ;; 00:0a42 $f5
     ld   A, $ff                                        ;; 00:0a43 $3e $ff
     ld   B, E                                          ;; 00:0a45 $43
-    call memset                                        ;; 00:0a46 $cd $6d $00
+    call memsetSmall                                   ;; 00:0a46 $cd $6d $00
     pop  AF                                            ;; 00:0a49 $f1
     inc  A                                             ;; 00:0a4a $3c
     ld   [HL+], A                                      ;; 00:0a4b $22
@@ -1977,7 +1979,7 @@ call_00_0a52:
     ld   [HL+], A                                      ;; 00:0a52 $22
     ld   B, E                                          ;; 00:0a53 $43
     inc  A                                             ;; 00:0a54 $3c
-    call memset                                        ;; 00:0a55 $cd $6d $00
+    call memsetSmall                                   ;; 00:0a55 $cd $6d $00
     inc  A                                             ;; 00:0a58 $3c
     ld   [HL+], A                                      ;; 00:0a59 $22
     inc  A                                             ;; 00:0a5a $3c
@@ -2084,7 +2086,7 @@ call_00_0af3:
     call call_00_1674                                  ;; 00:0af3 $cd $74 $16
 .jr_00_0af6:
     push BC                                            ;; 00:0af6 $c5
-    call call_00_0080                                  ;; 00:0af7 $cd $80 $00
+    call memcopySmall                                  ;; 00:0af7 $cd $80 $00
     pop  BC                                            ;; 00:0afa $c1
     ld   A, $20                                        ;; 00:0afb $3e $20
     sub  A, B                                          ;; 00:0afd $90
@@ -2521,7 +2523,7 @@ call_00_0e30:
     ld   [HL], $00                                     ;; 00:0e46 $36 $00
     ld   HL, wC7A6                                     ;; 00:0e48 $21 $a6 $c7
     ld   B, $20                                        ;; 00:0e4b $06 $20
-    call memclear                                      ;; 00:0e4d $cd $6c $00
+    call memclearSmall                                 ;; 00:0e4d $cd $6c $00
     call call_00_0546                                  ;; 00:0e50 $cd $46 $05
 .jr_00_0e53:
     call call_00_068f                                  ;; 00:0e53 $cd $8f $06
@@ -3211,7 +3213,7 @@ call_00_1313:
     jr   NZ, .jr_00_1334                               ;; 00:1329 $20 $09
     dec  A                                             ;; 00:132b $3d
     ld   B, $08                                        ;; 00:132c $06 $08
-    call memset                                        ;; 00:132e $cd $6d $00
+    call memsetSmall                                   ;; 00:132e $cd $6d $00
     xor  A, A                                          ;; 00:1331 $af
     ld   [HL], A                                       ;; 00:1332 $77
     ret                                                ;; 00:1333 $c9
@@ -3224,7 +3226,7 @@ call_00_1313:
     ld   DE, wC70A                                     ;; 00:133f $11 $0a $c7
     ld   B, $03                                        ;; 00:1342 $06 $03
     push DE                                            ;; 00:1344 $d5
-    call call_00_0080                                  ;; 00:1345 $cd $80 $00
+    call memcopySmall                                  ;; 00:1345 $cd $80 $00
     pop  DE                                            ;; 00:1348 $d1
     ld   BC, wC785                                     ;; 00:1349 $01 $85 $c7
     ld   HL, $145a                                     ;; 00:134c $21 $5a $14
@@ -3453,10 +3455,10 @@ call_00_14e3:
     push HL                                            ;; 00:14e9 $e5
     ld   HL, hFFA0                                     ;; 00:14ea $21 $a0 $ff
     ld   B, $04                                        ;; 00:14ed $06 $04
-    call call_00_0080                                  ;; 00:14ef $cd $80 $00
+    call memcopySmall                                  ;; 00:14ef $cd $80 $00
     ld   HL, wC77E                                     ;; 00:14f2 $21 $7e $c7
     ld   B, $07                                        ;; 00:14f5 $06 $07
-    call call_00_0080                                  ;; 00:14f7 $cd $80 $00
+    call memcopySmall                                  ;; 00:14f7 $cd $80 $00
     pop  HL                                            ;; 00:14fa $e1
     ld   [HL], D                                       ;; 00:14fb $72
     dec  HL                                            ;; 00:14fc $2b
@@ -3475,7 +3477,7 @@ call_00_150a:
     call call_00_0546                                  ;; 00:150d $cd $46 $05
     ld   HL, wCC80                                     ;; 00:1510 $21 $80 $cc
     ld   B, $20                                        ;; 00:1513 $06 $20
-    call memclear                                      ;; 00:1515 $cd $6c $00
+    call memclearSmall                                 ;; 00:1515 $cd $6c $00
     rst  rst_00_0010                                   ;; 00:1518 $d7
     ld   A, $cc                                        ;; 00:1519 $3e $cc
     rst  rst_00_0018                                   ;; 00:151b $df
@@ -3522,7 +3524,7 @@ call_00_1549:
     ret  NZ                                            ;; 00:154d $c0
     dec  A                                             ;; 00:154e $3d
     ld   HL, wC785                                     ;; 00:154f $21 $85 $c7
-    call memset                                        ;; 00:1552 $cd $6d $00
+    call memsetSmall                                   ;; 00:1552 $cd $6d $00
     xor  A, A                                          ;; 00:1555 $af
     ld   [HL], A                                       ;; 00:1556 $77
 
@@ -3580,7 +3582,7 @@ call_00_1598:
     ld   A, [wC77B]                                    ;; 00:159b $fa $7b $c7
     and  A, A                                          ;; 00:159e $a7
     jr   NZ, .jr_00_15a6                               ;; 00:159f $20 $05
-    call call_00_0080                                  ;; 00:15a1 $cd $80 $00
+    call memcopySmall                                  ;; 00:15a1 $cd $80 $00
     jr   .jr_00_15b2                                   ;; 00:15a4 $18 $0c
 .jr_00_15a6:
     ld   C, E                                          ;; 00:15a6 $4b
@@ -3857,7 +3859,7 @@ call_00_16f9:
     ld   DE, wC771                                     ;; 00:1722 $11 $71 $c7
     ld   B, $03                                        ;; 00:1725 $06 $03
     push HL                                            ;; 00:1727 $e5
-    call call_00_0080                                  ;; 00:1728 $cd $80 $00
+    call memcopySmall                                  ;; 00:1728 $cd $80 $00
     pop  HL                                            ;; 00:172b $e1
     ld   C, $00                                        ;; 00:172c $0e $00
     ld   A, $20                                        ;; 00:172e $3e $20
@@ -3927,7 +3929,7 @@ call_00_176c:
     jp   Z, .jp_00_182a                                ;; 00:1787 $ca $2a $18
     ld   HL, wCC00                                     ;; 00:178a $21 $00 $cc
     ld   B, $80                                        ;; 00:178d $06 $80
-    call memclear                                      ;; 00:178f $cd $6c $00
+    call memclearSmall                                 ;; 00:178f $cd $6c $00
     ld   HL, wC7A6                                     ;; 00:1792 $21 $a6 $c7
     ld   B, $08                                        ;; 00:1795 $06 $08
 .jp_00_1797:
@@ -4049,7 +4051,7 @@ call_00_176c:
     inc  A                                             ;; 00:183a $3c
     jr   NZ, .jr_00_1844                               ;; 00:183b $20 $07
     ld   B, $10                                        ;; 00:183d $06 $10
-    call memclear                                      ;; 00:183f $cd $6c $00
+    call memclearSmall                                 ;; 00:183f $cd $6c $00
     jr   .jr_00_185a                                   ;; 00:1842 $18 $16
 .jr_00_1844:
     call call_00_0526                                  ;; 00:1844 $cd $26 $05
@@ -5134,7 +5136,7 @@ call_00_1f55:
     ld   HL, $4000                                     ;; 00:1f8d $21 $00 $40
     add  HL, BC                                        ;; 00:1f90 $09
     ld   B, $40                                        ;; 00:1f91 $06 $40
-    call call_00_0080                                  ;; 00:1f93 $cd $80 $00
+    call memcopySmall                                  ;; 00:1f93 $cd $80 $00
     pop  HL                                            ;; 00:1f96 $e1
     pop  BC                                            ;; 00:1f97 $c1
     dec  B                                             ;; 00:1f98 $05
