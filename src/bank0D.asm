@@ -231,7 +231,7 @@ call_0d_4152:
     ld_long_load A, hFF89                              ;; 0d:4152 $fa $89 $ff
     ld   B, A                                          ;; 0d:4155 $47
 .jr_0d_4156:
-    rst  rst_00_0010                                   ;; 0d:4156 $d7
+    rst  waitForVBlank                                 ;; 0d:4156 $d7
     ld_long_load A, hFF89                              ;; 0d:4157 $fa $89 $ff
     cp   A, B                                          ;; 0d:415a $b8
     jr   Z, .jr_0d_4156                                ;; 0d:415b $28 $f9
@@ -1949,7 +1949,7 @@ data_0d_535b:
     ld   BC, $84a                                      ;; 0d:5361 $01 $4a $08
     ld   E, $40                                        ;; 0d:5364 $1e $40
 .jr_0d_5366:
-    rst  rst_00_0010                                   ;; 0d:5366 $d7
+    rst  waitForVBlank                                 ;; 0d:5366 $d7
     ld   A, E                                          ;; 0d:5367 $7b
     add  A, [HL]                                       ;; 0d:5368 $86
     inc  HL                                            ;; 0d:5369 $23
@@ -1959,7 +1959,7 @@ data_0d_535b:
     pop  BC                                            ;; 0d:536e $c1
     dec  B                                             ;; 0d:536f $05
     jr   NZ, .jr_0d_535d                               ;; 0d:5370 $20 $eb
-    rst  rst_00_0010                                   ;; 0d:5372 $d7
+    rst  waitForVBlank                                 ;; 0d:5372 $d7
     ld   A, $40                                        ;; 0d:5373 $3e $40
     ldh  [rWY], A                                      ;; 0d:5375 $e0 $4a
     ret                                                ;; 0d:5377 $c9
@@ -1977,7 +1977,7 @@ jp_0d_5399:
     call call_00_00ac                                  ;; 0d:53a5 $cd $ac $00
     call call_0d_53ef                                  ;; 0d:53a8 $cd $ef $53
     farcall2 call_0f_6086                              ;; 0d:53ab $cd $7d $01 $86 $60 $0f
-    rst  rst_00_0010                                   ;; 0d:53b1 $d7
+    rst  waitForVBlank                                 ;; 0d:53b1 $d7
     ld   A, $c3                                        ;; 0d:53b2 $3e $c3
     ldh  [rLCDC], A                                    ;; 0d:53b4 $e0 $40
     ld   E, $00                                        ;; 0d:53b6 $1e $00
@@ -1997,13 +1997,13 @@ call_0d_53dd:
     ld   DE, $9900                                     ;; 0d:53e0 $11 $00 $99
     ld   BC, $140                                      ;; 0d:53e3 $01 $40 $01
     call call_00_00ac                                  ;; 0d:53e6 $cd $ac $00
-    rst  rst_00_0010                                   ;; 0d:53e9 $d7
+    rst  waitForVBlank                                 ;; 0d:53e9 $d7
     ld   A, $c3                                        ;; 0d:53ea $3e $c3
     ldh  [rLCDC], A                                    ;; 0d:53ec $e0 $40
     ret                                                ;; 0d:53ee $c9
 
 call_0d_53ef:
-    rst  rst_00_0010                                   ;; 0d:53ef $d7
+    rst  waitForVBlank                                 ;; 0d:53ef $d7
     ld   A, $e3                                        ;; 0d:53f0 $3e $e3
     ldh  [rLCDC], A                                    ;; 0d:53f2 $e0 $40
     ldh  A, [rWY]                                      ;; 0d:53f4 $f0 $4a
@@ -2017,7 +2017,7 @@ call_0d_53fd:
     ld   DE, $9c00                                     ;; 0d:5400 $11 $00 $9c
     ld   BC, $140                                      ;; 0d:5403 $01 $40 $01
     call call_00_00ac                                  ;; 0d:5406 $cd $ac $00
-    rst  rst_00_0010                                   ;; 0d:5409 $d7
+    rst  waitForVBlank                                 ;; 0d:5409 $d7
     ld   A, $e3                                        ;; 0d:540a $3e $e3
     ldh  [rLCDC], A                                    ;; 0d:540c $e0 $40
     ld   A, [wD97B]                                    ;; 0d:540e $fa $7b $d9
@@ -2042,7 +2042,7 @@ call_0d_542a:
     ld   E, [HL]                                       ;; 0d:5433 $5e
     ld   D, $07                                        ;; 0d:5434 $16 $07
 .jr_0d_5436:
-    rst  rst_00_0010                                   ;; 0d:5436 $d7
+    rst  waitForVBlank                                 ;; 0d:5436 $d7
     call call_0d_5463                                  ;; 0d:5437 $cd $63 $54
     dec  D                                             ;; 0d:543a $15
     jr   NZ, .jr_0d_5436                               ;; 0d:543b $20 $f9
@@ -2533,7 +2533,7 @@ call_0d_60ce:
     ld   B, $01                                        ;; 0d:60d1 $06 $01
 
 call_0d_60d3:
-    rst  rst_00_0010                                   ;; 0d:60d3 $d7
+    rst  waitForVBlank                                 ;; 0d:60d3 $d7
     ld   A, $cc                                        ;; 0d:60d4 $3e $cc
     rst  executeOAM_DMA                                ;; 0d:60d6 $df
     dec  B                                             ;; 0d:60d7 $05

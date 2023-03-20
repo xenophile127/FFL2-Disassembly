@@ -1279,7 +1279,7 @@ call_01_546a:
     ret                                                ;; 01:5470 $c9
 
 jp_01_5471:
-    rst  rst_00_0010                                   ;; 01:5471 $d7
+    rst  waitForVBlank                                 ;; 01:5471 $d7
     xor  A, A                                          ;; 01:5472 $af
     ldh  [rBGP], A                                     ;; 01:5473 $e0 $47
     ldh  [rOBP0], A                                    ;; 01:5475 $e0 $48
@@ -2735,7 +2735,7 @@ call_01_5df8:
     ldh  [hFF96], A                                    ;; 01:5df9 $e0 $96
     call call_01_5f22                                  ;; 01:5dfb $cd $22 $5f
     call call_01_5e31                                  ;; 01:5dfe $cd $31 $5e
-    rst  rst_00_0010                                   ;; 01:5e01 $d7
+    rst  waitForVBlank                                 ;; 01:5e01 $d7
     ld   A, $cc                                        ;; 01:5e02 $3e $cc
     rst  executeOAM_DMA                                ;; 01:5e04 $df
     call call_01_5f44                                  ;; 01:5e05 $cd $44 $5f
@@ -2747,7 +2747,7 @@ call_01_5e0d:
     xor  A, A                                          ;; 01:5e0d $af
     ldh  [hFF96], A                                    ;; 01:5e0e $e0 $96
     call call_01_5e31                                  ;; 01:5e10 $cd $31 $5e
-    rst  rst_00_0010                                   ;; 01:5e13 $d7
+    rst  waitForVBlank                                 ;; 01:5e13 $d7
     ld   A, $cc                                        ;; 01:5e14 $3e $cc
     rst  executeOAM_DMA                                ;; 01:5e16 $df
     call call_01_5f2b                                  ;; 01:5e17 $cd $2b $5f
@@ -2850,7 +2850,7 @@ call_01_5eb1:
     call call_00_0174                                  ;; 01:5eb1 $cd $74 $01
 
 jp_01_5eb4:
-    rst  rst_00_0010                                   ;; 01:5eb4 $d7
+    rst  waitForVBlank                                 ;; 01:5eb4 $d7
     ld   A, $c0                                        ;; 01:5eb5 $3e $c0
     rst  executeOAM_DMA                                ;; 01:5eb7 $df
     xor  A, A                                          ;; 01:5eb8 $af
@@ -2861,7 +2861,7 @@ jp_01_5eb4:
     xor  A, A                                          ;; 01:5ec2 $af
     ldh  [hFF96], A                                    ;; 01:5ec3 $e0 $96
     call call_01_5e35                                  ;; 01:5ec5 $cd $35 $5e
-    rst  rst_00_0010                                   ;; 01:5ec8 $d7
+    rst  waitForVBlank                                 ;; 01:5ec8 $d7
     ldh  A, [rLCDC]                                    ;; 01:5ec9 $f0 $40
     and  A, $df                                        ;; 01:5ecb $e6 $df
     ldh  [rLCDC], A                                    ;; 01:5ecd $e0 $40
@@ -2907,7 +2907,7 @@ call_01_5f07:
     ret                                                ;; 01:5f0d $c9
 
 call_01_5f0e:
-    rst  rst_00_0010                                   ;; 01:5f0e $d7
+    rst  waitForVBlank                                 ;; 01:5f0e $d7
     ld   HL, wC700                                     ;; 01:5f0f $21 $00 $c7
     ld   A, $d2                                        ;; 01:5f12 $3e $d2
     ldh  [rBGP], A                                     ;; 01:5f14 $e0 $47
@@ -2921,7 +2921,7 @@ call_01_5f0e:
     ret                                                ;; 01:5f21 $c9
 
 call_01_5f22:
-    rst  rst_00_0010                                   ;; 01:5f22 $d7
+    rst  waitForVBlank                                 ;; 01:5f22 $d7
     xor  A, A                                          ;; 01:5f23 $af
     ldh  [rBGP], A                                     ;; 01:5f24 $e0 $47
     ldh  [rOBP0], A                                    ;; 01:5f26 $e0 $48
@@ -2944,7 +2944,7 @@ call_01_5f2b:
     jp   call_00_017a                                  ;; 01:5f41 $c3 $7a $01
 
 call_01_5f44:
-    rst  rst_00_0010                                   ;; 01:5f44 $d7
+    rst  waitForVBlank                                 ;; 01:5f44 $d7
     xor  A, A                                          ;; 01:5f45 $af
     ldh  [rWY], A                                      ;; 01:5f46 $e0 $4a
     ld   A, $07                                        ;; 01:5f48 $3e $07
@@ -2954,7 +2954,7 @@ call_01_5f44:
     ret                                                ;; 01:5f50 $c9
 
 jp_01_5f51:
-    rst  rst_00_0010                                   ;; 01:5f51 $d7
+    rst  waitForVBlank                                 ;; 01:5f51 $d7
     xor  A, A                                          ;; 01:5f52 $af
     ldh  [rBGP], A                                     ;; 01:5f53 $e0 $47
     ldh  [rOBP0], A                                    ;; 01:5f55 $e0 $48
@@ -3070,7 +3070,7 @@ call_01_6022:
     push BC                                            ;; 01:6022 $c5
     ld   B, $01                                        ;; 01:6023 $06 $01
 .jr_01_6025:
-    rst  rst_00_0010                                   ;; 01:6025 $d7
+    rst  waitForVBlank                                 ;; 01:6025 $d7
     ld   A, $cc                                        ;; 01:6026 $3e $cc
     rst  executeOAM_DMA                                ;; 01:6028 $df
     dec  B                                             ;; 01:6029 $05
@@ -3448,7 +3448,7 @@ call_01_6157:
 
 
 jp_01_628a:
-    rst  rst_00_0010                                   ;; 01:628a $d7
+    rst  waitForVBlank                                 ;; 01:628a $d7
     xor  A, A                                          ;; 01:628b $af
     ldh  [rBGP], A                                     ;; 01:628c $e0 $47
     ldh  [rOBP0], A                                    ;; 01:628e $e0 $48
@@ -3773,7 +3773,7 @@ jp_01_647a:
     call call_01_6669                                  ;; 01:64b7 $cd $69 $66
     dec  B                                             ;; 01:64ba $05
     jr   NZ, .jr_01_64b5                               ;; 01:64bb $20 $f8
-    rst  rst_00_0010                                   ;; 01:64bd $d7
+    rst  waitForVBlank                                 ;; 01:64bd $d7
     xor  A, A                                          ;; 01:64be $af
     ldh  [rBGP], A                                     ;; 01:64bf $e0 $47
     ldh  [rOBP0], A                                    ;; 01:64c1 $e0 $48
@@ -4064,7 +4064,7 @@ call_01_668c:
     call call_01_5e35                                  ;; 01:66b0 $cd $35 $5e
     ld   A, $03                                        ;; 01:66b3 $3e $03
     ldh  [hFF96], A                                    ;; 01:66b5 $e0 $96
-    rst  rst_00_0010                                   ;; 01:66b7 $d7
+    rst  waitForVBlank                                 ;; 01:66b7 $d7
     ld   A, $cc                                        ;; 01:66b8 $3e $cc
     rst  executeOAM_DMA                                ;; 01:66ba $df
     call call_01_5f0e                                  ;; 01:66bb $cd $0e $5f
@@ -4338,7 +4338,7 @@ jp_01_6838:
     ld   C, [HL]                                       ;; 01:688d $4e
     ld   HL, wC800                                     ;; 01:688e $21 $00 $c8
     call call_00_0186                                  ;; 01:6891 $cd $86 $01
-    rst  rst_00_0010                                   ;; 01:6894 $d7
+    rst  waitForVBlank                                 ;; 01:6894 $d7
     ld   A, $cc                                        ;; 01:6895 $3e $cc
     rst  executeOAM_DMA                                ;; 01:6897 $df
     ld   A, $c3                                        ;; 01:6898 $3e $c3
@@ -4364,13 +4364,13 @@ jp_01_6838:
     jp   NZ, .jp_01_697b                               ;; 01:68be $c2 $7b $69
 .jp_01_68c1:
     call call_01_5f22                                  ;; 01:68c1 $cd $22 $5f
-    rst  rst_00_0010                                   ;; 01:68c4 $d7
+    rst  waitForVBlank                                 ;; 01:68c4 $d7
     ld   A, $c3                                        ;; 01:68c5 $3e $c3
     ldh  [rLCDC], A                                    ;; 01:68c7 $e0 $40
     xor  A, A                                          ;; 01:68c9 $af
     ldh  [hFF96], A                                    ;; 01:68ca $e0 $96
     call call_01_5e25                                  ;; 01:68cc $cd $25 $5e
-    rst  rst_00_0010                                   ;; 01:68cf $d7
+    rst  waitForVBlank                                 ;; 01:68cf $d7
     ld   A, $cc                                        ;; 01:68d0 $3e $cc
     rst  executeOAM_DMA                                ;; 01:68d2 $df
     ld   DE, $70                                       ;; 01:68d3 $11 $70 $00
@@ -4384,7 +4384,7 @@ jp_01_6838:
     call call_00_0186                                  ;; 01:68e6 $cd $86 $01
     ld   A, $0a                                        ;; 01:68e9 $3e $0a
     ldh  [hFF90], A                                    ;; 01:68eb $e0 $90
-    rst  rst_00_0010                                   ;; 01:68ed $d7
+    rst  waitForVBlank                                 ;; 01:68ed $d7
     di                                                 ;; 01:68ee $f3
 .jr_01_68ef:
     call call_00_016e                                  ;; 01:68ef $cd $6e $01
@@ -4594,7 +4594,7 @@ call_01_6a39:
     call call_01_5e25                                  ;; 01:6a39 $cd $25 $5e
     xor  A, A                                          ;; 01:6a3c $af
     ldh  [hFF96], A                                    ;; 01:6a3d $e0 $96
-    rst  rst_00_0010                                   ;; 01:6a3f $d7
+    rst  waitForVBlank                                 ;; 01:6a3f $d7
     ld   A, $cc                                        ;; 01:6a40 $3e $cc
     rst  executeOAM_DMA                                ;; 01:6a42 $df
     jp   jp_01_5ea3                                    ;; 01:6a43 $c3 $a3 $5e
@@ -4920,7 +4920,7 @@ jp_01_6c71:
     xor  A, A                                          ;; 01:6cd3 $af
     ldh  [hFF96], A                                    ;; 01:6cd4 $e0 $96
     call call_01_5e35                                  ;; 01:6cd6 $cd $35 $5e
-    rst  rst_00_0010                                   ;; 01:6cd9 $d7
+    rst  waitForVBlank                                 ;; 01:6cd9 $d7
     ld   A, $cc                                        ;; 01:6cda $3e $cc
     rst  executeOAM_DMA                                ;; 01:6cdc $df
     call call_01_6ce3                                  ;; 01:6cdd $cd $e3 $6c
@@ -4962,14 +4962,14 @@ call_01_6d12:
     ldh  [hFF96], A                                    ;; 01:6d13 $e0 $96
     ld   [wC764], A                                    ;; 01:6d15 $ea $64 $c7
     call call_01_5e35                                  ;; 01:6d18 $cd $35 $5e
-    rst  rst_00_0010                                   ;; 01:6d1b $d7
+    rst  waitForVBlank                                 ;; 01:6d1b $d7
     ld   A, $cc                                        ;; 01:6d1c $3e $cc
     rst  executeOAM_DMA                                ;; 01:6d1e $df
     ld   HL, $9c00                                     ;; 01:6d1f $21 $00 $9c
     ld   BC, $140                                      ;; 01:6d22 $01 $40 $01
     ld   A, $75                                        ;; 01:6d25 $3e $75
     call call_00_009c                                  ;; 01:6d27 $cd $9c $00
-    rst  rst_00_0010                                   ;; 01:6d2a $d7
+    rst  waitForVBlank                                 ;; 01:6d2a $d7
     ld   A, $d2                                        ;; 01:6d2b $3e $d2
     ldh  [rBGP], A                                     ;; 01:6d2d $e0 $47
     ld   A, $d2                                        ;; 01:6d2f $3e $d2
@@ -4985,7 +4985,7 @@ jp_01_6d3c:
     ldh  [hFF96], A                                    ;; 01:6d3d $e0 $96
     call call_01_5e35                                  ;; 01:6d3f $cd $35 $5e
     call call_00_01b0                                  ;; 01:6d42 $cd $b0 $01
-    rst  rst_00_0010                                   ;; 01:6d45 $d7
+    rst  waitForVBlank                                 ;; 01:6d45 $d7
     ld   A, $cc                                        ;; 01:6d46 $3e $cc
     rst  executeOAM_DMA                                ;; 01:6d48 $df
     ldh  A, [rLCDC]                                    ;; 01:6d49 $f0 $40

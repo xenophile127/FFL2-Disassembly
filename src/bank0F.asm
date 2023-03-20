@@ -1094,7 +1094,7 @@ call_0f_608f:
     db   $c3, $57, $62, $c3, $ca, $61                  ;; 0f:6092 ??????
 
 jp_0f_6098:
-    rst  rst_00_0010                                   ;; 0f:6098 $d7
+    rst  waitForVBlank                                 ;; 0f:6098 $d7
     xor  A, A                                          ;; 0f:6099 $af
     ldh  [rBGP], A                                     ;; 0f:609a $e0 $47
     ldh  [rOBP0], A                                    ;; 0f:609c $e0 $48
@@ -1112,7 +1112,7 @@ jp_0f_6098:
     ld   HL, wCC00                                     ;; 0f:60b9 $21 $00 $cc
     ld   B, $a0                                        ;; 0f:60bc $06 $a0
     call memclearSmall                                 ;; 0f:60be $cd $6c $00
-    rst  rst_00_0010                                   ;; 0f:60c1 $d7
+    rst  waitForVBlank                                 ;; 0f:60c1 $d7
     ld   A, $cc                                        ;; 0f:60c2 $3e $cc
     rst  executeOAM_DMA                                ;; 0f:60c4 $df
     ld   HL, data_0f_4700                              ;; 0f:60c5 $21 $00 $47
@@ -1149,7 +1149,7 @@ jp_0f_6098:
     call call_0f_6257                                  ;; 0f:60fe $cd $57 $62
     call call_0f_627f                                  ;; 0f:6101 $cd $7f $62
     call call_0f_6146                                  ;; 0f:6104 $cd $46 $61
-    rst  rst_00_0010                                   ;; 0f:6107 $d7
+    rst  waitForVBlank                                 ;; 0f:6107 $d7
     ld   A, $40                                        ;; 0f:6108 $3e $40
     ldh  [rWY], A                                      ;; 0f:610a $e0 $4a
     ld   A, $07                                        ;; 0f:610c $3e $07
@@ -1172,7 +1172,7 @@ jp_0f_6098:
 .jr_0f_612c:
     call call_0f_61ed                                  ;; 0f:612c $cd $ed $61
 .jr_0f_612f:
-    rst  rst_00_0010                                   ;; 0f:612f $d7
+    rst  waitForVBlank                                 ;; 0f:612f $d7
     ld   A, $d2                                        ;; 0f:6130 $3e $d2
     ldh  [rBGP], A                                     ;; 0f:6132 $e0 $47
     ld   [wC700], A                                    ;; 0f:6134 $ea $00 $c7
@@ -1317,7 +1317,7 @@ call_0f_61ed:
     ld   E, $01                                        ;; 0f:61ed $1e $01
     ld   A, $ff                                        ;; 0f:61ef $3e $ff
     ldh  [hFF90], A                                    ;; 0f:61f1 $e0 $90
-    rst  rst_00_0010                                   ;; 0f:61f3 $d7
+    rst  waitForVBlank                                 ;; 0f:61f3 $d7
     ld   A, $d2                                        ;; 0f:61f4 $3e $d2
     ldh  [rBGP], A                                     ;; 0f:61f6 $e0 $47
     di                                                 ;; 0f:61f8 $f3
@@ -1523,20 +1523,20 @@ call_0f_62e9:
     call mul_hl_32_add_de                              ;; 0f:632b $cd $65 $00
     call call_0f_6450                                  ;; 0f:632e $cd $50 $64
 .jr_0f_6331:
-    rst  rst_00_0010                                   ;; 0f:6331 $d7
+    rst  waitForVBlank                                 ;; 0f:6331 $d7
     call call_0f_6439                                  ;; 0f:6332 $cd $39 $64
     call call_0f_642e                                  ;; 0f:6335 $cd $2e $64
     ld   A, $20                                        ;; 0f:6338 $3e $20
     rst  add_hl_a                                      ;; 0f:633a $c7
     call call_0f_6440                                  ;; 0f:633b $cd $40 $64
-    rst  rst_00_0010                                   ;; 0f:633e $d7
+    rst  waitForVBlank                                 ;; 0f:633e $d7
     call call_0f_6449                                  ;; 0f:633f $cd $49 $64
     call call_0f_642e                                  ;; 0f:6342 $cd $2e $64
     ld   DE, hFFE0                                     ;; 0f:6345 $11 $e0 $ff
     add  HL, DE                                        ;; 0f:6348 $19
     call call_0f_6450                                  ;; 0f:6349 $cd $50 $64
-    rst  rst_00_0010                                   ;; 0f:634c $d7
-    rst  rst_00_0010                                   ;; 0f:634d $d7
+    rst  waitForVBlank                                 ;; 0f:634c $d7
+    rst  waitForVBlank                                 ;; 0f:634d $d7
     ld   HL, hFF92                                     ;; 0f:634e $21 $92 $ff
     dec  [HL]                                          ;; 0f:6351 $35
     jr   NZ, .jr_0f_6331                               ;; 0f:6352 $20 $dd
@@ -1581,7 +1581,7 @@ call_0f_62e9:
     ld   [HL], $01                                     ;; 0f:638f $36 $01
 .jr_0f_6391:
     call call_0f_6459                                  ;; 0f:6391 $cd $59 $64
-    rst  rst_00_0010                                   ;; 0f:6394 $d7
+    rst  waitForVBlank                                 ;; 0f:6394 $d7
     ld   A, $cc                                        ;; 0f:6395 $3e $cc
     rst  executeOAM_DMA                                ;; 0f:6397 $df
     ld   A, [wD944]                                    ;; 0f:6398 $fa $44 $d9
@@ -1617,7 +1617,7 @@ call_0f_62e9:
 .jr_0f_63c6:
     ld   D, $04                                        ;; 0f:63c6 $16 $04
 .jr_0f_63c8:
-    rst  rst_00_0010                                   ;; 0f:63c8 $d7
+    rst  waitForVBlank                                 ;; 0f:63c8 $d7
     ld   A, [HL]                                       ;; 0f:63c9 $7e
     ldh  [rOBP0], A                                    ;; 0f:63ca $e0 $48
     dec  D                                             ;; 0f:63cc $15
@@ -1628,7 +1628,7 @@ call_0f_62e9:
     ld   HL, wCC00                                     ;; 0f:63d3 $21 $00 $cc
     ld   B, $28                                        ;; 0f:63d6 $06 $28
     call memclearSmall                                 ;; 0f:63d8 $cd $6c $00
-    rst  rst_00_0010                                   ;; 0f:63db $d7
+    rst  waitForVBlank                                 ;; 0f:63db $d7
     ld   A, $cc                                        ;; 0f:63dc $3e $cc
     rst  executeOAM_DMA                                ;; 0f:63de $df
     ld   A, $d2                                        ;; 0f:63df $3e $d2
@@ -1656,7 +1656,7 @@ call_0f_62e9:
     ld   HL, $9800                                     ;; 0f:6401 $21 $00 $98
     ld   C, $04                                        ;; 0f:6404 $0e $04
     call call_0f_61a9                                  ;; 0f:6406 $cd $a9 $61
-    rst  rst_00_0010                                   ;; 0f:6409 $d7
+    rst  waitForVBlank                                 ;; 0f:6409 $d7
     xor  A, A                                          ;; 0f:640a $af
     ldh  [rSCY], A                                     ;; 0f:640b $e0 $42
     jr   .jp_0f_63e3                                   ;; 0f:640d $18 $d4
@@ -1665,18 +1665,18 @@ call_0f_640f:
     ld   A, $04                                        ;; 0f:640f $3e $04
     ldh  [hFF90], A                                    ;; 0f:6411 $e0 $90
 .jr_0f_6413:
-    rst  rst_00_0010                                   ;; 0f:6413 $d7
-    rst  rst_00_0010                                   ;; 0f:6414 $d7
+    rst  waitForVBlank                                 ;; 0f:6413 $d7
+    rst  waitForVBlank                                 ;; 0f:6414 $d7
     ld   A, $27                                        ;; 0f:6415 $3e $27
     ldh  [hFFB2], A                                    ;; 0f:6417 $e0 $b2
     ldh  A, [hFF90]                                    ;; 0f:6419 $f0 $90
     ldh  [rSCX], A                                     ;; 0f:641b $e0 $43
-    rst  rst_00_0010                                   ;; 0f:641d $d7
-    rst  rst_00_0010                                   ;; 0f:641e $d7
+    rst  waitForVBlank                                 ;; 0f:641d $d7
+    rst  waitForVBlank                                 ;; 0f:641e $d7
     xor  A, A                                          ;; 0f:641f $af
     ldh  [rSCX], A                                     ;; 0f:6420 $e0 $43
-    rst  rst_00_0010                                   ;; 0f:6422 $d7
-    rst  rst_00_0010                                   ;; 0f:6423 $d7
+    rst  waitForVBlank                                 ;; 0f:6422 $d7
+    rst  waitForVBlank                                 ;; 0f:6423 $d7
     ldh  A, [hFF90]                                    ;; 0f:6424 $f0 $90
     cpl                                                ;; 0f:6426 $2f
     inc  A                                             ;; 0f:6427 $3c
@@ -1786,7 +1786,7 @@ call_0f_6471:
     call call_0f_6449                                  ;; 0f:64c2 $cd $49 $64
     ld   B, C                                          ;; 0f:64c5 $41
     ld   A, $ff                                        ;; 0f:64c6 $3e $ff
-    rst  rst_00_0010                                   ;; 0f:64c8 $d7
+    rst  waitForVBlank                                 ;; 0f:64c8 $d7
     call memsetSmall                                   ;; 0f:64c9 $cd $6d $00
     call call_0f_6449                                  ;; 0f:64cc $cd $49 $64
     ld   A, $20                                        ;; 0f:64cf $3e $20
