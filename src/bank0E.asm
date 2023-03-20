@@ -21,10 +21,10 @@ updateSoundEngineImpl:
     push BC                                            ;; 0e:4007 $c5
     push DE                                            ;; 0e:4008 $d5
     push HL                                            ;; 0e:4009 $e5
-    ldh  A, [hFFB1]                                    ;; 0e:400a $f0 $b1
+    ldh  A, [hMusicSpecialSongRequest]                 ;; 0e:400a $f0 $b1
     or   A, A                                          ;; 0e:400c $b7
     jr   Z, .jr_0e_401e                                ;; 0e:400d $28 $0f
-    ldh  A, [hFFB9]                                    ;; 0e:400f $f0 $b9
+    ldh  A, [hMusicSpecialSongPlaying]                 ;; 0e:400f $f0 $b9
     or   A, A                                          ;; 0e:4011 $b7
     jr   Z, .jr_0e_4019                                ;; 0e:4012 $28 $05
     call call_0e_410d                                  ;; 0e:4014 $cd $0d $41
@@ -33,7 +33,7 @@ updateSoundEngineImpl:
     call call_0e_40eb                                  ;; 0e:4019 $cd $eb $40
     jr   .jr_0e_403d                                   ;; 0e:401c $18 $1f
 .jr_0e_401e:
-    ldh  A, [hFFB9]                                    ;; 0e:401e $f0 $b9
+    ldh  A, [hMusicSpecialSongPlaying]                 ;; 0e:401e $f0 $b9
     or   A, A                                          ;; 0e:4020 $b7
     jr   Z, .jr_0e_4028                                ;; 0e:4021 $28 $05
     call call_0e_411d                                  ;; 0e:4023 $cd $1d $41
@@ -42,13 +42,13 @@ updateSoundEngineImpl:
     ld   A, [wCB1A]                                    ;; 0e:4028 $fa $1a $cb
     or   A, A                                          ;; 0e:402b $b7
     jr   NZ, .jr_0e_4037                               ;; 0e:402c $20 $09
-    ldh  A, [hFFB3]                                    ;; 0e:402e $f0 $b3
+    ldh  A, [hPlayingMusic]                            ;; 0e:402e $f0 $b3
     ld   B, A                                          ;; 0e:4030 $47
-    ldh  A, [hFFB0]                                    ;; 0e:4031 $f0 $b0
+    ldh  A, [hCurrentMusic]                            ;; 0e:4031 $f0 $b0
     cp   A, B                                          ;; 0e:4033 $b8
     call NZ, call_0e_409b                              ;; 0e:4034 $c4 $9b $40
 .jr_0e_4037:
-    ldh  A, [hFFB2]                                    ;; 0e:4037 $f0 $b2
+    ldh  A, [hSFX]                                     ;; 0e:4037 $f0 $b2
     or   A, A                                          ;; 0e:4039 $b7
     call NZ, call_0e_4920                              ;; 0e:403a $c4 $20 $49
 .jr_0e_403d:
@@ -81,7 +81,7 @@ initSoundEngineImpl:
     ldh  [rNR50], A                                    ;; 0e:4070 $e0 $24
     ld   A, $ff                                        ;; 0e:4072 $3e $ff
     ldh  [rNR51], A                                    ;; 0e:4074 $e0 $25
-    ld   HL, hFFB0                                     ;; 0e:4076 $21 $b0 $ff
+    ld   HL, hCurrentMusic                             ;; 0e:4076 $21 $b0 $ff
     ld   C, $10                                        ;; 0e:4079 $0e $10
     xor  A, A                                          ;; 0e:407b $af
 .jr_0e_407c:
@@ -111,7 +111,7 @@ call_0e_4081:
     ret                                                ;; 0e:409a $c9
 
 call_0e_409b:
-    ldh  [hFFB3], A                                    ;; 0e:409b $e0 $b3
+    ldh  [hPlayingMusic], A                            ;; 0e:409b $e0 $b3
     or   A, A                                          ;; 0e:409d $b7
     jr   NZ, call_0e_40a4                              ;; 0e:409e $20 $04
     call initSoundEngineImpl                           ;; 0e:40a0 $cd $48 $40
@@ -176,10 +176,10 @@ call_0e_40eb:
     inc  E                                             ;; 0e:40ff $1c
     dec  C                                             ;; 0e:4100 $0d
     jr   NZ, .jr_0e_40fd                               ;; 0e:4101 $20 $fa
-    ldh  A, [hFFB1]                                    ;; 0e:4103 $f0 $b1
+    ldh  A, [hMusicSpecialSongRequest]                 ;; 0e:4103 $f0 $b1
     call call_0e_40a4                                  ;; 0e:4105 $cd $a4 $40
     ld   A, $01                                        ;; 0e:4108 $3e $01
-    ldh  [hFFB9], A                                    ;; 0e:410a $e0 $b9
+    ldh  [hMusicSpecialSongPlaying], A                 ;; 0e:410a $e0 $b9
     ret                                                ;; 0e:410c $c9
 
 call_0e_410d:
@@ -205,17 +205,17 @@ call_0e_411d:
     dec  C                                             ;; 0e:412b $0d
     jr   NZ, .jr_0e_4128                               ;; 0e:412c $20 $fa
     xor  A, A                                          ;; 0e:412e $af
-    ldh  [hFFB1], A                                    ;; 0e:412f $e0 $b1
-    ldh  [hFFB9], A                                    ;; 0e:4131 $e0 $b9
+    ldh  [hMusicSpecialSongRequest], A                 ;; 0e:412f $e0 $b1
+    ldh  [hMusicSpecialSongPlaying], A                 ;; 0e:4131 $e0 $b9
     ld   A, [wCB0C]                                    ;; 0e:4133 $fa $0c $cb
     ldh  [rNR21], A                                    ;; 0e:4136 $e0 $16
     ld   A, [wCB10]                                    ;; 0e:4138 $fa $10 $cb
     ldh  [rNR22], A                                    ;; 0e:413b $e0 $17
     ld   A, $87                                        ;; 0e:413d $3e $87
     ldh  [rNR24], A                                    ;; 0e:413f $e0 $19
-    ldh  A, [hFFBA]                                    ;; 0e:4141 $f0 $ba
+    ldh  A, [hWaveTablePointer]                        ;; 0e:4141 $f0 $ba
     ld   L, A                                          ;; 0e:4143 $6f
-    ldh  A, [hFFBB]                                    ;; 0e:4144 $f0 $bb
+    ldh  A, [hWaveTablePointer.high]                   ;; 0e:4144 $f0 $bb
     ld   H, A                                          ;; 0e:4146 $67
     call call_0e_4791                                  ;; 0e:4147 $cd $91 $47
 
@@ -320,19 +320,19 @@ call_0e_4251:
     call call_0e_4281                                  ;; 0e:425e $cd $81 $42
     call call_0e_4281                                  ;; 0e:4261 $cd $81 $42
 .jr_0e_4264:
-    ldh  A, [hFFB4]                                    ;; 0e:4264 $f0 $b4
+    ldh  A, [hVibratoVolumeChannelSelection]           ;; 0e:4264 $f0 $b4
     inc  A                                             ;; 0e:4266 $3c
     cp   A, $03                                        ;; 0e:4267 $fe $03
     jr   NZ, .jr_0e_426c                               ;; 0e:4269 $20 $01
     xor  A, A                                          ;; 0e:426b $af
 .jr_0e_426c:
-    ldh  [hFFB4], A                                    ;; 0e:426c $e0 $b4
+    ldh  [hVibratoVolumeChannelSelection], A           ;; 0e:426c $e0 $b4
     or   A, A                                          ;; 0e:426e $b7
     call Z, call_0e_47d3                               ;; 0e:426f $cc $d3 $47
-    ldh  A, [hFFB4]                                    ;; 0e:4272 $f0 $b4
+    ldh  A, [hVibratoVolumeChannelSelection]           ;; 0e:4272 $f0 $b4
     cp   A, $01                                        ;; 0e:4274 $fe $01
     call Z, call_0e_484d                               ;; 0e:4276 $cc $4d $48
-    ldh  A, [hFFB4]                                    ;; 0e:4279 $f0 $b4
+    ldh  A, [hVibratoVolumeChannelSelection]           ;; 0e:4279 $f0 $b4
     cp   A, $02                                        ;; 0e:427b $fe $02
     call Z, call_0e_48c7                               ;; 0e:427d $cc $c7 $48
     ret                                                ;; 0e:4280 $c9
@@ -344,7 +344,7 @@ call_0e_4281:
     ld   A, [wCB03]                                    ;; 0e:4289 $fa $03 $cb
     dec  A                                             ;; 0e:428c $3d
     ld   [wCB03], A                                    ;; 0e:428d $ea $03 $cb
-    ldh  [hFFB5], A                                    ;; 0e:4290 $e0 $b5
+    ldh  [hMusicNoteDurationChannel2Copy], A           ;; 0e:4290 $e0 $b5
     jp   NZ, jp_0e_44cc                                ;; 0e:4292 $c2 $cc $44
 .jp_0e_4295:
     call call_0e_47bd                                  ;; 0e:4295 $cd $bd $47
@@ -704,7 +704,7 @@ jp_0e_44cc:
     ld   A, [wCB1B]                                    ;; 0e:44d4 $fa $1b $cb
     dec  A                                             ;; 0e:44d7 $3d
     ld   [wCB1B], A                                    ;; 0e:44d8 $ea $1b $cb
-    ldh  [hFFB6], A                                    ;; 0e:44db $e0 $b6
+    ldh  [hMusicNoteDurationChannel1Copy], A           ;; 0e:44db $e0 $b6
     jp   NZ, jp_0e_464c                                ;; 0e:44dd $c2 $4c $46
 .jp_0e_44e0:
     call call_0e_47c9                                  ;; 0e:44e0 $cd $c9 $47
@@ -928,7 +928,7 @@ jp_0e_464c:
     ld   A, [wCB33]                                    ;; 0e:4654 $fa $33 $cb
     dec  A                                             ;; 0e:4657 $3d
     ld   [wCB33], A                                    ;; 0e:4658 $ea $33 $cb
-    ldh  [hFFB7], A                                    ;; 0e:465b $e0 $b7
+    ldh  [hMusicNoteDurationChannel3Copy], A           ;; 0e:465b $e0 $b7
     jp   NZ, jp_0e_47ab                                ;; 0e:465d $c2 $ab $47
 .jp_0e_4660:
     call call_0e_47ce                                  ;; 0e:4660 $cd $ce $47
@@ -1104,11 +1104,11 @@ data_0e_477c:
     ld   D, [HL]                                       ;; 0e:4781 $56
     ld   A, [DE]                                       ;; 0e:4782 $1a
     ld   C, A                                          ;; 0e:4783 $4f
-    ldh  [hFFBA], A                                    ;; 0e:4784 $e0 $ba
+    ldh  [hWaveTablePointer], A                        ;; 0e:4784 $e0 $ba
     inc  DE                                            ;; 0e:4786 $13
     ld   A, [DE]                                       ;; 0e:4787 $1a
     ld   B, A                                          ;; 0e:4788 $47
-    ldh  [hFFBB], A                                    ;; 0e:4789 $e0 $bb
+    ldh  [hWaveTablePointer.high], A                   ;; 0e:4789 $e0 $bb
     inc  DE                                            ;; 0e:478b $13
     ld   [HL], D                                       ;; 0e:478c $72
     dec  HL                                            ;; 0e:478d $2b
@@ -1179,7 +1179,7 @@ call_0e_47d3:
     ld   A, [wCB13]                                    ;; 0e:47d7 $fa $13 $cb
     or   A, E                                          ;; 0e:47da $b3
     ret  NZ                                            ;; 0e:47db $c0
-    ldh  A, [hFFB5]                                    ;; 0e:47dc $f0 $b5
+    ldh  A, [hMusicNoteDurationChannel2Copy]           ;; 0e:47dc $f0 $b5
     or   A, A                                          ;; 0e:47de $b7
     ret  Z                                             ;; 0e:47df $c8
     ld   A, [wCB11]                                    ;; 0e:47e0 $fa $11 $cb
@@ -1249,7 +1249,7 @@ call_0e_484d:
     ld   A, [wCB2B]                                    ;; 0e:4851 $fa $2b $cb
     or   A, E                                          ;; 0e:4854 $b3
     ret  NZ                                            ;; 0e:4855 $c0
-    ldh  A, [hFFB6]                                    ;; 0e:4856 $f0 $b6
+    ldh  A, [hMusicNoteDurationChannel1Copy]           ;; 0e:4856 $f0 $b6
     or   A, A                                          ;; 0e:4858 $b7
     ret  Z                                             ;; 0e:4859 $c8
     ld   A, [wCB29]                                    ;; 0e:485a $fa $29 $cb
@@ -1319,7 +1319,7 @@ call_0e_48c7:
     ld   A, [wCB43]                                    ;; 0e:48cb $fa $43 $cb
     or   A, E                                          ;; 0e:48ce $b3
     ret  NZ                                            ;; 0e:48cf $c0
-    ldh  A, [hFFB7]                                    ;; 0e:48d0 $f0 $b7
+    ldh  A, [hMusicNoteDurationChannel3Copy]           ;; 0e:48d0 $f0 $b7
     or   A, A                                          ;; 0e:48d2 $b7
     ret  Z                                             ;; 0e:48d3 $c8
     ld   A, [wCB41]                                    ;; 0e:48d4 $fa $41 $cb
@@ -1394,7 +1394,7 @@ call_0e_4920:
     ld   [wCB1A], A                                    ;; 0e:493f $ea $1a $cb
     ld   [wCB4A], A                                    ;; 0e:4942 $ea $4a $cb
     xor  A, A                                          ;; 0e:4945 $af
-    ldh  [hFFB2], A                                    ;; 0e:4946 $e0 $b2
+    ldh  [hSFX], A                                     ;; 0e:4946 $e0 $b2
     ret                                                ;; 0e:4948 $c9
 
 call_0e_4949:
@@ -1422,9 +1422,9 @@ call_0e_4949:
     ld   C, A                                          ;; 0e:496f $4f
     ld   A, [HL+]                                      ;; 0e:4970 $2a
     ld   B, A                                          ;; 0e:4971 $47
-    ldh  A, [hFFBC]                                    ;; 0e:4972 $f0 $bc
+    ldh  A, [hSoundEffectLoopCounterChannel1]          ;; 0e:4972 $f0 $bc
     dec  A                                             ;; 0e:4974 $3d
-    ldh  [hFFBC], A                                    ;; 0e:4975 $e0 $bc
+    ldh  [hSoundEffectLoopCounterChannel1], A          ;; 0e:4975 $e0 $bc
     jr   Z, .jr_0e_495e                                ;; 0e:4977 $28 $e5
     ld   L, C                                          ;; 0e:4979 $69
     ld   H, B                                          ;; 0e:497a $60
@@ -1433,7 +1433,7 @@ call_0e_4949:
     cp   A, $f0                                        ;; 0e:497d $fe $f0
     jr   C, .jr_0e_4987                                ;; 0e:497f $38 $06
     and  A, $0f                                        ;; 0e:4981 $e6 $0f
-    ldh  [hFFBC], A                                    ;; 0e:4983 $e0 $bc
+    ldh  [hSoundEffectLoopCounterChannel1], A          ;; 0e:4983 $e0 $bc
     jr   .jr_0e_495e                                   ;; 0e:4985 $18 $d7
 .jr_0e_4987:
     ld   C, $10                                        ;; 0e:4987 $0e $10
@@ -1476,9 +1476,9 @@ call_0e_4949:
     ld   C, A                                          ;; 0e:49c4 $4f
     ld   A, [HL+]                                      ;; 0e:49c5 $2a
     ld   B, A                                          ;; 0e:49c6 $47
-    ldh  A, [hFFBD]                                    ;; 0e:49c7 $f0 $bd
+    ldh  A, [hSoundEffectLoopCounterChannel4]          ;; 0e:49c7 $f0 $bd
     dec  A                                             ;; 0e:49c9 $3d
-    ldh  [hFFBD], A                                    ;; 0e:49ca $e0 $bd
+    ldh  [hSoundEffectLoopCounterChannel4], A          ;; 0e:49ca $e0 $bd
     jr   Z, .jr_0e_49b3                                ;; 0e:49cc $28 $e5
     ld   L, C                                          ;; 0e:49ce $69
     ld   H, B                                          ;; 0e:49cf $60
@@ -1487,7 +1487,7 @@ call_0e_4949:
     cp   A, $f0                                        ;; 0e:49d2 $fe $f0
     jr   C, .jr_0e_49dc                                ;; 0e:49d4 $38 $06
     and  A, $0f                                        ;; 0e:49d6 $e6 $0f
-    ldh  [hFFBD], A                                    ;; 0e:49d8 $e0 $bd
+    ldh  [hSoundEffectLoopCounterChannel4], A          ;; 0e:49d8 $e0 $bd
     jr   .jr_0e_49b3                                   ;; 0e:49da $18 $d7
 .jr_0e_49dc:
     ld   A, [HL+]                                      ;; 0e:49dc $2a

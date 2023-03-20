@@ -161,7 +161,7 @@ call_0d_4000:
     cp   A, $03                                        ;; 0d:40d5 $fe $03
     jr   Z, .jr_0d_40dd                                ;; 0d:40d7 $28 $04
     add  A, $11                                        ;; 0d:40d9 $c6 $11
-    ldh  [hFFB0], A                                    ;; 0d:40db $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 0d:40db $e0 $b0
 .jr_0d_40dd:
     call call_00_01d4                                  ;; 0d:40dd $cd $d4 $01
     ld   A, $00                                        ;; 0d:40e0 $3e $00
@@ -219,12 +219,12 @@ jp_0d_40e9:
     or   A, A                                          ;; 0d:413c $b7
     jr   Z, jr_0d_4164                                 ;; 0d:413d $28 $25
     ld   A, $38                                        ;; 0d:413f $3e $38
-    ldh  [hFFB2], A                                    ;; 0d:4141 $e0 $b2
+    ldh  [hSFX], A                                     ;; 0d:4141 $e0 $b2
     call call_0d_4152                                  ;; 0d:4143 $cd $52 $41
     call call_0d_437e                                  ;; 0d:4146 $cd $7e $43
     call call_00_1915                                  ;; 0d:4149 $cd $15 $19
     ld   A, [wC31A]                                    ;; 0d:414c $fa $1a $c3
-    ldh  [hFFB0], A                                    ;; 0d:414f $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 0d:414f $e0 $b0
     ret                                                ;; 0d:4151 $c9
 
 call_0d_4152:
@@ -406,7 +406,7 @@ jr_0d_4167:
     ld   A, $02                                        ;; 0d:4269 $3e $02
     ld_long_store hFFC0, A                             ;; 0d:426b $ea $c0 $ff
     ld   A, $07                                        ;; 0d:426e $3e $07
-    ldh  [hFFB0], A                                    ;; 0d:4270 $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 0d:4270 $e0 $b0
     ret                                                ;; 0d:4272 $c9
 .jr_0d_4273:
     pop  HL                                            ;; 0d:4273 $e1
@@ -415,7 +415,7 @@ jr_0d_4167:
     inc  A                                             ;; 0d:4277 $3c
     jr   Z, .jr_0d_427e                                ;; 0d:4278 $28 $04
     ld   A, $03                                        ;; 0d:427a $3e $03
-    ldh  [hFFB0], A                                    ;; 0d:427c $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 0d:427c $e0 $b0
 .jr_0d_427e:
     xor  A, A                                          ;; 0d:427e $af
     ld   [wD85E], A                                    ;; 0d:427f $ea $5e $d8
@@ -551,7 +551,7 @@ jr_0d_4167:
     call call_0d_4152                                  ;; 0d:434e $cd $52 $41
     call call_00_1915                                  ;; 0d:4351 $cd $15 $19
     ld   A, [wC31A]                                    ;; 0d:4354 $fa $1a $c3
-    ldh  [hFFB0], A                                    ;; 0d:4357 $e0 $b0
+    ldh  [hCurrentMusic], A                            ;; 0d:4357 $e0 $b0
     ret                                                ;; 0d:4359 $c9
 
 call_0d_435a:
