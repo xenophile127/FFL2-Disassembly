@@ -19,10 +19,10 @@ jp_0c_400a:
     cp   A, $1f                                        ;; 0c:400d $fe $1f
     ret  Z                                             ;; 0c:400f $c8
     add  A, A                                          ;; 0c:4010 $87
-    add  A, $2d                                        ;; 0c:4011 $c6 $2d
+    add  A, LOW(jumptable_0c_402d) ;@=low jumptable_0c_402d ;; 0c:4011 $c6 $2d
     ld   L, A                                          ;; 0c:4013 $6f
     ld   A, $00                                        ;; 0c:4014 $3e $00
-    adc  A, $40                                        ;; 0c:4016 $ce $40
+    adc  A, HIGH(jumptable_0c_402d) ;@=high jumptable_0c_402d ;; 0c:4016 $ce $40
     ld   H, A                                          ;; 0c:4018 $67
     ld   A, [HL+]                                      ;; 0c:4019 $2a
     ld   H, [HL]                                       ;; 0c:401a $66
@@ -42,7 +42,9 @@ jp_0c_401d:
     ld   H, [HL]                                       ;; 0c:402a $66
     ld   L, A                                          ;; 0c:402b $6f
     jp   HL                                            ;; 0c:402c $e9
+
 ;@jumptable
+jumptable_0c_402d:
     dw   call_0c_4084                                  ;; 0c:402d pP $00
     dw   call_0c_40b6                                  ;; 0c:402f pP $01
     dw   call_0c_4104                                  ;; 0c:4031 pP $02
