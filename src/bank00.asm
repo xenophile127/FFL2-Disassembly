@@ -7044,7 +7044,7 @@ call_00_2ae6:
     add  HL, HL                                        ;; 00:2aec $29
     add  HL, HL                                        ;; 00:2aed $29
     add  HL, HL                                        ;; 00:2aee $29
-    ld   DE, $6570                                     ;; 00:2aef $11 $70 $65
+    ld   DE, data_0b_6570                              ;; 00:2aef $11 $70 $65
     add  HL, DE                                        ;; 00:2af2 $19
     push HL                                            ;; 00:2af3 $e5
     ld   A, $0d                                        ;; 00:2af4 $3e $0d
