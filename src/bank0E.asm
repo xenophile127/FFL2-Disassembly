@@ -8,15 +8,15 @@ INCLUDE "include/constants.inc"
 SECTION "bank0e", ROMX[$4000], BANK[$0e]
 
 ; Disassembled with BadBoy Disassembler: https://github.com/daid/BadBoy
-call_0e_4000:
-    jr   jr_0e_4006                                    ;; 0e:4000 $18 $04
+updateSoundEngine:
+    jr   updateSoundEngineImpl                         ;; 0e:4000 $18 $04
     db   $00                                           ;; 0e:4002 ?
 
-call_0e_4003:
-    jr   call_0e_4048                                  ;; 0e:4003 $18 $43
+initSoundEngine:
+    jr   initSoundEngineImpl                           ;; 0e:4003 $18 $43
     db   $00                                           ;; 0e:4005 ?
 
-jr_0e_4006:
+updateSoundEngineImpl:
     push AF                                            ;; 0e:4006 $f5
     push BC                                            ;; 0e:4007 $c5
     push DE                                            ;; 0e:4008 $d5
@@ -60,7 +60,7 @@ jr_0e_4006:
     pop  AF                                            ;; 0e:4046 $f1
     ret                                                ;; 0e:4047 $c9
 
-call_0e_4048:
+initSoundEngineImpl:
     ld   A, $ff                                        ;; 0e:4048 $3e $ff
     ldh  [rNR52], A                                    ;; 0e:404a $e0 $26
     call call_0e_4081                                  ;; 0e:404c $cd $81 $40
@@ -114,7 +114,7 @@ call_0e_409b:
     ldh  [hFFB3], A                                    ;; 0e:409b $e0 $b3
     or   A, A                                          ;; 0e:409d $b7
     jr   NZ, call_0e_40a4                              ;; 0e:409e $20 $04
-    call call_0e_4048                                  ;; 0e:40a0 $cd $48 $40
+    call initSoundEngineImpl                           ;; 0e:40a0 $cd $48 $40
     ret                                                ;; 0e:40a3 $c9
 
 call_0e_40a4:
@@ -455,21 +455,26 @@ call_0e_4351:
     ld   H, A                                          ;; 0e:4354 $67
     ld   L, E                                          ;; 0e:4355 $6b
     jp   HL                                            ;; 0e:4356 $e9
-    db   $c9                                           ;; 0e:4357 ?
 
+call_0e_4357:
+    ret                                                ;; 0e:4357 $c9
+
+;@jumptable
 data_0e_4358:
-    dw   data_0e_4370                                  ;; 0e:4358 pP
-    dw   data_0e_4391                                  ;; 0e:435a pP
-    dw   data_0e_43a1                                  ;; 0e:435c pP
-    dw   data_0e_4477                                  ;; 0e:435e pP
-    dw   data_0e_4485                                  ;; 0e:4360 pP
-    dw   data_0e_44a6                                  ;; 0e:4362 pP
-    dw   data_0e_44af                                  ;; 0e:4364 pP
-    dw   data_0e_44c5                                  ;; 0e:4366 pP
-    db   $57, $43, $d1, $43, $7e, $44                  ;; 0e:4368 ??????
-    dw   data_0e_4414                                  ;; 0e:436e pP
+    dw   call_0e_4370                                  ;; 0e:4358 pP $00
+    dw   call_0e_4391                                  ;; 0e:435a pP $01
+    dw   call_0e_43a1                                  ;; 0e:435c pP $02
+    dw   call_0e_4477                                  ;; 0e:435e pP $03
+    dw   call_0e_4485                                  ;; 0e:4360 pP $04
+    dw   call_0e_44a6                                  ;; 0e:4362 pP $05
+    dw   call_0e_44af                                  ;; 0e:4364 pP $06
+    dw   call_0e_44c5                                  ;; 0e:4366 pP $07
+    dw   call_0e_4357                                  ;; 0e:4368 ?? $08
+    dw   call_0e_43d1                                  ;; 0e:436a ?? $09
+    dw   call_0e_447e                                  ;; 0e:436c ?? $0a
+    dw   call_0e_4414                                  ;; 0e:436e pP $0b
 
-data_0e_4370:
+call_0e_4370:
     ld   HL, wCB04                                     ;; 0e:4370 $21 $04 $cb
     ld   E, [HL]                                       ;; 0e:4373 $5e
     inc  HL                                            ;; 0e:4374 $23
@@ -490,7 +495,7 @@ data_0e_4370:
     ld   [wCB05], A                                    ;; 0e:438d $ea $05 $cb
     ret                                                ;; 0e:4390 $c9
 
-data_0e_4391:
+call_0e_4391:
     ld   HL, wCB04                                     ;; 0e:4391 $21 $04 $cb
     ld   E, [HL]                                       ;; 0e:4394 $5e
     inc  HL                                            ;; 0e:4395 $23
@@ -502,7 +507,7 @@ data_0e_4391:
     ld   [wCB05], A                                    ;; 0e:439d $ea $05 $cb
     ret                                                ;; 0e:43a0 $c9
 
-data_0e_43a1:
+call_0e_43a1:
     ld   HL, wCB04                                     ;; 0e:43a1 $21 $04 $cb
     call call_0e_4401                                  ;; 0e:43a4 $cd $01 $44
     ld   B, A                                          ;; 0e:43a7 $47
@@ -528,8 +533,15 @@ data_0e_43c1:
     dec  A                                             ;; 0e:43cb $3d
     ld   [wCB3F], A                                    ;; 0e:43cc $ea $3f $cb
     jr   jr_0e_440a                                    ;; 0e:43cf $18 $39
-    db   $21, $04, $cb, $cd, $01, $44, $47, $fa        ;; 0e:43d1 ????????
-    db   $19, $cb, $3d, $ea, $19, $cb, $18, $29        ;; 0e:43d9 ????????
+
+call_0e_43d1:
+    ld   HL, wCB04                                     ;; 0e:43d1 $21 $04 $cb
+    call call_0e_4401                                  ;; 0e:43d4 $cd $01 $44
+    ld   B, A                                          ;; 0e:43d7 $47
+    ld   A, [wCB19]                                    ;; 0e:43d8 $fa $19 $cb
+    dec  A                                             ;; 0e:43db $3d
+    ld   [wCB19], A                                    ;; 0e:43dc $ea $19 $cb
+    jr   jr_0e_440a                                    ;; 0e:43df $18 $29
     db   $21, $1c, $cb, $cd, $01, $44, $47, $fa        ;; 0e:43e1 ????????
     db   $31, $cb, $3d, $ea, $31, $cb, $18, $19        ;; 0e:43e9 ????????
     db   $21, $34, $cb, $cd, $01, $44, $47, $fa        ;; 0e:43f1 ????????
@@ -559,7 +571,7 @@ jr_0e_4410:
     ld   [HL], C                                       ;; 0e:4412 $71
     ret                                                ;; 0e:4413 $c9
 
-data_0e_4414:
+call_0e_4414:
     call call_0e_47bd                                  ;; 0e:4414 $cd $bd $47
     ld   C, A                                          ;; 0e:4417 $4f
     ld   A, [wCB04]                                    ;; 0e:4418 $fa $04 $cb
@@ -628,13 +640,17 @@ data_0e_4456:
     ld   [wCB35], A                                    ;; 0e:4473 $ea $35 $cb
     ret                                                ;; 0e:4476 $c9
 
-data_0e_4477:
+call_0e_4477:
     call call_0e_47bd                                  ;; 0e:4477 $cd $bd $47
     ld   [wCB0F], A                                    ;; 0e:447a $ea $0f $cb
     ret                                                ;; 0e:447d $c9
-    db   $cd, $bd, $47, $ea, $19, $cb, $c9             ;; 0e:447e ???????
 
-data_0e_4485:
+call_0e_447e:
+    call call_0e_47bd                                  ;; 0e:447e $cd $bd $47
+    ld   [wCB19], A                                    ;; 0e:4481 $ea $19 $cb
+    ret                                                ;; 0e:4484 $c9
+
+call_0e_4485:
     ld   HL, wCB04                                     ;; 0e:4485 $21 $04 $cb
     ld   E, [HL]                                       ;; 0e:4488 $5e
     inc  HL                                            ;; 0e:4489 $23
@@ -655,13 +671,13 @@ data_0e_4485:
     ld   [wCB05], A                                    ;; 0e:44a2 $ea $05 $cb
     ret                                                ;; 0e:44a5 $c9
 
-data_0e_44a6:
+call_0e_44a6:
     call call_0e_47bd                                  ;; 0e:44a6 $cd $bd $47
     ldh  [rNR21], A                                    ;; 0e:44a9 $e0 $16
     ld   [wCB0C], A                                    ;; 0e:44ab $ea $0c $cb
     ret                                                ;; 0e:44ae $c9
 
-data_0e_44af:
+call_0e_44af:
     call call_0e_47bd                                  ;; 0e:44af $cd $bd $47
     ld   E, A                                          ;; 0e:44b2 $5f
     ld   D, $00                                        ;; 0e:44b3 $16 $00
@@ -676,7 +692,7 @@ data_0e_44af:
 data_0e_44c1:
     db   $00, $01, $10, $11                            ;; 0e:44c1 ?...
 
-data_0e_44c5:
+call_0e_44c5:
     call call_0e_47bd                                  ;; 0e:44c5 $cd $bd $47
     ld   [wCB01], A                                    ;; 0e:44c8 $ea $01 $cb
     ret                                                ;; 0e:44cb $c9

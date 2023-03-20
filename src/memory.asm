@@ -812,7 +812,10 @@ wCB17:
     ds 1                                               ;; cb17
 
 wCB18:
-    ds 2                                               ;; cb18
+    ds 1                                               ;; cb18
+
+wCB19:
+    ds 1                                               ;; cb19
 
 wCB1A:
     ds 1                                               ;; cb1a

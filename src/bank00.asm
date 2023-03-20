@@ -489,7 +489,7 @@ init:
     call memcopySmall                                  ;; 00:027d $cd $80 $00
     ld   A, $0e                                        ;; 00:0280 $3e $0e
     rst  switchBankSafe                                ;; 00:0282 $ef
-    call call_0e_4003                                  ;; 00:0283 $cd $03 $40
+    call initSoundEngine                               ;; 00:0283 $cd $03 $40
     di                                                 ;; 00:0286 $f3
     xor  A, A                                          ;; 00:0287 $af
     ldh  [rLYC], A                                     ;; 00:0288 $e0 $45
@@ -827,8 +827,11 @@ jp_00_040b:
     ld   C, A                                          ;; 00:041b $4f
     xor  A, A                                          ;; 00:041c $af
     ld   L, $18                                        ;; 00:041d $2e $18
-.jr_00_041f:
+
+jr_00_041f:
     sla  E                                             ;; 00:041f $cb $23
+
+call_00_0421:
     rl   D                                             ;; 00:0421 $cb $12
     rl   C                                             ;; 00:0423 $cb $11
     rla                                                ;; 00:0425 $17
@@ -838,7 +841,7 @@ jp_00_040b:
     inc  E                                             ;; 00:042a $1c
 .jr_00_042b:
     dec  L                                             ;; 00:042b $2d
-    jr   NZ, .jr_00_041f                               ;; 00:042c $20 $f1
+    jr   NZ, jr_00_041f                                ;; 00:042c $20 $f1
     pop  HL                                            ;; 00:042e $e1
     ld   B, A                                          ;; 00:042f $47
     ld   A, E                                          ;; 00:0430 $7b
@@ -3858,7 +3861,7 @@ call_00_16f9:
     ld   A, $0e                                        ;; 00:1705 $3e $0e
     call switchBankUnsafe                              ;; 00:1707 $cd $b1 $04
     push AF                                            ;; 00:170a $f5
-    call call_0e_4000                                  ;; 00:170b $cd $00 $40
+    call updateSoundEngine                             ;; 00:170b $cd $00 $40
     ldh  A, [hFFA5]                                    ;; 00:170e $f0 $a5
     and  A, A                                          ;; 00:1710 $a7
     jr   Z, .jr_00_171b                                ;; 00:1711 $28 $08
