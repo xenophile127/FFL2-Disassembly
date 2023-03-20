@@ -459,7 +459,7 @@ jr_0d_4167:
     ld   DE, data_0d_6f80                              ;; 0d:42ce $11 $80 $6f
     add  HL, DE                                        ;; 0d:42d1 $19
     ld   A, $0d                                        ;; 0d:42d2 $3e $0d
-    call call_00_00d2                                  ;; 0d:42d4 $cd $d2 $00
+    call readFromBank                                  ;; 0d:42d4 $cd $d2 $00
     ld   B, A                                          ;; 0d:42d7 $47
     swap A                                             ;; 0d:42d8 $cb $37
     and  A, $0f                                        ;; 0d:42da $e6 $0f
@@ -470,13 +470,13 @@ jr_0d_4167:
     inc  HL                                            ;; 0d:42e0 $23
     inc  HL                                            ;; 0d:42e1 $23
     ld   A, $0d                                        ;; 0d:42e2 $3e $0d
-    call call_00_00d2                                  ;; 0d:42e4 $cd $d2 $00
+    call readFromBank                                  ;; 0d:42e4 $cd $d2 $00
     ld   [DE], A                                       ;; 0d:42e7 $12
     ld   C, A                                          ;; 0d:42e8 $4f
     inc  E                                             ;; 0d:42e9 $1c
     inc  HL                                            ;; 0d:42ea $23
     ld   A, $0d                                        ;; 0d:42eb $3e $0d
-    call call_00_00d2                                  ;; 0d:42ed $cd $d2 $00
+    call readFromBank                                  ;; 0d:42ed $cd $d2 $00
     ld   [DE], A                                       ;; 0d:42f0 $12
     inc  E                                             ;; 0d:42f1 $1c
     inc  E                                             ;; 0d:42f2 $1c
@@ -490,18 +490,18 @@ jr_0d_4167:
     ld   C, $04                                        ;; 0d:42fa $0e $04
 .jr_0d_42fc:
     ld   A, $0d                                        ;; 0d:42fc $3e $0d
-    call call_00_00d2                                  ;; 0d:42fe $cd $d2 $00
+    call readFromBank                                  ;; 0d:42fe $cd $d2 $00
     ld   [DE], A                                       ;; 0d:4301 $12
     inc  E                                             ;; 0d:4302 $1c
     inc  HL                                            ;; 0d:4303 $23
     dec  C                                             ;; 0d:4304 $0d
     jr   NZ, .jr_0d_42fc                               ;; 0d:4305 $20 $f5
     ld   A, $0d                                        ;; 0d:4307 $3e $0d
-    call call_00_00d2                                  ;; 0d:4309 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4309 $cd $d2 $00
     ld   C, A                                          ;; 0d:430c $4f
     inc  HL                                            ;; 0d:430d $23
     ld   A, $0d                                        ;; 0d:430e $3e $0d
-    call call_00_00d2                                  ;; 0d:4310 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4310 $cd $d2 $00
     ld   H, A                                          ;; 0d:4313 $67
     ld   L, C                                          ;; 0d:4314 $69
     push DE                                            ;; 0d:4315 $d5
@@ -521,7 +521,7 @@ jr_0d_4167:
     push DE                                            ;; 0d:4326 $d5
 .jr_0d_4327:
     ld   A, $0d                                        ;; 0d:4327 $3e $0d
-    call call_00_00d2                                  ;; 0d:4329 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4329 $cd $d2 $00
     ld   [DE], A                                       ;; 0d:432c $12
     inc  E                                             ;; 0d:432d $1c
     inc  E                                             ;; 0d:432e $1c
@@ -539,7 +539,7 @@ jr_0d_4167:
     ld   H, A                                          ;; 0d:433d $67
     inc  E                                             ;; 0d:433e $1c
     ld   A, $0c                                        ;; 0d:433f $3e $0c
-    call call_00_00d2                                  ;; 0d:4341 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4341 $cd $d2 $00
     ld   [DE], A                                       ;; 0d:4344 $12
     inc  E                                             ;; 0d:4345 $1c
     dec  B                                             ;; 0d:4346 $05
@@ -571,11 +571,11 @@ call_0d_4361:
     adc  A, $00                                        ;; 0d:4367 $ce $00
     ld   H, A                                          ;; 0d:4369 $67
     ld   A, $0c                                        ;; 0d:436a $3e $0c
-    call call_00_00d2                                  ;; 0d:436c $cd $d2 $00
+    call readFromBank                                  ;; 0d:436c $cd $d2 $00
     ld   E, A                                          ;; 0d:436f $5f
     inc  HL                                            ;; 0d:4370 $23
     ld   A, $0c                                        ;; 0d:4371 $3e $0c
-    call call_00_00d2                                  ;; 0d:4373 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4373 $cd $d2 $00
     ld   D, A                                          ;; 0d:4376 $57
     farcall2 call_0c_4000                              ;; 0d:4377 $cd $7d $01 $00 $40 $0c
     ret                                                ;; 0d:437d $c9
@@ -706,7 +706,7 @@ call_0d_43fa:
     ld   DE, data_0d_6f82                              ;; 0d:4411 $11 $82 $6f
     add  HL, DE                                        ;; 0d:4414 $19
     ld   A, $0c                                        ;; 0d:4415 $3e $0c
-    call call_00_00d2                                  ;; 0d:4417 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4417 $cd $d2 $00
     and  A, $30                                        ;; 0d:441a $e6 $30
     jr   Z, .jr_0d_4431                                ;; 0d:441c $28 $13
     pop  DE                                            ;; 0d:441e $d1
@@ -719,7 +719,7 @@ call_0d_43fa:
     inc  HL                                            ;; 0d:4426 $23
     inc  HL                                            ;; 0d:4427 $23
     ld   A, $0c                                        ;; 0d:4428 $3e $0c
-    call call_00_00d2                                  ;; 0d:442a $cd $d2 $00
+    call readFromBank                                  ;; 0d:442a $cd $d2 $00
     ld   L, A                                          ;; 0d:442d $6f
     ld   A, [DE]                                       ;; 0d:442e $1a
     or   A, L                                          ;; 0d:442f $b5
@@ -899,7 +899,7 @@ call_0d_44f4:
     add  HL, HL                                        ;; 0d:44fe $29
     add  HL, HL                                        ;; 0d:44ff $29
     push DE                                            ;; 0d:4500 $d5
-    ld   DE, data_0d_6ec0                              ;; 0d:4501 $11 $c0 $6e
+    ld   DE, label_0f_6ec0 ;@=ptr bank=0F              ;; 0d:4501 $11 $c0 $6e
     add  HL, DE                                        ;; 0d:4504 $19
     pop  DE                                            ;; 0d:4505 $d1
     ld   A, $0f                                        ;; 0d:4506 $3e $0f
@@ -912,7 +912,7 @@ call_0d_44f4:
     add  HL, HL                                        ;; 0d:4511 $29
     add  HL, HL                                        ;; 0d:4512 $29
     add  HL, DE                                        ;; 0d:4513 $19
-    ld   DE, data_0d_6f80                              ;; 0d:4514 $11 $80 $6f
+    ld   DE, label_0a_6f80 ;@=ptr bank=0A              ;; 0d:4514 $11 $80 $6f
     add  HL, DE                                        ;; 0d:4517 $19
     ld   B, $0a                                        ;; 0d:4518 $06 $0a
     ld   DE, wDE00                                     ;; 0d:451a $11 $00 $de
@@ -956,7 +956,7 @@ call_0d_44f4:
     ld   E, $12                                        ;; 0d:454e $1e $12
 .jr_0d_4550:
     ld   A, $0d                                        ;; 0d:4550 $3e $0d
-    call call_00_00d2                                  ;; 0d:4552 $cd $d2 $00
+    call readFromBank                                  ;; 0d:4552 $cd $d2 $00
     inc  HL                                            ;; 0d:4555 $23
     ld   [DE], A                                       ;; 0d:4556 $12
     inc  E                                             ;; 0d:4557 $1c
@@ -1740,7 +1740,7 @@ call_0d_5239:
     ld   A, $01                                        ;; 0d:5239 $3e $01
 
 jp_0d_523b:
-    call call_00_00d2                                  ;; 0d:523b $cd $d2 $00
+    call readFromBank                                  ;; 0d:523b $cd $d2 $00
     inc  HL                                            ;; 0d:523e $23
     ret                                                ;; 0d:523f $c9
 
@@ -2999,8 +2999,6 @@ data_0d_6800:
     db   $24, $3e, $8a, $03, $b7, $22, $39, $12        ;; 0d:6ea8 ????????
     db   $4e, $3f, $2c, $2f, $5d, $35, $49, $23        ;; 0d:6eb0 ????????
     db   $32, $53, $30, $df, $23, $2e, $b2, $c6        ;; 0d:6eb8 ????????
-
-data_0d_6ec0:
     db   $62, $21, $3e, $bc, $c1, $99, $2d, $3d        ;; 0d:6ec0 ????????
     db   $44, $71, $80, $27, $38, $08, $ad, $17        ;; 0d:6ec8 ????????
     db   $27, $38, $26, $2b, $d0, $27, $38, $9e        ;; 0d:6ed0 ????????
