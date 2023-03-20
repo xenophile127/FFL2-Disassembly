@@ -742,218 +742,205 @@ wC800:
 wC814:
     ds 748                                             ;; c814
 
-wCB00:
+; START OF AUDIO ENGINE WRAM
+wMusicTempoTimeCounter:
     ds 1                                               ;; cb00
 
-wCB01:
+wMusicTempo:
     ds 1                                               ;; cb01
 
-wCB02:
+wSoundEffectDurationChannel2:
     ds 1                                               ;; cb02
 
-wCB03:
+wMusicNoteDurationChannel2:
     ds 1                                               ;; cb03
 
-wCB04:
+wMusicInstructionPointerChannel2:
     ds 1                                               ;; cb04
-
-wCB05:
+.high:
     ds 1                                               ;; cb05
 
-wCB06:
+wMusicVibratoDurationChannel2:
     ds 1                                               ;; cb06
 
-wCB07:
+wMusicVibratoEnvelopeChannel2:
     ds 1                                               ;; cb07
-
-wCB08:
+.high:
     ds 1                                               ;; cb08
 
-wCB09:
+wMusicVibratoEnvelopePointerChannel2:
     ds 1                                               ;; cb09
-
-wCB0A:
+.high:
     ds 1                                               ;; cb0a
 
-wCB0B:
+wMusicOctaveChannel2:
     ds 1                                               ;; cb0b
 
-wCB0C:
+wMusicNR21DutyCycleChannel2:
     ds 1                                               ;; cb0c
 
-wCB0D:
+wMusicCurrentPitchChannel2:
     ds 1                                               ;; cb0d
-
-wCB0E:
+.high:
     ds 1                                               ;; cb0e
 
-wCB0F:
+wMusicLoopCounter1Channel2:
     ds 1                                               ;; cb0f
 
-wCB10:
+wMusicNR22DefaultVolumeChannel2:
     ds 1                                               ;; cb10
 
-wCB11:
+wMusicNotePitchChannel2:
     ds 2                                               ;; cb11
 
-wCB13:
+wMusicEndedOnChannel2:
     ds 1                                               ;; cb13
 
-wCB14:
+wMusicVolumeDurationChannel2:
     ds 1                                               ;; cb14
 
-wCB15:
+wMusicVolumeEnvelopeChannel2:
     ds 1                                               ;; cb15
-
-wCB16:
+.high:
     ds 1                                               ;; cb16
 
-wCB17:
+wMusicVolumeEnvelopePointerChannel2:
     ds 1                                               ;; cb17
-
-wCB18:
+.high:
     ds 1                                               ;; cb18
 
-wCB19:
+wMusicLoopCounter2Channel2:
     ds 1                                               ;; cb19
 
-wCB1A:
+wSoundEffectDurationChannel1:
     ds 1                                               ;; cb1a
 
-wCB1B:
+wMusicNoteDurationChannel1:
     ds 1                                               ;; cb1b
 
-wCB1C:
+wMusicInstructionPointerChannel1:
     ds 1                                               ;; cb1c
-
-wCB1D:
+.high:
     ds 1                                               ;; cb1d
 
-wCB1E:
+wMusicVibratoDurationChannel1:
     ds 1                                               ;; cb1e
 
-wCB1F:
+wMusicVibratoEnvelopeChannel1:
     ds 1                                               ;; cb1f
-
-wCB20:
+.high:
     ds 1                                               ;; cb20
 
-wCB21:
+wMusicVibratoEnvelopePointerChannel1:
     ds 1                                               ;; cb21
 
-wCB22:
+.high:
     ds 1                                               ;; cb22
 
-wCB23:
+wMusicOctaveChannel1:
     ds 1                                               ;; cb23
 
-wCB24:
+wMusicNR11DutyCycleChannel1:
     ds 1                                               ;; cb24
 
-wCB25:
+wMusicCurrentPitchChannel1:
     ds 1                                               ;; cb25
-
-wCB26:
+.high:
     ds 1                                               ;; cb26
 
-wCB27:
+wMusicLoopCounter1Channel1:
     ds 1                                               ;; cb27
 
-wCB28:
+wMusicNR12DefaultVolumeChannel1:
     ds 1                                               ;; cb28
 
-wCB29:
+wMusicNotePitchChannel1:
     ds 1                                               ;; cb29
 
-wCB2A:
+wMusicStereoPanChannel1:
     ds 1                                               ;; cb2a
 
-wCB2B:
+wMusicEndedOnChannel1:
     ds 1                                               ;; cb2b
 
-wCB2C:
+wMusicVolumeDurationChannel1:
     ds 1                                               ;; cb2c
 
-wCB2D:
+wMusicVolumeEnvelopeChannel1:
     ds 1                                               ;; cb2d
-
-wCB2E:
+.high:
     ds 1                                               ;; cb2e
 
-wCB2F:
+wMusicVolumeEnvelopePointerChannel1:
     ds 1                                               ;; cb2f
-
-wCB30:
+.high:
     ds 2                                               ;; cb30
 
-wCB32:
+;wMusicLoopCounter2Channel1 is apparently unused
+
+wSoundEffectDurationChannel3:
     ds 1                                               ;; cb32
 
-wCB33:
+wMusicNoteDurationChannel3:
     ds 1                                               ;; cb33
 
-wCB34:
+wMusicInstructionPointerChannel3:
     ds 1                                               ;; cb34
-
-wCB35:
+.high:
     ds 1                                               ;; cb35
 
-wCB36:
+wMusicVibratoDurationChannel3:
     ds 1                                               ;; cb36
 
-wCB37:
+wMusicVibratoEnvelopeChannel3:
     ds 1                                               ;; cb37
-
-wCB38:
+.high:
     ds 1                                               ;; cb38
 
-wCB39:
+wMusicVibratoEnvelopePointerChannel3:
     ds 1                                               ;; cb39
-
-wCB3A:
+.high:
     ds 1                                               ;; cb3a
 
-wCB3B:
+wMusicOctaveChannel3:
     ds 2                                               ;; cb3b
 
-wCB3D:
+wMusicCurrentPitchChannel3:
     ds 1                                               ;; cb3d
-
-wCB3E:
+.high:
     ds 1                                               ;; cb3e
 
-wCB3F:
+wMusicLoopCounter1Channel3:
     ds 1                                               ;; cb3f
 
-wCB40:
+wMusicVolumeChannel3:
     ds 1                                               ;; cb40
 
-wCB41:
+wMusicNotePitchChannel3:
     ds 2                                               ;; cb41
 
-wCB43:
+wMusicEndedOnChannel3:
     ds 7                                               ;; cb43
 
-wCB4A:
+wSoundEffectDurationChannel4:
     ds 17                                              ;; cb4a
 
-wCB5B:
+wMusicEndedOnChannel4:
     ds 7                                               ;; cb5b
 
-wCB62:
+wMusicDataBackup:
     ds 98                                              ;; cb62
 
-wCBC4:
+wSoundEffectInstructionPointerChannel1:
     ds 1                                               ;; cbc4
-
-wCBC5:
+.high:
     ds 1                                               ;; cbc5
 
-wCBC6:
+wSoundEffectInstructionPointerChannel4:
     ds 1                                               ;; cbc6
-
-wCBC7:
+.high:
     ds 57                                              ;; cbc7
+; END OF AUDIO ENGINE WRAM
 
 wCC00:
     ds 128                                             ;; cc00
