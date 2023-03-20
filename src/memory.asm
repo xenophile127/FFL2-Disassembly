@@ -497,13 +497,28 @@ wC70E:
     ds 15                                              ;; c70e
 
 wC71D:
-    ds 32                                              ;; c71d
+    ds 1                                               ;; c71d
+
+wC71E:
+    ds 29                                              ;; c71e
+
+wC73B:
+    ds 1                                               ;; c73b
+
+wC73C:
+    ds 1                                               ;; c73c
 
 wC73D:
     ds 8                                               ;; c73d
 
 wC745:
-    ds 30                                              ;; c745
+    ds 1                                               ;; c745
+
+wC746:
+    ds 26                                              ;; c746
+
+wC760:
+    ds 3                                               ;; c760
 
 wC763:
     ds 1                                               ;; c763
@@ -1200,7 +1215,7 @@ SECTION "hram", HRAM[$ff80]
 hFF80:
     ds 8                                               ;; ff80
 
-hFF88:
+hCurrentBank:
     ds 1                                               ;; ff88
 
 hFF89:
@@ -1276,7 +1291,22 @@ hFFA3:
     ds 2                                               ;; ffa3
 
 hFFA5:
-    ds 11                                              ;; ffa5
+    ds 1                                               ;; ffa5
+
+hFFA6:
+    ds 1                                               ;; ffa6
+
+hFFA7:
+    ds 1                                               ;; ffa7
+
+hFFA8:
+    ds 1                                               ;; ffa8
+
+hFFA9:
+    ds 1                                               ;; ffa9
+
+hFFAA:
+    ds 6                                               ;; ffaa
 
 hFFB0:
     ds 1                                               ;; ffb0

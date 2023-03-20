@@ -30,7 +30,7 @@ rst_00_0010:
     jp   jp_00_00d9                                    ;; 00:0010 $c3 $d9 $00
 
 data_00_0013:
-    dw   data_00_16d9                                  ;; 00:0013 pP
+    dw   LCDCInterruptHandler                          ;; 00:0013 pP
     db   $00, $00, $00                                 ;; 00:0015 ???
 
 rst_00_0018:
@@ -41,9 +41,10 @@ rst_00_0020:
     jp   jp_00_0800                                    ;; 00:0020 $c3 $00 $08
     db   $00, $00, $00, $00, $00                       ;; 00:0023 ?????
 
-rst_00_0028:
+;Switch bank to A, return old bank in A. Interrupt safe function
+switchBankSafe:
     di                                                 ;; 00:0028 $f3
-    call call_00_04b1                                  ;; 00:0029 $cd $b1 $04
+    call switchBankUnsafe                              ;; 00:0029 $cd $b1 $04
     reti                                               ;; 00:002c $d9
     db   $00, $00, $00                                 ;; 00:002d ???
 
@@ -182,33 +183,33 @@ jr_00_00b2:
     jp   call_00_1691                                  ;; 00:00b2 $c3 $91 $16
 
 call_00_00b5:
-    rst  rst_00_0028                                   ;; 00:00b5 $ef
+    rst  switchBankSafe                                ;; 00:00b5 $ef
     push AF                                            ;; 00:00b6 $f5
     call call_00_0080                                  ;; 00:00b7 $cd $80 $00
     jr   jr_00_00cf                                    ;; 00:00ba $18 $13
     db   $ef, $f5, $cd, $89, $00, $18, $0c             ;; 00:00bc ???????
 
 jp_00_00c3:
-    rst  rst_00_0028                                   ;; 00:00c3 $ef
+    rst  switchBankSafe                                ;; 00:00c3 $ef
     push AF                                            ;; 00:00c4 $f5
     call call_00_00a4                                  ;; 00:00c5 $cd $a4 $00
     jr   jr_00_00cf                                    ;; 00:00c8 $18 $05
 
 call_00_00ca:
-    rst  rst_00_0028                                   ;; 00:00ca $ef
+    rst  switchBankSafe                                ;; 00:00ca $ef
     push AF                                            ;; 00:00cb $f5
     call call_00_00ac                                  ;; 00:00cc $cd $ac $00
 
 jr_00_00cf:
     pop  AF                                            ;; 00:00cf $f1
-    rst  rst_00_0028                                   ;; 00:00d0 $ef
+    rst  switchBankSafe                                ;; 00:00d0 $ef
     ret                                                ;; 00:00d1 $c9
 
 call_00_00d2:
     push BC                                            ;; 00:00d2 $c5
-    rst  rst_00_0028                                   ;; 00:00d3 $ef
+    rst  switchBankSafe                                ;; 00:00d3 $ef
     ld   C, [HL]                                       ;; 00:00d4 $4e
-    rst  rst_00_0028                                   ;; 00:00d5 $ef
+    rst  switchBankSafe                                ;; 00:00d5 $ef
     ld   A, C                                          ;; 00:00d6 $79
     pop  BC                                            ;; 00:00d7 $c1
     ret                                                ;; 00:00d8 $c9
@@ -289,7 +290,12 @@ call_00_017a:
 ;@FFLFarcall2
 executeFarcall2:
     jp   executeFarcall                                ;; 00:017d $c3 $bf $04
-    db   $c3, $dc, $03, $c3, $0b, $04                  ;; 00:0180 ??????
+
+call_00_0180:
+    jp   jp_00_03dc                                    ;; 00:0180 $c3 $dc $03
+
+call_00_0183:
+    jp   jp_00_040b                                    ;; 00:0183 $c3 $0b $04
 
 call_00_0186:
     jp   call_00_0af3                                  ;; 00:0186 $c3 $f3 $0a
@@ -469,7 +475,7 @@ init:
     ld   B, $0c                                        ;; 00:027b $06 $0c
     call call_00_0080                                  ;; 00:027d $cd $80 $00
     ld   A, $0e                                        ;; 00:0280 $3e $0e
-    rst  rst_00_0028                                   ;; 00:0282 $ef
+    rst  switchBankSafe                                ;; 00:0282 $ef
     call call_0e_4003                                  ;; 00:0283 $cd $03 $40
     di                                                 ;; 00:0286 $f3
     xor  A, A                                          ;; 00:0287 $af
@@ -482,16 +488,16 @@ init:
     ld   HL, wVBlankInterruptHandler                   ;; 00:0294 $21 $03 $c7
     ld   A, $c3                                        ;; 00:0297 $3e $c3
     ld   [HL+], A                                      ;; 00:0299 $22
-    ld   A, $df                                        ;; 00:029a $3e $df
+    ld   A, LOW(VBlankHandler) ;@=low VBlankHandler    ;; 00:029a $3e $df
     ld   [HL+], A                                      ;; 00:029c $22
-    ld   A, $16                                        ;; 00:029d $3e $16
+    ld   A, HIGH(VBlankHandler) ;@=high VBlankHandler  ;; 00:029d $3e $16
     ld   [HL+], A                                      ;; 00:029f $22
     ld   HL, wLCDCInterruptHandler                     ;; 00:02a0 $21 $06 $c7
     ld   A, $c3                                        ;; 00:02a3 $3e $c3
     ld   [HL+], A                                      ;; 00:02a5 $22
-    ld   A, $d9                                        ;; 00:02a6 $3e $d9
+    ld   A, LOW(LCDCInterruptHandler) ;@=low LCDCInterruptHandler ;; 00:02a6 $3e $d9
     ld   [HL+], A                                      ;; 00:02a8 $22
-    ld   A, $16                                        ;; 00:02a9 $3e $16
+    ld   A, HIGH(LCDCInterruptHandler) ;@=high LCDCInterruptHandler ;; 00:02a9 $3e $16
     ld   [HL], A                                       ;; 00:02ab $77
     call call_00_0550                                  ;; 00:02ac $cd $50 $05
     ld   HL, $4800                                     ;; 00:02af $21 $00 $48
@@ -522,7 +528,7 @@ init:
     dec  C                                             ;; 00:02e1 $0d
     jr   NZ, .jr_00_02d7                               ;; 00:02e2 $20 $f3
     ld   A, $01                                        ;; 00:02e4 $3e $01
-    rst  rst_00_0028                                   ;; 00:02e6 $ef
+    rst  switchBankSafe                                ;; 00:02e6 $ef
     call call_01_500f                                  ;; 00:02e7 $cd $0f $50
     jp   NC, jp_00_1900                                ;; 00:02ea $d2 $00 $19
     jp   jp_00_1903                                    ;; 00:02ed $c3 $03 $19
@@ -747,19 +753,95 @@ jr_00_03d6:
     pop  BC                                            ;; 00:03d8 $c1
     ldh  A, [hFF90]                                    ;; 00:03d9 $f0 $90
     ret                                                ;; 00:03db $c9
-    db   $f5, $c5, $d5, $e5, $d5, $6b, $62, $5e        ;; 00:03dc ????????
-    db   $23, $56, $23, $6e, $67, $06, $18, $af        ;; 00:03e4 ????????
-    db   $cb, $1d, $cb, $1a, $cb, $1b, $30, $01        ;; 00:03ec ????????
-    db   $84, $1f, $05, $20, $f3, $cb, $1d, $cb        ;; 00:03f4 ????????
-    db   $1a, $cb, $1b, $4d, $e1, $73, $23, $72        ;; 00:03fc ????????
-    db   $23, $71, $23, $77, $c3, $0b, $00, $c5        ;; 00:0404 ????????
-    db   $d5, $e5, $6b, $62, $4f, $2f, $47, $04        ;; 00:040c ????????
-    db   $e5, $5e, $23, $56, $23, $7e, $61, $4f        ;; 00:0414 ????????
-    db   $af, $2e, $18, $cb, $23, $cb, $12, $cb        ;; 00:041c ????????
-    db   $11, $17, $80, $38, $02, $84, $1c, $2d        ;; 00:0424 ????????
-    db   $20, $f1, $e1, $47, $7b, $2f, $22, $7a        ;; 00:042c ????????
-    db   $2f, $22, $79, $2f, $77, $78, $e1, $d1        ;; 00:0434 ????????
-    db   $c1, $c9                                      ;; 00:043c ??
+
+jp_00_03dc:
+    push AF                                            ;; 00:03dc $f5
+    push BC                                            ;; 00:03dd $c5
+    push DE                                            ;; 00:03de $d5
+    push HL                                            ;; 00:03df $e5
+    push DE                                            ;; 00:03e0 $d5
+    ld   L, E                                          ;; 00:03e1 $6b
+    ld   H, D                                          ;; 00:03e2 $62
+    ld   E, [HL]                                       ;; 00:03e3 $5e
+    inc  HL                                            ;; 00:03e4 $23
+    ld   D, [HL]                                       ;; 00:03e5 $56
+    inc  HL                                            ;; 00:03e6 $23
+    ld   L, [HL]                                       ;; 00:03e7 $6e
+    ld   H, A                                          ;; 00:03e8 $67
+    ld   B, $18                                        ;; 00:03e9 $06 $18
+    xor  A, A                                          ;; 00:03eb $af
+.jr_00_03ec:
+    rr   L                                             ;; 00:03ec $cb $1d
+    rr   D                                             ;; 00:03ee $cb $1a
+    rr   E                                             ;; 00:03f0 $cb $1b
+    jr   NC, .jr_00_03f5                               ;; 00:03f2 $30 $01
+    add  A, H                                          ;; 00:03f4 $84
+.jr_00_03f5:
+    rra                                                ;; 00:03f5 $1f
+    dec  B                                             ;; 00:03f6 $05
+    jr   NZ, .jr_00_03ec                               ;; 00:03f7 $20 $f3
+    rr   L                                             ;; 00:03f9 $cb $1d
+    rr   D                                             ;; 00:03fb $cb $1a
+    rr   E                                             ;; 00:03fd $cb $1b
+    ld   C, L                                          ;; 00:03ff $4d
+    pop  HL                                            ;; 00:0400 $e1
+    ld   [HL], E                                       ;; 00:0401 $73
+    inc  HL                                            ;; 00:0402 $23
+    ld   [HL], D                                       ;; 00:0403 $72
+    inc  HL                                            ;; 00:0404 $23
+    ld   [HL], C                                       ;; 00:0405 $71
+    inc  HL                                            ;; 00:0406 $23
+    ld   [HL], A                                       ;; 00:0407 $77
+    jp   pop_all                                       ;; 00:0408 $c3 $0b $00
+
+jp_00_040b:
+    push BC                                            ;; 00:040b $c5
+    push DE                                            ;; 00:040c $d5
+    push HL                                            ;; 00:040d $e5
+    ld   L, E                                          ;; 00:040e $6b
+    ld   H, D                                          ;; 00:040f $62
+    ld   C, A                                          ;; 00:0410 $4f
+    cpl                                                ;; 00:0411 $2f
+    ld   B, A                                          ;; 00:0412 $47
+    inc  B                                             ;; 00:0413 $04
+    push HL                                            ;; 00:0414 $e5
+    ld   E, [HL]                                       ;; 00:0415 $5e
+    inc  HL                                            ;; 00:0416 $23
+    ld   D, [HL]                                       ;; 00:0417 $56
+    inc  HL                                            ;; 00:0418 $23
+    ld   A, [HL]                                       ;; 00:0419 $7e
+    ld   H, C                                          ;; 00:041a $61
+    ld   C, A                                          ;; 00:041b $4f
+    xor  A, A                                          ;; 00:041c $af
+    ld   L, $18                                        ;; 00:041d $2e $18
+.jr_00_041f:
+    sla  E                                             ;; 00:041f $cb $23
+    rl   D                                             ;; 00:0421 $cb $12
+    rl   C                                             ;; 00:0423 $cb $11
+    rla                                                ;; 00:0425 $17
+    add  A, B                                          ;; 00:0426 $80
+    jr   C, .jr_00_042b                                ;; 00:0427 $38 $02
+    add  A, H                                          ;; 00:0429 $84
+    inc  E                                             ;; 00:042a $1c
+.jr_00_042b:
+    dec  L                                             ;; 00:042b $2d
+    jr   NZ, .jr_00_041f                               ;; 00:042c $20 $f1
+    pop  HL                                            ;; 00:042e $e1
+    ld   B, A                                          ;; 00:042f $47
+    ld   A, E                                          ;; 00:0430 $7b
+    cpl                                                ;; 00:0431 $2f
+    ld   [HL+], A                                      ;; 00:0432 $22
+    ld   A, D                                          ;; 00:0433 $7a
+    cpl                                                ;; 00:0434 $2f
+    ld   [HL+], A                                      ;; 00:0435 $22
+    ld   A, C                                          ;; 00:0436 $79
+    cpl                                                ;; 00:0437 $2f
+    ld   [HL], A                                       ;; 00:0438 $77
+    ld   A, B                                          ;; 00:0439 $78
+    pop  HL                                            ;; 00:043a $e1
+    pop  DE                                            ;; 00:043b $d1
+    pop  BC                                            ;; 00:043c $c1
+    ret                                                ;; 00:043d $c9
 
 jp_00_043e:
     push DE                                            ;; 00:043e $d5
@@ -770,9 +852,9 @@ jp_00_043e:
     ld   L, [HL]                                       ;; 00:0445 $6e
     ld   H, $40                                        ;; 00:0446 $26 $40
     ld   A, $0f                                        ;; 00:0448 $3e $0f
-    rst  rst_00_0028                                   ;; 00:044a $ef
+    rst  switchBankSafe                                ;; 00:044a $ef
     ld   H, [HL]                                       ;; 00:044b $66
-    rst  rst_00_0028                                   ;; 00:044c $ef
+    rst  switchBankSafe                                ;; 00:044c $ef
     ld   A, E                                          ;; 00:044d $7b
     cp   A, $ff                                        ;; 00:044e $fe $ff
     jr   Z, .jr_00_0466                                ;; 00:0450 $28 $14
@@ -849,13 +931,14 @@ call_00_04a6:
     pop  AF                                            ;; 00:04af $f1
     ret                                                ;; 00:04b0 $c9
 
-call_00_04b1:
+;Switch to bank A, return old bank in A, not interrupt safe
+switchBankUnsafe:
     push BC                                            ;; 00:04b1 $c5
     ld   C, A                                          ;; 00:04b2 $4f
-    ldh  A, [hFF88]                                    ;; 00:04b3 $f0 $88
+    ldh  A, [hCurrentBank]                             ;; 00:04b3 $f0 $88
     ld   B, A                                          ;; 00:04b5 $47
     ld   A, C                                          ;; 00:04b6 $79
-    ldh  [hFF88], A                                    ;; 00:04b7 $e0 $88
+    ldh  [hCurrentBank], A                             ;; 00:04b7 $e0 $88
     ld   [$2100], A                                    ;; 00:04b9 $ea $00 $21
     ld   A, B                                          ;; 00:04bc $78
     pop  BC                                            ;; 00:04bd $c1
@@ -883,7 +966,7 @@ executeFarcall:
     ld   A, [HL+]                                      ;; 00:04d3 $2a
     ld   [wC0E8], A                                    ;; 00:04d4 $ea $e8 $c0
     ld   A, [HL]                                       ;; 00:04d7 $7e
-    rst  rst_00_0028                                   ;; 00:04d8 $ef
+    rst  switchBankSafe                                ;; 00:04d8 $ef
     ld   E, A                                          ;; 00:04d9 $5f
     ld   HL, SP+5                                      ;; 00:04da $f8 $05
     ld   A, [HL]                                       ;; 00:04dc $7e
@@ -900,7 +983,7 @@ executeFarcall:
     push HL                                            ;; 00:04eb $e5
     ld   HL, SP+4                                      ;; 00:04ec $f8 $04
     ld   A, [HL]                                       ;; 00:04ee $7e
-    rst  rst_00_0028                                   ;; 00:04ef $ef
+    rst  switchBankSafe                                ;; 00:04ef $ef
     pop  HL                                            ;; 00:04f0 $e1
     pop  AF                                            ;; 00:04f1 $f1
     inc  SP                                            ;; 00:04f2 $33
@@ -995,7 +1078,7 @@ call_00_0550:
 call_00_055d:
     ldh  [hFF90], A                                    ;; 00:055d $e0 $90
     ld   A, $0d                                        ;; 00:055f $3e $0d
-    rst  rst_00_0028                                   ;; 00:0561 $ef
+    rst  switchBankSafe                                ;; 00:0561 $ef
     push AF                                            ;; 00:0562 $f5
     ldh  A, [hFF90]                                    ;; 00:0563 $f0 $90
     ld   L, A                                          ;; 00:0565 $6f
@@ -1060,7 +1143,7 @@ call_00_055d:
     jr   NZ, .jr_00_05b0                               ;; 00:05b5 $20 $f9
     pop  DE                                            ;; 00:05b7 $d1
     ld   A, $0c                                        ;; 00:05b8 $3e $0c
-    rst  rst_00_0028                                   ;; 00:05ba $ef
+    rst  switchBankSafe                                ;; 00:05ba $ef
     ldh  A, [hFF90]                                    ;; 00:05bb $f0 $90
     ld   B, A                                          ;; 00:05bd $47
 .jr_00_05be:
@@ -1081,7 +1164,7 @@ call_00_055d:
     dec  B                                             ;; 00:05d3 $05
     jr   NZ, .jr_00_05be                               ;; 00:05d4 $20 $e8
     pop  AF                                            ;; 00:05d6 $f1
-    rst  rst_00_0028                                   ;; 00:05d7 $ef
+    rst  switchBankSafe                                ;; 00:05d7 $ef
     ret                                                ;; 00:05d8 $c9
 
 call_00_05d9:
@@ -1515,7 +1598,7 @@ call_00_07e9:
 .jr_00_07f9:
     ld   A, $0a                                        ;; 00:07f9 $3e $0a
 .jr_00_07fb:
-    rst  rst_00_0028                                   ;; 00:07fb $ef
+    rst  switchBankSafe                                ;; 00:07fb $ef
     ldh  [hFFA1], A                                    ;; 00:07fc $e0 $a1
     pop  AF                                            ;; 00:07fe $f1
     ret                                                ;; 00:07ff $c9
@@ -1557,7 +1640,7 @@ jp_00_0800:
     call call_00_070c                                  ;; 00:0843 $cd $0c $07
     jr   .jr_00_0843                                   ;; 00:0846 $18 $fb
     ldh  A, [hFFA1]                                    ;; 00:0848 $f0 $a1
-    rst  rst_00_0028                                   ;; 00:084a $ef
+    rst  switchBankSafe                                ;; 00:084a $ef
     jp   pop_all                                       ;; 00:084b $c3 $0b $00
 .jr_00_084e:
     push AF                                            ;; 00:084e $f5
@@ -1591,7 +1674,7 @@ jp_00_0800:
     call call_00_070c                                  ;; 00:087c $cd $0c $07
     jr   .jr_00_087c                                   ;; 00:087f $18 $fb
     ldh  A, [hFFA1]                                    ;; 00:0881 $f0 $a1
-    rst  rst_00_0028                                   ;; 00:0883 $ef
+    rst  switchBankSafe                                ;; 00:0883 $ef
     ld   HL, wC779                                     ;; 00:0884 $21 $79 $c7
     ld   E, [HL]                                       ;; 00:0887 $5e
     inc  HL                                            ;; 00:0888 $23
@@ -1858,7 +1941,7 @@ call_00_0916:
     ei                                                 ;; 00:0a23 $fb
     call call_00_0a5c                                  ;; 00:0a24 $cd $5c $0a
     ldh  A, [hFFA1]                                    ;; 00:0a27 $f0 $a1
-    rst  rst_00_0028                                   ;; 00:0a29 $ef
+    rst  switchBankSafe                                ;; 00:0a29 $ef
     ret                                                ;; 00:0a2a $c9
 
 call_00_0a2b:
@@ -2501,16 +2584,16 @@ data_00_0eb8:
 
 jp_00_0ebb:
     ld   A, $0f                                        ;; 00:0ebb $3e $0f
-    rst  rst_00_0028                                   ;; 00:0ebd $ef
+    rst  switchBankSafe                                ;; 00:0ebd $ef
     push AF                                            ;; 00:0ebe $f5
     call call_00_155a                                  ;; 00:0ebf $cd $5a $15
     pop  AF                                            ;; 00:0ec2 $f1
-    rst  rst_00_0028                                   ;; 00:0ec3 $ef
+    rst  switchBankSafe                                ;; 00:0ec3 $ef
     ret                                                ;; 00:0ec4 $c9
 
 data_00_0ec5:
     call call_00_0e5c                                  ;; 00:0ec5 $cd $5c $0e
-    ldh  A, [hFF88]                                    ;; 00:0ec8 $f0 $88
+    ldh  A, [hCurrentBank]                             ;; 00:0ec8 $f0 $88
     push AF                                            ;; 00:0eca $f5
     rst  rst_00_0030                                   ;; 00:0ecb $f7
     ld   [wC7F3], A                                    ;; 00:0ecc $ea $f3 $c7
@@ -2523,7 +2606,7 @@ data_00_0ec5:
     call call_00_190f                                  ;; 00:0ed9 $cd $0f $19
 .jr_00_0edc:
     pop  AF                                            ;; 00:0edc $f1
-    rst  rst_00_0028                                   ;; 00:0edd $ef
+    rst  switchBankSafe                                ;; 00:0edd $ef
 .jr_00_0ede:
     xor  A, A                                          ;; 00:0ede $af
     ld   [wC764], A                                    ;; 00:0edf $ea $64 $c7
@@ -2590,11 +2673,11 @@ data_00_0f86:
     call call_00_0e5c                                  ;; 00:0f86 $cd $5c $0e
     call call_00_14d5                                  ;; 00:0f89 $cd $d5 $14
     farcall call_01_5006                               ;; 00:0f8c $cd $bf $04 $06 $50 $01
-    ldh  A, [hFF88]                                    ;; 00:0f92 $f0 $88
+    ldh  A, [hCurrentBank]                             ;; 00:0f92 $f0 $88
     push AF                                            ;; 00:0f94 $f5
     call call_00_1915                                  ;; 00:0f95 $cd $15 $19
     pop  AF                                            ;; 00:0f98 $f1
-    rst  rst_00_0028                                   ;; 00:0f99 $ef
+    rst  switchBankSafe                                ;; 00:0f99 $ef
     jp   call_00_150a                                  ;; 00:0f9a $c3 $0a $15
     db   $f7, $5f, $d5, $cd, $ca, $14, $d1, $cf        ;; 00:0f9d ????????
     db   $cd, $bc, $18, $fe, $ff, $28, $f9, $18        ;; 00:0fa5 ????????
@@ -2882,14 +2965,14 @@ call_00_11ab:
     add  A, A                                          ;; 00:11ab $87
     rst  add_hl_a                                      ;; 00:11ac $c7
     ld   A, $0f                                        ;; 00:11ad $3e $0f
-    rst  rst_00_0028                                   ;; 00:11af $ef
+    rst  switchBankSafe                                ;; 00:11af $ef
     push AF                                            ;; 00:11b0 $f5
     ld   E, [HL]                                       ;; 00:11b1 $5e
     inc  HL                                            ;; 00:11b2 $23
     ld   D, [HL]                                       ;; 00:11b3 $56
     call call_00_155a                                  ;; 00:11b4 $cd $5a $15
     pop  AF                                            ;; 00:11b7 $f1
-    rst  rst_00_0028                                   ;; 00:11b8 $ef
+    rst  switchBankSafe                                ;; 00:11b8 $ef
     ret                                                ;; 00:11b9 $c9
 
 jr_00_11ba:
@@ -3339,12 +3422,12 @@ jp_00_14ac:
     call call_00_14d5                                  ;; 00:14b4 $cd $d5 $14
     pop  DE                                            ;; 00:14b7 $d1
     ld   A, $01                                        ;; 00:14b8 $3e $01
-    rst  rst_00_0028                                   ;; 00:14ba $ef
+    rst  switchBankSafe                                ;; 00:14ba $ef
     push AF                                            ;; 00:14bb $f5
-    call $5009                                         ;; 00:14bc $cd $09 $50
+    call call_01_5009 ;@bank 1                         ;; 00:14bc $cd $09 $50
     call call_00_191b                                  ;; 00:14bf $cd $1b $19
     pop  AF                                            ;; 00:14c2 $f1
-    rst  rst_00_0028                                   ;; 00:14c3 $ef
+    rst  switchBankSafe                                ;; 00:14c3 $ef
     call call_00_150a                                  ;; 00:14c4 $cd $0a $15
     jp   pop_all                                       ;; 00:14c7 $c3 $0b $00
 
@@ -3426,11 +3509,11 @@ jp_00_153b:
 
 jp_00_153e:
     ld   A, $0f                                        ;; 00:153e $3e $0f
-    rst  rst_00_0028                                   ;; 00:1540 $ef
+    rst  switchBankSafe                                ;; 00:1540 $ef
     push AF                                            ;; 00:1541 $f5
     call call_00_1598                                  ;; 00:1542 $cd $98 $15
     pop  AF                                            ;; 00:1545 $f1
-    rst  rst_00_0028                                   ;; 00:1546 $ef
+    rst  switchBankSafe                                ;; 00:1546 $ef
     jr   jp_00_1557                                    ;; 00:1547 $18 $0e
 
 call_00_1549:
@@ -3620,7 +3703,7 @@ call_00_1648:
     push HL                                            ;; 00:164a $e5
     ld   B, A                                          ;; 00:164b $47
     ld   A, $0f                                        ;; 00:164c $3e $0f
-    rst  rst_00_0028                                   ;; 00:164e $ef
+    rst  switchBankSafe                                ;; 00:164e $ef
     push AF                                            ;; 00:164f $f5
     ld   HL, $4238                                     ;; 00:1650 $21 $38 $42
     ld   D, $08                                        ;; 00:1653 $16 $08
@@ -3637,7 +3720,7 @@ call_00_1648:
     ld   E, $00                                        ;; 00:1662 $1e $00
 .jr_00_1664:
     pop  AF                                            ;; 00:1664 $f1
-    rst  rst_00_0028                                   ;; 00:1665 $ef
+    rst  switchBankSafe                                ;; 00:1665 $ef
     ld   A, E                                          ;; 00:1666 $7b
     pop  HL                                            ;; 00:1667 $e1
     pop  DE                                            ;; 00:1668 $d1
@@ -3724,20 +3807,23 @@ call_00_16d0:
     jr   NZ, call_00_16d0                              ;; 00:16d6 $20 $f8
     ret                                                ;; 00:16d8 $c9
 
-data_00_16d9:
+LCDCInterruptHandler:
     call call_00_16f9                                  ;; 00:16d9 $cd $f9 $16
     push AF                                            ;; 00:16dc $f5
-    jr   .jr_00_16f2                                   ;; 00:16dd $18 $13
+    jr   jr_00_16f2                                    ;; 00:16dd $18 $13
+
+VBlankHandler:
     push AF                                            ;; 00:16df $f5
     ldh  A, [hFFA5]                                    ;; 00:16e0 $f0 $a5
     and  A, A                                          ;; 00:16e2 $a7
-    jr   Z, .jr_00_16f2                                ;; 00:16e3 $28 $0d
+    jr   Z, jr_00_16f2                                 ;; 00:16e3 $28 $0d
     ld   A, $01                                        ;; 00:16e5 $3e $01
     ld   [$2100], A                                    ;; 00:16e7 $ea $00 $21
-    call $502d                                         ;; 00:16ea $cd $2d $50
-    ldh  A, [hFF88]                                    ;; 00:16ed $f0 $88
+    call call_01_502d ;@bank 1                         ;; 00:16ea $cd $2d $50
+    ldh  A, [hCurrentBank]                             ;; 00:16ed $f0 $88
     ld   [$2100], A                                    ;; 00:16ef $ea $00 $21
-.jr_00_16f2:
+
+jr_00_16f2:
     xor  A, A                                          ;; 00:16f2 $af
     ldh  [rLYC], A                                     ;; 00:16f3 $e0 $45
     ldh  [rIF], A                                      ;; 00:16f5 $e0 $0f
@@ -3755,18 +3841,18 @@ call_00_16f9:
     jr   NZ, .jr_00_1760                               ;; 00:1702 $20 $5c
     inc  [HL]                                          ;; 00:1704 $34
     ld   A, $0e                                        ;; 00:1705 $3e $0e
-    call call_00_04b1                                  ;; 00:1707 $cd $b1 $04
+    call switchBankUnsafe                              ;; 00:1707 $cd $b1 $04
     push AF                                            ;; 00:170a $f5
     call call_0e_4000                                  ;; 00:170b $cd $00 $40
     ldh  A, [hFFA5]                                    ;; 00:170e $f0 $a5
     and  A, A                                          ;; 00:1710 $a7
     jr   Z, .jr_00_171b                                ;; 00:1711 $28 $08
     ld   A, $01                                        ;; 00:1713 $3e $01
-    call call_00_04b1                                  ;; 00:1715 $cd $b1 $04
-    call $5033                                         ;; 00:1718 $cd $33 $50
+    call switchBankUnsafe                              ;; 00:1715 $cd $b1 $04
+    call call_01_5033 ;@bank 1                         ;; 00:1718 $cd $33 $50
 .jr_00_171b:
     pop  AF                                            ;; 00:171b $f1
-    call call_00_04b1                                  ;; 00:171c $cd $b1 $04
+    call switchBankUnsafe                              ;; 00:171c $cd $b1 $04
     ld   HL, wC770                                     ;; 00:171f $21 $70 $c7
     ld   DE, wC771                                     ;; 00:1722 $11 $71 $c7
     ld   B, $03                                        ;; 00:1725 $06 $03
@@ -3822,7 +3908,7 @@ call_00_1767:
 
 call_00_176c:
     ld   A, $0f                                        ;; 00:176c $3e $0f
-    call call_00_04b1                                  ;; 00:176e $cd $b1 $04
+    call switchBankUnsafe                              ;; 00:176e $cd $b1 $04
     push AF                                            ;; 00:1771 $f5
     ld   HL, wC7C6                                     ;; 00:1772 $21 $c6 $c7
     inc  [HL]                                          ;; 00:1775 $34
@@ -3988,7 +4074,7 @@ call_00_176c:
     cp   A, $02                                        ;; 00:1860 $fe $02
     jr   C, .jr_00_182e                                ;; 00:1862 $38 $ca
     pop  AF                                            ;; 00:1864 $f1
-    call call_00_04b1                                  ;; 00:1865 $cd $b1 $04
+    call switchBankUnsafe                              ;; 00:1865 $cd $b1 $04
     ret                                                ;; 00:1868 $c9
 
 call_00_1869:
@@ -4064,11 +4150,11 @@ call_00_18c3:
     or   A, B                                          ;; 00:18cc $b0
     ld   [wC7CD], A                                    ;; 00:18cd $ea $cd $c7
     ld   A, $01                                        ;; 00:18d0 $3e $01
-    rst  rst_00_0028                                   ;; 00:18d2 $ef
+    rst  switchBankSafe                                ;; 00:18d2 $ef
     push AF                                            ;; 00:18d3 $f5
     call call_01_500c                                  ;; 00:18d4 $cd $0c $50
     pop  AF                                            ;; 00:18d7 $f1
-    rst  rst_00_0028                                   ;; 00:18d8 $ef
+    rst  switchBankSafe                                ;; 00:18d8 $ef
     jp   pop_all                                       ;; 00:18d9 $c3 $0b $00
     db   $f5, $c5, $d5, $e5, $47, $fa, $9a, $c7        ;; 00:18dc ????????
     db   $87, $b0, $ea, $cd, $c7, $3e, $01, $ef        ;; 00:18e4 ????????
@@ -4386,7 +4472,7 @@ call_00_1b4b:
 jp_00_1b5f:
     call call_00_28a8                                  ;; 00:1b5f $cd $a8 $28
     ld   A, $0d                                        ;; 00:1b62 $3e $0d
-    rst  rst_00_0028                                   ;; 00:1b64 $ef
+    rst  switchBankSafe                                ;; 00:1b64 $ef
     ret                                                ;; 00:1b65 $c9
 
 call_00_1b66:
@@ -4455,7 +4541,7 @@ call_00_1bb9:
     ld   HL, $7000                                     ;; 00:1bc8 $21 $00 $70
     add  HL, BC                                        ;; 00:1bcb $09
     ld   A, $07                                        ;; 00:1bcc $3e $07
-    rst  rst_00_0028                                   ;; 00:1bce $ef
+    rst  switchBankSafe                                ;; 00:1bce $ef
     ld   DE, wC520                                     ;; 00:1bcf $11 $20 $c5
     ld   B, $20                                        ;; 00:1bd2 $06 $20
 .jr_00_1bd4:
@@ -4476,7 +4562,7 @@ call_00_1bdb:
     add  HL, HL                                        ;; 00:1be6 $29
     ld   DE, $4000                                     ;; 00:1be7 $11 $00 $40
     ld   A, $07                                        ;; 00:1bea $3e $07
-    rst  rst_00_0028                                   ;; 00:1bec $ef
+    rst  switchBankSafe                                ;; 00:1bec $ef
     add  HL, DE                                        ;; 00:1bed $19
     jr   call_00_1c61                                  ;; 00:1bee $18 $71
 
@@ -4514,7 +4600,7 @@ call_00_1bf0:
     ld   DE, $4000                                     ;; 00:1c24 $11 $00 $40
 .jr_00_1c27:
     ld   A, $07                                        ;; 00:1c27 $3e $07
-    rst  rst_00_0028                                   ;; 00:1c29 $ef
+    rst  switchBankSafe                                ;; 00:1c29 $ef
     add  HL, DE                                        ;; 00:1c2a $19
     ld   A, [wC2A5]                                    ;; 00:1c2b $fa $a5 $c2
     ld   [wC316], A                                    ;; 00:1c2e $ea $16 $c3
@@ -4590,7 +4676,7 @@ call_00_1c61:
 
 call_00_1caf:
     ld   A, $07                                        ;; 00:1caf $3e $07
-    rst  rst_00_0028                                   ;; 00:1cb1 $ef
+    rst  switchBankSafe                                ;; 00:1cb1 $ef
     ld   A, [wC44B]                                    ;; 00:1cb2 $fa $4b $c4
     ld   E, A                                          ;; 00:1cb5 $5f
     ld   A, [wC44C]                                    ;; 00:1cb6 $fa $4c $c4
@@ -4948,13 +5034,13 @@ call_00_1ec2:
     ld   HL, $6b70                                     ;; 00:1ee2 $21 $70 $6b
     add  HL, BC                                        ;; 00:1ee5 $09
     ld   A, $0d                                        ;; 00:1ee6 $3e $0d
-    rst  rst_00_0028                                   ;; 00:1ee8 $ef
+    rst  switchBankSafe                                ;; 00:1ee8 $ef
     ld   A, [HL]                                       ;; 00:1ee9 $7e
     add  A, $00                                        ;; 00:1eea $c6 $00
     ld   L, A                                          ;; 00:1eec $6f
     ld   H, $43                                        ;; 00:1eed $26 $43
     ld   A, $01                                        ;; 00:1eef $3e $01
-    rst  rst_00_0028                                   ;; 00:1ef1 $ef
+    rst  switchBankSafe                                ;; 00:1ef1 $ef
     ld   C, $00                                        ;; 00:1ef2 $0e $00
     ld   A, [HL]                                       ;; 00:1ef4 $7e
     ld   [wC431], A                                    ;; 00:1ef5 $ea $31 $c4
@@ -5000,13 +5086,13 @@ call_00_1f23:
     ld   HL, $6b70                                     ;; 00:1f3b $21 $70 $6b
     add  HL, BC                                        ;; 00:1f3e $09
     ld   A, $0d                                        ;; 00:1f3f $3e $0d
-    rst  rst_00_0028                                   ;; 00:1f41 $ef
+    rst  switchBankSafe                                ;; 00:1f41 $ef
     ld   A, [HL]                                       ;; 00:1f42 $7e
     add  A, $40                                        ;; 00:1f43 $c6 $40
     ld   H, A                                          ;; 00:1f45 $67
     ld   L, $00                                        ;; 00:1f46 $2e $00
     ld   A, $03                                        ;; 00:1f48 $3e $03
-    rst  rst_00_0028                                   ;; 00:1f4a $ef
+    rst  switchBankSafe                                ;; 00:1f4a $ef
     ld   DE, $8000                                     ;; 00:1f4b $11 $00 $80
     ld   BC, $100                                      ;; 00:1f4e $01 $00 $01
     call call_00_00ac                                  ;; 00:1f51 $cd $ac $00
@@ -5024,7 +5110,7 @@ call_00_1f55:
     ld   HL, $7800                                     ;; 00:1f64 $21 $00 $78
     add  HL, BC                                        ;; 00:1f67 $09
     ld   A, $02                                        ;; 00:1f68 $3e $02
-    rst  rst_00_0028                                   ;; 00:1f6a $ef
+    rst  switchBankSafe                                ;; 00:1f6a $ef
 .jr_00_1f6b:
     ldh  A, [rLY]                                      ;; 00:1f6b $f0 $44
     cp   A, $96                                        ;; 00:1f6d $fe $96
@@ -5524,14 +5610,14 @@ call_00_2232:
 
 call_00_223e:
     ld   A, $09                                        ;; 00:223e $3e $09
-    rst  rst_00_0028                                   ;; 00:2240 $ef
+    rst  switchBankSafe                                ;; 00:2240 $ef
     bit  6, H                                          ;; 00:2241 $cb $74
     jr   NZ, .jr_00_224c                               ;; 00:2243 $20 $07
     ld   A, $40                                        ;; 00:2245 $3e $40
     add  A, H                                          ;; 00:2247 $84
     ld   H, A                                          ;; 00:2248 $67
     ld   A, $08                                        ;; 00:2249 $3e $08
-    rst  rst_00_0028                                   ;; 00:224b $ef
+    rst  switchBankSafe                                ;; 00:224b $ef
 .jr_00_224c:
     call call_00_2253                                  ;; 00:224c $cd $53 $22
     call call_00_2647                                  ;; 00:224f $cd $47 $26
@@ -6634,7 +6720,7 @@ call_00_28a8:
     set  7, A                                          ;; 00:2923 $cb $ff
     ld   [BC], A                                       ;; 00:2925 $02
     ld   A, $03                                        ;; 00:2926 $3e $03
-    rst  rst_00_0028                                   ;; 00:2928 $ef
+    rst  switchBankSafe                                ;; 00:2928 $ef
     ld   HL, $7f00                                     ;; 00:2929 $21 $00 $7f
     ld   DE, $8700                                     ;; 00:292c $11 $00 $87
     ld   BC, $100                                      ;; 00:292f $01 $00 $01
@@ -6707,7 +6793,7 @@ call_00_298a:
     ld   L, A                                          ;; 00:298d $6f
     ld   H, $00                                        ;; 00:298e $26 $00
     ld   A, $07                                        ;; 00:2990 $3e $07
-    rst  rst_00_0028                                   ;; 00:2992 $ef
+    rst  switchBankSafe                                ;; 00:2992 $ef
     ld   A, [wC457]                                    ;; 00:2993 $fa $57 $c4
     ld   E, A                                          ;; 00:2996 $5f
     ld   A, [wC458]                                    ;; 00:2997 $fa $58 $c4
@@ -6858,7 +6944,7 @@ call_00_2a5d:
     jr   NZ, .jr_00_2a5e                               ;; 00:2a68 $20 $f4
     pop  HL                                            ;; 00:2a6a $e1
     ld   A, $01                                        ;; 00:2a6b $3e $01
-    rst  rst_00_0028                                   ;; 00:2a6d $ef
+    rst  switchBankSafe                                ;; 00:2a6d $ef
     push HL                                            ;; 00:2a6e $e5
 .jr_00_2a6f:
     ld   A, [DE]                                       ;; 00:2a6f $1a
@@ -6960,7 +7046,7 @@ call_00_2ae6:
     add  HL, DE                                        ;; 00:2af2 $19
     push HL                                            ;; 00:2af3 $e5
     ld   A, $0d                                        ;; 00:2af4 $3e $0d
-    rst  rst_00_0028                                   ;; 00:2af6 $ef
+    rst  switchBankSafe                                ;; 00:2af6 $ef
     ld   HL, $6560                                     ;; 00:2af7 $21 $60 $65
     ld   A, $0a                                        ;; 00:2afa $3e $0a
     ld   DE, $ff00                                     ;; 00:2afc $11 $00 $ff
@@ -8260,7 +8346,7 @@ call_00_32d8:
     ret                                                ;; 00:333b $c9
 
 jp_00_333c:
-    ld_long_load A, hFF88                              ;; 00:333c $fa $88 $ff
+    ld_long_load A, hCurrentBank                       ;; 00:333c $fa $88 $ff
     ld   [wC467], A                                    ;; 00:333f $ea $67 $c4
     ld   HL, wD000                                     ;; 00:3342 $21 $00 $d0
 .jr_00_3345:
@@ -8277,7 +8363,7 @@ jp_00_333c:
     ld   D, $81                                        ;; 00:3356 $16 $81
 .jr_00_3358:
     ld   A, $07                                        ;; 00:3358 $3e $07
-    rst  rst_00_0028                                   ;; 00:335a $ef
+    rst  switchBankSafe                                ;; 00:335a $ef
     ld   A, D                                          ;; 00:335b $7a
     cp   A, $87                                        ;; 00:335c $fe $87
     jr   Z, .jr_00_3368                                ;; 00:335e $28 $08
@@ -8300,7 +8386,7 @@ jp_00_333c:
     set  7, A                                          ;; 00:3382 $cb $ff
     ld   [BC], A                                       ;; 00:3384 $02
     ld   A, [wC467]                                    ;; 00:3385 $fa $67 $c4
-    rst  rst_00_0028                                   ;; 00:3388 $ef
+    rst  switchBankSafe                                ;; 00:3388 $ef
     ret                                                ;; 00:3389 $c9
 
 call_00_338a:
@@ -8813,7 +8899,7 @@ call_00_363f:
     ld   DE, $8100                                     ;; 00:3647 $11 $00 $81
 .jr_00_364a:
     ld   A, $07                                        ;; 00:364a $3e $07
-    rst  rst_00_0028                                   ;; 00:364c $ef
+    rst  switchBankSafe                                ;; 00:364c $ef
     ld   A, D                                          ;; 00:364d $7a
     cp   A, $87                                        ;; 00:364e $fe $87
     jr   Z, .jr_00_367a                                ;; 00:3650 $28 $28
@@ -8830,12 +8916,12 @@ call_00_363f:
     or   A, $40                                        ;; 00:3663 $f6 $40
     ld   H, A                                          ;; 00:3665 $67
     ld   A, $04                                        ;; 00:3666 $3e $04
-    rst  rst_00_0028                                   ;; 00:3668 $ef
+    rst  switchBankSafe                                ;; 00:3668 $ef
     jr   .jr_00_366f                                   ;; 00:3669 $18 $04
 .jr_00_366b:
     ld   H, A                                          ;; 00:366b $67
     ld   A, $03                                        ;; 00:366c $3e $03
-    rst  rst_00_0028                                   ;; 00:366e $ef
+    rst  switchBankSafe                                ;; 00:366e $ef
 .jr_00_366f:
     ld   BC, $100                                      ;; 00:366f $01 $00 $01
     call call_00_00ac                                  ;; 00:3672 $cd $ac $00
@@ -9233,7 +9319,7 @@ jp_00_388c:
     ld   A, [wC468]                                    ;; 00:388c $fa $68 $c4
     ld   E, A                                          ;; 00:388f $5f
     ld   D, $c4                                        ;; 00:3890 $16 $c4
-    ld_long_load A, hFF88                              ;; 00:3892 $fa $88 $ff
+    ld_long_load A, hCurrentBank                       ;; 00:3892 $fa $88 $ff
     ld   [DE], A                                       ;; 00:3895 $12
     inc  E                                             ;; 00:3896 $1c
     ld   A, E                                          ;; 00:3897 $7b
@@ -9244,7 +9330,7 @@ jp_00_388c:
     ld   D, $c4                                        ;; 00:389f $16 $c4
     dec  E                                             ;; 00:38a1 $1d
     ld   A, [DE]                                       ;; 00:38a2 $1a
-    rst  rst_00_0028                                   ;; 00:38a3 $ef
+    rst  switchBankSafe                                ;; 00:38a3 $ef
     ld   A, [HL+]                                      ;; 00:38a4 $2a
     ld   [wC443], A                                    ;; 00:38a5 $ea $43 $c4
     ld   B, A                                          ;; 00:38a8 $47
@@ -9313,7 +9399,7 @@ jp_00_388c:
     ld   E, A                                          ;; 00:3917 $5f
     ld   D, $c4                                        ;; 00:3918 $16 $c4
     ld   A, [DE]                                       ;; 00:391a $1a
-    rst  rst_00_0028                                   ;; 00:391b $ef
+    rst  switchBankSafe                                ;; 00:391b $ef
     ret                                                ;; 00:391c $c9
 
 call_00_391d:
@@ -10287,7 +10373,7 @@ jp_00_3fbf:
 
 jp_00_3fd0:
     ld   A, $0c                                        ;; 00:3fd0 $3e $0c
-    rst  rst_00_0028                                   ;; 00:3fd2 $ef
+    rst  switchBankSafe                                ;; 00:3fd2 $ef
     ld   DE, $7f80                                     ;; 00:3fd3 $11 $80 $7f
     ld   HL, wC2DA                                     ;; 00:3fd6 $21 $da $c2
     ld   B, $08                                        ;; 00:3fd9 $06 $08
