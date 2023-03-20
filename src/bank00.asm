@@ -5101,7 +5101,7 @@ call_00_1f23:
     ld   A, [HL]                                       ;; 00:1f37 $7e
     ld   B, $00                                        ;; 00:1f38 $06 $00
     ld   C, A                                          ;; 00:1f3a $4f
-    ld   HL, $6b70                                     ;; 00:1f3b $21 $70 $6b
+    ld   HL, data_0d_6b70 ;@=ptr bank=0D               ;; 00:1f3b $21 $70 $6b
     add  HL, BC                                        ;; 00:1f3e $09
     ld   A, $0d                                        ;; 00:1f3f $3e $0d
     rst  switchBankSafe                                ;; 00:1f41 $ef
