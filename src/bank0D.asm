@@ -904,7 +904,7 @@ call_0d_44f4:
     pop  DE                                            ;; 0d:4505 $d1
     ld   A, $0f                                        ;; 0d:4506 $3e $0f
     ld   B, $08                                        ;; 0d:4508 $06 $08
-    call call_00_00b5                                  ;; 0d:450a $cd $b5 $00
+    call memcopySmallFromBank                          ;; 0d:450a $cd $b5 $00
     pop  HL                                            ;; 0d:450d $e1
     push DE                                            ;; 0d:450e $d5
     ld   E, L                                          ;; 0d:450f $5d
@@ -917,7 +917,7 @@ call_0d_44f4:
     ld   B, $0a                                        ;; 0d:4518 $06 $0a
     ld   DE, wDE00                                     ;; 0d:451a $11 $00 $de
     ld   A, $0d                                        ;; 0d:451d $3e $0d
-    call call_00_00b5                                  ;; 0d:451f $cd $b5 $00
+    call memcopySmallFromBank                          ;; 0d:451f $cd $b5 $00
     pop  DE                                            ;; 0d:4522 $d1
     ld   HL, wDE00                                     ;; 0d:4523 $21 $00 $de
     ld   A, [HL+]                                      ;; 0d:4526 $2a
@@ -2535,7 +2535,7 @@ call_0d_60ce:
 call_0d_60d3:
     rst  rst_00_0010                                   ;; 0d:60d3 $d7
     ld   A, $cc                                        ;; 0d:60d4 $3e $cc
-    rst  rst_00_0018                                   ;; 0d:60d6 $df
+    rst  executeOAM_DMA                                ;; 0d:60d6 $df
     dec  B                                             ;; 0d:60d7 $05
     jr   NZ, call_0d_60d3                              ;; 0d:60d8 $20 $f9
     ret                                                ;; 0d:60da $c9

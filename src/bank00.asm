@@ -33,8 +33,8 @@ data_00_0013:
     dw   LCDCInterruptHandler                          ;; 00:0013 pP
     db   $00, $00, $00                                 ;; 00:0015 ???
 
-rst_00_0018:
-    jp   hFF80                                         ;; 00:0018 $c3 $80 $ff
+executeOAM_DMA:
+    jp   hOAM_DMAHandler                               ;; 00:0018 $c3 $80 $ff
     db   $00, $00, $00, $00, $00                       ;; 00:001b ?????
 
 rst_00_0020:
@@ -184,7 +184,7 @@ call_00_00ac:
 jr_00_00b2:
     jp   call_00_1691                                  ;; 00:00b2 $c3 $91 $16
 
-call_00_00b5:
+memcopySmallFromBank:
     rst  switchBankSafe                                ;; 00:00b5 $ef
     push AF                                            ;; 00:00b6 $f5
     call memcopySmall                                  ;; 00:00b7 $cd $80 $00
@@ -227,8 +227,16 @@ jp_00_00d9:
     pop  AF                                            ;; 00:00e4 $f1
     ret                                                ;; 00:00e5 $c9
     db   $31, $00, $00, $c9, $3e, $00, $c3, $00        ;; 00:00e6 ........
-    db   $00, $cb, $47, $c9, $e0, $46, $3e, $28        ;; 00:00ee ........
-    db   $3d, $20, $fd, $c9                            ;; 00:00f6 ....
+    db   $00, $cb, $47, $c9                            ;; 00:00ee ....
+
+;@code
+oamDMAHandler:
+    ldh  [rDMA], A                                     ;; 00:00f2 $e0 $46
+    ld   A, $28                                        ;; 00:00f4 $3e $28
+.delayloop:
+    dec  A                                             ;; 00:00f6 $3d
+    jr   NZ, .delayloop                                ;; 00:00f7 $20 $fd
+    ret                                                ;; 00:00f9 $c9
 
 SECTION "entry", ROM0[$0100]
 
@@ -442,7 +450,7 @@ init:
     ld   H, $cf                                        ;; 00:023b $26 $cf
     ld   B, $11                                        ;; 00:023d $06 $11
     call memclearBig                                   ;; 00:023f $cd $72 $00
-    ld   HL, hFF80                                     ;; 00:0242 $21 $80 $ff
+    ld   HL, hOAM_DMAHandler                           ;; 00:0242 $21 $80 $ff
     ld   B, $7f                                        ;; 00:0245 $06 $7f
     call memclearSmall                                 ;; 00:0247 $cd $6c $00
     pop  BC                                            ;; 00:024a $c1
@@ -468,8 +476,8 @@ init:
     ld   [HL], $a0                                     ;; 00:0265 $36 $a0
     inc  HL                                            ;; 00:0267 $23
     ld   [HL], $cc                                     ;; 00:0268 $36 $cc
-    ld   HL, $f2                                       ;; 00:026a $21 $f2 $00
-    ld   DE, hFF80                                     ;; 00:026d $11 $80 $ff
+    ld   HL, oamDMAHandler ;@=ptr                      ;; 00:026a $21 $f2 $00
+    ld   DE, hOAM_DMAHandler                           ;; 00:026d $11 $80 $ff
     ld   B, $08                                        ;; 00:0270 $06 $08
     call memcopySmall                                  ;; 00:0272 $cd $80 $00
     ld   HL, $e6                                       ;; 00:0275 $21 $e6 $00
@@ -1319,7 +1327,7 @@ call_00_0679:
 
 call_00_068a:
     ld   A, [wC7DF]                                    ;; 00:068a $fa $df $c7
-    rst  rst_00_0018                                   ;; 00:068d $df
+    rst  executeOAM_DMA                                ;; 00:068d $df
     ret                                                ;; 00:068e $c9
 
 call_00_068f:
@@ -1342,7 +1350,7 @@ call_00_068f:
     ld   C, A                                          ;; 00:06aa $4f
 .jr_00_06ab:
     ld   A, C                                          ;; 00:06ab $79
-    rst  rst_00_0018                                   ;; 00:06ac $df
+    rst  executeOAM_DMA                                ;; 00:06ac $df
     pop  BC                                            ;; 00:06ad $c1
     pop  AF                                            ;; 00:06ae $f1
     ret                                                ;; 00:06af $c9
@@ -1684,7 +1692,7 @@ jp_00_0800:
     push HL                                            ;; 00:088a $e5
     ld   HL, hFFA3                                     ;; 00:088b $21 $a3 $ff
     ld   B, $04                                        ;; 00:088e $06 $04
-    call call_00_08a3                                  ;; 00:0890 $cd $a3 $08
+    call memcopySmallReverse                           ;; 00:0890 $cd $a3 $08
     pop  HL                                            ;; 00:0893 $e1
     ld   [HL], D                                       ;; 00:0894 $72
     dec  HL                                            ;; 00:0895 $2b
@@ -1696,12 +1704,14 @@ jp_00_0800:
     ld   [wC77C], A                                    ;; 00:089d $ea $7c $c7
     jp   pop_all                                       ;; 00:08a0 $c3 $0b $00
 
-call_00_08a3:
+; Copies data from DE-1 to HL B times, but in the reverse direction compared to normal copies,
+; pointers start at the end of the data.
+memcopySmallReverse:
     dec  DE                                            ;; 00:08a3 $1b
     ld   A, [DE]                                       ;; 00:08a4 $1a
     ld   [HL-], A                                      ;; 00:08a5 $32
     dec  B                                             ;; 00:08a6 $05
-    jr   NZ, call_00_08a3                              ;; 00:08a7 $20 $fa
+    jr   NZ, memcopySmallReverse                       ;; 00:08a7 $20 $fa
     ret                                                ;; 00:08a9 $c9
 
 call_00_08aa:
@@ -2663,7 +2673,7 @@ data_00_0f2f:
     ld   DE, wC280                                     ;; 00:0f4e $11 $80 $c2
     ld   A, $0f                                        ;; 00:0f51 $3e $0f
     ld   B, $04                                        ;; 00:0f53 $06 $04
-    jp   call_00_00b5                                  ;; 00:0f55 $c3 $b5 $00
+    jp   memcopySmallFromBank                          ;; 00:0f55 $c3 $b5 $00
     db   $cd, $bf, $04, $1e, $50, $01, $c9, $f7        ;; 00:0f58 ????????
     db   $4f, $f7, $47, $cd, $bf, $04, $27, $50        ;; 00:0f60 ????????
     db   $01, $c9, $21, $0a, $c7, $f7, $22, $f7        ;; 00:0f68 ????????
@@ -3480,7 +3490,7 @@ call_00_150a:
     call memclearSmall                                 ;; 00:1515 $cd $6c $00
     rst  rst_00_0010                                   ;; 00:1518 $d7
     ld   A, $cc                                        ;; 00:1519 $3e $cc
-    rst  rst_00_0018                                   ;; 00:151b $df
+    rst  executeOAM_DMA                                ;; 00:151b $df
 
 call_00_151c:
     ld   HL, wC779                                     ;; 00:151c $21 $79 $c7
@@ -3490,10 +3500,10 @@ call_00_151c:
     push HL                                            ;; 00:1522 $e5
     ld   HL, wC784                                     ;; 00:1523 $21 $84 $c7
     ld   B, $07                                        ;; 00:1526 $06 $07
-    call call_00_08a3                                  ;; 00:1528 $cd $a3 $08
+    call memcopySmallReverse                           ;; 00:1528 $cd $a3 $08
     ld   HL, hFFA3                                     ;; 00:152b $21 $a3 $ff
     ld   B, $04                                        ;; 00:152e $06 $04
-    call call_00_08a3                                  ;; 00:1530 $cd $a3 $08
+    call memcopySmallReverse                           ;; 00:1530 $cd $a3 $08
     pop  HL                                            ;; 00:1533 $e1
     ld   [HL], D                                       ;; 00:1534 $72
     dec  HL                                            ;; 00:1535 $2b

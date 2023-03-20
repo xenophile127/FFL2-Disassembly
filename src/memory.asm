@@ -1215,7 +1215,7 @@ wDE10:
 
 SECTION "hram", HRAM[$ff80]
 
-hFF80:
+hOAM_DMAHandler:
     ds 8                                               ;; ff80
 
 hCurrentBank:

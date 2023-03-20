@@ -1114,7 +1114,7 @@ jp_0f_6098:
     call memclearSmall                                 ;; 0f:60be $cd $6c $00
     rst  rst_00_0010                                   ;; 0f:60c1 $d7
     ld   A, $cc                                        ;; 0f:60c2 $3e $cc
-    rst  rst_00_0018                                   ;; 0f:60c4 $df
+    rst  executeOAM_DMA                                ;; 0f:60c4 $df
     ld   HL, data_0f_4700                              ;; 0f:60c5 $21 $00 $47
     ld   DE, $9700                                     ;; 0f:60c8 $11 $00 $97
     ld   BC, $100                                      ;; 0f:60cb $01 $00 $01
@@ -1583,7 +1583,7 @@ call_0f_62e9:
     call call_0f_6459                                  ;; 0f:6391 $cd $59 $64
     rst  rst_00_0010                                   ;; 0f:6394 $d7
     ld   A, $cc                                        ;; 0f:6395 $3e $cc
-    rst  rst_00_0018                                   ;; 0f:6397 $df
+    rst  executeOAM_DMA                                ;; 0f:6397 $df
     ld   A, [wD944]                                    ;; 0f:6398 $fa $44 $d9
     ld   E, A                                          ;; 0f:639b $5f
     ld   HL, wD97C                                     ;; 0f:639c $21 $7c $d9
@@ -1630,7 +1630,7 @@ call_0f_62e9:
     call memclearSmall                                 ;; 0f:63d8 $cd $6c $00
     rst  rst_00_0010                                   ;; 0f:63db $d7
     ld   A, $cc                                        ;; 0f:63dc $3e $cc
-    rst  rst_00_0018                                   ;; 0f:63de $df
+    rst  executeOAM_DMA                                ;; 0f:63de $df
     ld   A, $d2                                        ;; 0f:63df $3e $d2
     ldh  [rOBP0], A                                    ;; 0f:63e1 $e0 $48
 .jp_0f_63e3:
