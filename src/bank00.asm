@@ -54,12 +54,12 @@ rst_00_0030:
 SECTION "isrVBlank", ROM0[$0040]
 
 isrVBlank:
-    jp   wC703                                         ;; 00:0040 $c3 $03 $c7
+    jp   wVBlankInterruptHandler                       ;; 00:0040 $c3 $03 $c7
 
 SECTION "isrLCDC", ROM0[$0048]
 
 isrLCDC:
-    jp   wC706                                         ;; 00:0048 $c3 $06 $c7
+    jp   wLCDCInterruptHandler                         ;; 00:0048 $c3 $06 $c7
     db   $87                                           ;; 00:004b ?
 
 mul_a_32:
@@ -286,8 +286,9 @@ call_00_0177:
 call_00_017a:
     jp   call_00_1691                                  ;; 00:017a $c3 $91 $16
 
-call_00_017d:
-    jp   call_00_04bf                                  ;; 00:017d $c3 $bf $04
+;@FFLFarcall2
+executeFarcall2:
+    jp   executeFarcall                                ;; 00:017d $c3 $bf $04
     db   $c3, $dc, $03, $c3, $0b, $04                  ;; 00:0180 ??????
 
 call_00_0186:
@@ -342,7 +343,12 @@ call_00_01b9:
 
 call_00_01bc:
     jp   call_00_05ef                                  ;; 00:01bc $c3 $ef $05
-    db   $c3, $e3, $14, $c3, $1c, $15                  ;; 00:01bf ??????
+
+call_00_01bf:
+    jp   call_00_14e3                                  ;; 00:01bf $c3 $e3 $14
+
+jp_00_01c2:
+    jp   call_00_151c                                  ;; 00:01c2 $c3 $1c $15
 
 call_00_01c5:
     jp   jp_00_0901                                    ;; 00:01c5 $c3 $01 $09
@@ -363,10 +369,10 @@ call_00_01d4:
     jp   jp_00_18a7                                    ;; 00:01d4 $c3 $a7 $18
 
 call_00_01d7:
-    jp   $1892                                         ;; 00:01d7 $c3 $92 $18
+    jp   jp_00_1892                                    ;; 00:01d7 $c3 $92 $18
 
 call_00_01da:
-    jp   $1899                                         ;; 00:01da $c3 $99 $18
+    jp   jp_00_1899                                    ;; 00:01da $c3 $99 $18
 
 call_00_01dd:
     jp   jp_00_18a0                                    ;; 00:01dd $c3 $a0 $18
@@ -473,14 +479,14 @@ init:
     ldh  [rIE], A                                      ;; 00:028e $e0 $ff
     ld   A, $40                                        ;; 00:0290 $3e $40
     ldh  [rSTAT], A                                    ;; 00:0292 $e0 $41
-    ld   HL, wC703                                     ;; 00:0294 $21 $03 $c7
+    ld   HL, wVBlankInterruptHandler                   ;; 00:0294 $21 $03 $c7
     ld   A, $c3                                        ;; 00:0297 $3e $c3
     ld   [HL+], A                                      ;; 00:0299 $22
     ld   A, $df                                        ;; 00:029a $3e $df
     ld   [HL+], A                                      ;; 00:029c $22
     ld   A, $16                                        ;; 00:029d $3e $16
     ld   [HL+], A                                      ;; 00:029f $22
-    ld   HL, wC706                                     ;; 00:02a0 $21 $06 $c7
+    ld   HL, wLCDCInterruptHandler                     ;; 00:02a0 $21 $06 $c7
     ld   A, $c3                                        ;; 00:02a3 $3e $c3
     ld   [HL+], A                                      ;; 00:02a5 $22
     ld   A, $d9                                        ;; 00:02a6 $3e $d9
@@ -857,7 +863,7 @@ call_00_04b1:
 
 ; The 3 bytes after this instruction indicate which bank and address to call
 ;@FFLFarcall
-call_00_04bf:
+executeFarcall:
     push AF                                            ;; 00:04bf $f5
     push HL                                            ;; 00:04c0 $e5
     push DE                                            ;; 00:04c1 $d5
@@ -2526,10 +2532,7 @@ data_00_0ec5:
     cpl                                                ;; 00:0ee8 $2f
     ldh  [hFF8B], A                                    ;; 00:0ee9 $e0 $8b
     call call_00_14e3                                  ;; 00:0eeb $cd $e3 $14
-    call call_00_04bf                                  ;; 00:0eee $cd $bf $04
-    nop                                                ;; 00:0ef1 $00
-    ld   B, B                                          ;; 00:0ef2 $40
-    dec  C                                             ;; 00:0ef3 $0d
+    farcall call_0d_4000                               ;; 00:0eee $cd $bf $04 $00 $40 $0d
     call call_00_151c                                  ;; 00:0ef4 $cd $1c $15
     ld   A, [wC763]                                    ;; 00:0ef7 $fa $63 $c7
     and  A, A                                          ;; 00:0efa $a7
@@ -2586,9 +2589,8 @@ data_00_0f2f:
 data_00_0f86:
     call call_00_0e5c                                  ;; 00:0f86 $cd $5c $0e
     call call_00_14d5                                  ;; 00:0f89 $cd $d5 $14
-    call call_00_04bf                                  ;; 00:0f8c $cd $bf $04
-    ld   B, $50                                        ;; 00:0f8f $06 $50
-    ld   BC, $88f0                                     ;; 00:0f91 $01 $f0 $88
+    farcall call_01_5006                               ;; 00:0f8c $cd $bf $04 $06 $50 $01
+    ldh  A, [hFF88]                                    ;; 00:0f92 $f0 $88
     push AF                                            ;; 00:0f94 $f5
     call call_00_1915                                  ;; 00:0f95 $cd $15 $19
     pop  AF                                            ;; 00:0f98 $f1
@@ -3650,7 +3652,7 @@ call_00_1674:
     push AF                                            ;; 00:1676 $f5
     push DE                                            ;; 00:1677 $d5
     push HL                                            ;; 00:1678 $e5
-    ld   HL, wC706                                     ;; 00:1679 $21 $06 $c7
+    ld   HL, wLCDCInterruptHandler                     ;; 00:1679 $21 $06 $c7
     ld   DE, wC7D3                                     ;; 00:167c $11 $d3 $c7
     ld   A, [HL]                                       ;; 00:167f $7e
     ld   [DE], A                                       ;; 00:1680 $12
@@ -3673,7 +3675,7 @@ call_00_1691:
     push AF                                            ;; 00:1693 $f5
     push DE                                            ;; 00:1694 $d5
     push HL                                            ;; 00:1695 $e5
-    ld   HL, wC706                                     ;; 00:1696 $21 $06 $c7
+    ld   HL, wLCDCInterruptHandler                     ;; 00:1696 $21 $06 $c7
     ld   DE, wC7D3                                     ;; 00:1699 $11 $d3 $c7
     ld   A, [DE]                                       ;; 00:169c $1a
     inc  DE                                            ;; 00:169d $13
@@ -4014,53 +4016,35 @@ call_00_1869:
     ret                                                ;; 00:1883 $c9
 
 jp_00_1884:
-    call call_00_04bf                                  ;; 00:1884 $cd $bf $04
-    nop                                                ;; 00:1887 $00
-    ld   D, B                                          ;; 00:1888 $50
-    db   $01                                           ;; 00:1889 .
+    farcall call_01_5000                               ;; 00:1884 $cd $bf $04 $00 $50 $01
     ret                                                ;; 00:188a $c9
 
 jp_00_188b:
-    call call_00_04bf                                  ;; 00:188b $cd $bf $04
-    inc  BC                                            ;; 00:188e $03
-    ld   D, B                                          ;; 00:188f $50
-    ld   BC, wCDC9                                     ;; 00:1890 $01 $c9 $cd
-    cp   A, A                                          ;; 00:1893 $bf
-    inc  B                                             ;; 00:1894 $04
-    dec  D                                             ;; 00:1895 $15
-    ld   D, B                                          ;; 00:1896 $50
-    ld   BC, wCDC9                                     ;; 00:1897 $01 $c9 $cd
-    cp   A, A                                          ;; 00:189a $bf
-    inc  B                                             ;; 00:189b $04
-    jr   jr_00_18ee                                    ;; 00:189c $18 $50
-    db   $01                                           ;; 00:189e .
+    farcall call_01_5003                               ;; 00:188b $cd $bf $04 $03 $50 $01
+    ret                                                ;; 00:1891 $c9
+
+jp_00_1892:
+    farcall call_01_5015                               ;; 00:1892 $cd $bf $04 $15 $50 $01
+    ret                                                ;; 00:1898 $c9
+
+jp_00_1899:
+    farcall call_01_5018                               ;; 00:1899 $cd $bf $04 $18 $50 $01
     ret                                                ;; 00:189f $c9
 
 jp_00_18a0:
-    call call_00_04bf                                  ;; 00:18a0 $cd $bf $04
-    dec  DE                                            ;; 00:18a3 $1b
-    ld   D, B                                          ;; 00:18a4 $50
-    db   $01, $c9                                      ;; 00:18a5 ??
+    farcall call_01_501b                               ;; 00:18a0 $cd $bf $04 $1b $50 $01
+    ret                                                ;; 00:18a6 $c9
 
 jp_00_18a7:
-    call call_00_04bf                                  ;; 00:18a7 $cd $bf $04
-    add  A, B                                          ;; 00:18aa $80
-    ld   H, B                                          ;; 00:18ab $60
-    rrca                                               ;; 00:18ac $0f
+    farcall call_0f_6080                               ;; 00:18a7 $cd $bf $04 $80 $60 $0f
     ret                                                ;; 00:18ad $c9
 
 jp_00_18ae:
-    call call_00_04bf                                  ;; 00:18ae $cd $bf $04
-    nop                                                ;; 00:18b1 $00
-    ld   D, B                                          ;; 00:18b2 $50
-    dec  C                                             ;; 00:18b3 $0d
+    farcall call_0d_5000                               ;; 00:18ae $cd $bf $04 $00 $50 $0d
     ret                                                ;; 00:18b4 $c9
 
 jp_00_18b5:
-    call call_00_04bf                                  ;; 00:18b5 $cd $bf $04
-    add  A, E                                          ;; 00:18b8 $83
-    ld   H, B                                          ;; 00:18b9 $60
-    rrca                                               ;; 00:18ba $0f
+    farcall call_0f_6083                               ;; 00:18b5 $cd $bf $04 $83 $60 $0f
     ret                                                ;; 00:18bb $c9
 
 call_00_18bc:
@@ -4088,16 +4072,9 @@ call_00_18c3:
     jp   pop_all                                       ;; 00:18d9 $c3 $0b $00
     db   $f5, $c5, $d5, $e5, $47, $fa, $9a, $c7        ;; 00:18dc ????????
     db   $87, $b0, $ea, $cd, $c7, $3e, $01, $ef        ;; 00:18e4 ????????
-    db   $f5, $cd                                      ;; 00:18ec ??
-
-jr_00_18ee:
-    inc  C                                             ;; 00:18ee $0c
-    ld   D, B                                          ;; 00:18ef $50
-    pop  AF                                            ;; 00:18f0 $f1
-    rst  rst_00_0028                                   ;; 00:18f1 $ef
-    jp   pop_all                                       ;; 00:18f2 $c3 $0b $00
-    db   $00, $00, $00, $00, $00, $00, $00, $00        ;; 00:18f5 ????????
-    db   $00, $00, $00                                 ;; 00:18fd ???
+    db   $f5, $cd, $0c, $50, $f1, $ef, $c3, $0b        ;; 00:18ec ????????
+    db   $00, $00, $00, $00, $00, $00, $00, $00        ;; 00:18f4 ????????
+    db   $00, $00, $00, $00                            ;; 00:18fc ????
 
 jp_00_1900:
     jp   jp_00_19d6                                    ;; 00:1900 $c3 $d6 $19
@@ -7517,7 +7494,7 @@ call_00_2ddc:
 
 call_00_2e9c:
     di                                                 ;; 00:2e9c $f3
-    ld   HL, wC706                                     ;; 00:2e9d $21 $06 $c7
+    ld   HL, wLCDCInterruptHandler                     ;; 00:2e9d $21 $06 $c7
     ld   DE, wC473                                     ;; 00:2ea0 $11 $73 $c4
     ld   A, [HL]                                       ;; 00:2ea3 $7e
     ld   [DE], A                                       ;; 00:2ea4 $12
@@ -7544,7 +7521,7 @@ call_00_2e9c:
 call_00_2ebc:
     di                                                 ;; 00:2ebc $f3
     ld   A, $c3                                        ;; 00:2ebd $3e $c3
-    ld   [wC706], A                                    ;; 00:2ebf $ea $06 $c7
+    ld   [wLCDCInterruptHandler], A                    ;; 00:2ebf $ea $06 $c7
     ld   A, $95                                        ;; 00:2ec2 $3e $95
     ld   [wC707], A                                    ;; 00:2ec4 $ea $07 $c7
     ld   A, $2c                                        ;; 00:2ec7 $3e $2c
@@ -7555,7 +7532,7 @@ call_00_2ebc:
 call_00_2ece:
     di                                                 ;; 00:2ece $f3
     ld   A, $c3                                        ;; 00:2ecf $3e $c3
-    ld   [wC706], A                                    ;; 00:2ed1 $ea $06 $c7
+    ld   [wLCDCInterruptHandler], A                    ;; 00:2ed1 $ea $06 $c7
     ld   A, [data_00_0013]                             ;; 00:2ed4 $fa $13 $00
     ld   [wC707], A                                    ;; 00:2ed7 $ea $07 $c7
     ld   A, [data_00_0013 + $01]                       ;; 00:2eda $fa $14 $00
@@ -7575,7 +7552,7 @@ call_00_2eec:
     xor  A, A                                          ;; 00:2eed $af
     ldh  [rLYC], A                                     ;; 00:2eee $e0 $45
     ld   HL, wC473                                     ;; 00:2ef0 $21 $73 $c4
-    ld   DE, wC706                                     ;; 00:2ef3 $11 $06 $c7
+    ld   DE, wLCDCInterruptHandler                     ;; 00:2ef3 $11 $06 $c7
     ld   A, [HL+]                                      ;; 00:2ef6 $2a
     ld   [DE], A                                       ;; 00:2ef7 $12
     inc  E                                             ;; 00:2ef8 $1c
@@ -8107,10 +8084,7 @@ jp_00_3232:
     ld   A, $0c                                        ;; 00:323c $3e $0c
     call call_00_00d2                                  ;; 00:323e $cd $d2 $00
     ld   D, A                                          ;; 00:3241 $57
-    call call_00_017d                                  ;; 00:3242 $cd $7d $01
-    nop                                                ;; 00:3245 $00
-    ld   B, B                                          ;; 00:3246 $40
-    inc  C                                             ;; 00:3247 $0c
+    farcall2 call_0c_4000                              ;; 00:3242 $cd $7d $01 $00 $40 $0c
     ret                                                ;; 00:3248 $c9
 
 call_00_3249:
@@ -9832,7 +9806,7 @@ jp_00_3cb4:
     rst  rst_00_0010                                   ;; 00:3cc4 $d7
     call call_00_1a97                                  ;; 00:3cc5 $cd $97 $1a
     di                                                 ;; 00:3cc8 $f3
-    ld   HL, wC706                                     ;; 00:3cc9 $21 $06 $c7
+    ld   HL, wLCDCInterruptHandler                     ;; 00:3cc9 $21 $06 $c7
     ld   DE, wC473                                     ;; 00:3ccc $11 $73 $c4
     ld   BC, $3d7b                                     ;; 00:3ccf $01 $7b $3d
     ld   A, [HL]                                       ;; 00:3cd2 $7e
@@ -9938,7 +9912,7 @@ jp_00_3cb4:
     jr   NZ, .jr_00_3cec                               ;; 00:3d65 $20 $85
     di                                                 ;; 00:3d67 $f3
     ld   HL, wC473                                     ;; 00:3d68 $21 $73 $c4
-    ld   DE, wC706                                     ;; 00:3d6b $11 $06 $c7
+    ld   DE, wLCDCInterruptHandler                     ;; 00:3d6b $11 $06 $c7
     ld   A, [HL+]                                      ;; 00:3d6e $2a
     ld   [DE], A                                       ;; 00:3d6f $12
     inc  E                                             ;; 00:3d70 $1c

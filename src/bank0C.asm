@@ -6,6 +6,8 @@ INCLUDE "include/charmaps.inc"
 INCLUDE "include/constants.inc"
 
 SECTION "bank0c", ROMX[$4000], BANK[$0c]
+
+call_0c_4000:
     ld   A, $b1                                        ;; 0c:4000 $3e $b1
     ld   [wC1AF], A                                    ;; 0c:4002 $ea $af $c1
     ld   A, $c1                                        ;; 0c:4005 $3e $c1

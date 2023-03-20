@@ -472,10 +472,10 @@ wC701:
 wC702:
     ds 1                                               ;; c702
 
-wC703:
+wVBlankInterruptHandler:
     ds 3                                               ;; c703
 
-wC706:
+wLCDCInterruptHandler:
     ds 1                                               ;; c706
 
 wC707:
@@ -941,10 +941,7 @@ wCC80:
     ds 16                                              ;; cc80
 
 wCC90:
-    ds 313                                             ;; cc90
-
-wCDC9:
-    ds 311                                             ;; cdc9
+    ds 624                                             ;; cc90
 
 wCF00:
     ds 224                                             ;; cf00
@@ -1172,7 +1169,10 @@ wD978:
     ds 2                                               ;; d978
 
 wD97A:
-    ds 2                                               ;; d97a
+    ds 1                                               ;; d97a
+
+wD97B:
+    ds 1                                               ;; d97b
 
 wD97C:
     ds 10                                              ;; d97c
@@ -1353,7 +1353,4 @@ sA780:
     ds 1                                               ;; a780
 
 sA781:
-    ds 2636                                            ;; a781
-
-sB1CD:
-    ds 3635                                            ;; b1cd
+    ds 6271                                            ;; a781
