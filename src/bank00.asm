@@ -1452,7 +1452,7 @@ jp_00_0719:
     jp   HL                                            ;; 00:0723 $e9
 
 jr_00_0724:
-    ld   HL, $6560                                     ;; 00:0724 $21 $60 $65
+    ld   HL, data_0f_6560 ;@=ptr bank=0F               ;; 00:0724 $21 $60 $65
     sub  A, $4e                                        ;; 00:0727 $d6 $4e
     add  A, A                                          ;; 00:0729 $87
     rst  add_hl_a                                      ;; 00:072a $c7
@@ -2379,11 +2379,11 @@ data_00_0d05:
     ld   [HL+], A                                      ;; 00:0d4d $22
     push HL                                            ;; 00:0d4e $e5
     ld   A, C                                          ;; 00:0d4f $79
-    ld   HL, $6b70                                     ;; 00:0d50 $21 $70 $6b
+    ld   HL, data_0d_6b70 ;@=ptr bank=0D               ;; 00:0d50 $21 $70 $6b
     rst  add_hl_a                                      ;; 00:0d53 $c7
     ld   A, $0d                                        ;; 00:0d54 $3e $0d
     call readFromBank                                  ;; 00:0d56 $cd $d2 $00
-    ld   HL, $4300                                     ;; 00:0d59 $21 $00 $43
+    ld   HL, data_01_4300 ;@=ptr bank=01               ;; 00:0d59 $21 $00 $43
     rst  add_hl_a                                      ;; 00:0d5c $c7
     ld   A, $01                                        ;; 00:0d5d $3e $01
     call readFromBank                                  ;; 00:0d5f $cd $d2 $00
@@ -2674,7 +2674,7 @@ data_00_0f2f:
     pop  AF                                            ;; 00:0f47 $f1
     add  A, A                                          ;; 00:0f48 $87
     add  A, A                                          ;; 00:0f49 $87
-    ld   HL, $6610                                     ;; 00:0f4a $21 $10 $66
+    ld   HL, data_0f_6610 ;@=ptr bank=0F               ;; 00:0f4a $21 $10 $66
     rst  add_hl_a                                      ;; 00:0f4d $c7
     ld   DE, wC280                                     ;; 00:0f4e $11 $80 $c2
     ld   A, $0f                                        ;; 00:0f51 $3e $0f
@@ -3678,7 +3678,7 @@ call_00_15f7:
     db   $c9                                           ;; 00:160b ?
 
 call_00_160c:
-    ld   HL, $6b70                                     ;; 00:160c $21 $70 $6b
+    ld   HL, data_0d_6b70 ;@=ptr bank=0D               ;; 00:160c $21 $70 $6b
     rst  add_hl_a                                      ;; 00:160f $c7
     ld   A, $0d                                        ;; 00:1610 $3e $0d
     call readFromBank                                  ;; 00:1612 $cd $d2 $00
@@ -3705,7 +3705,7 @@ call_00_1622:
     inc  HL                                            ;; 00:1634 $23
     ld   H, [HL]                                       ;; 00:1635 $66
     ld   L, A                                          ;; 00:1636 $6f
-    ld   DE, $6f80                                     ;; 00:1637 $11 $80 $6f
+    ld   DE, data_0c_6f80 ;@=ptr bank=0C               ;; 00:1637 $11 $80 $6f
     call mul_hl_8_add_de                               ;; 00:163a $cd $67 $00
     ld   A, $0c                                        ;; 00:163d $3e $0c
     call readFromBank                                  ;; 00:163f $cd $d2 $00
@@ -5125,7 +5125,7 @@ call_00_1f55:
     srl  A                                             ;; 00:1f5f $cb $3f
     rr   C                                             ;; 00:1f61 $cb $19
     ld   B, A                                          ;; 00:1f63 $47
-    ld   HL, $7800                                     ;; 00:1f64 $21 $00 $78
+    ld   HL, data_07_7800 ;@=ptr bank=07               ;; 00:1f64 $21 $00 $78
     add  HL, BC                                        ;; 00:1f67 $09
     ld   A, $02                                        ;; 00:1f68 $3e $02
     rst  switchBankSafe                                ;; 00:1f6a $ef
@@ -5149,7 +5149,7 @@ call_00_1f55:
     srl  B                                             ;; 00:1f88 $cb $38
     rr   C                                             ;; 00:1f8a $cb $19
     push HL                                            ;; 00:1f8c $e5
-    ld   HL, $4000                                     ;; 00:1f8d $21 $00 $40
+    ld   HL, data_02_4000 ;@=ptr bank=2                ;; 00:1f8d $21 $00 $40
     add  HL, BC                                        ;; 00:1f90 $09
     ld   B, $40                                        ;; 00:1f91 $06 $40
     call memcopySmall                                  ;; 00:1f93 $cd $80 $00
@@ -8180,7 +8180,7 @@ jp_00_322b:
     ret                                                ;; 00:3231 $c9
 
 jp_00_3232:
-    ld   HL, $468a                                     ;; 00:3232 $21 $8a $46
+    ld   HL, data_0c_468a ;@=ptr bank=0C               ;; 00:3232 $21 $8a $46
     ld   A, $0c                                        ;; 00:3235 $3e $0c
     call readFromBank                                  ;; 00:3237 $cd $d2 $00
     ld   E, A                                          ;; 00:323a $5f

@@ -6,6 +6,8 @@ INCLUDE "include/charmaps.inc"
 INCLUDE "include/constants.inc"
 
 SECTION "bank02", ROMX[$4000], BANK[$02]
+
+data_02_4000:
     db   $f5, $f1, $1a, $da, $0f, $af, $89, $49        ;; 02:4000 ????????
     db   $4c, $ac, $93, $53, $16, $95, $3f, $3b        ;; 02:4008 ????????
     db   $31, $21, $33, $33, $5a, $5b, $8e, $ef        ;; 02:4010 ????????
