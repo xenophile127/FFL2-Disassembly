@@ -3327,30 +3327,30 @@ soundEffectDataChannel1:
     dw   data_0e_7baa                                  ;; 0e:7ac5 ?? $00
     dw   data_0e_7bd9                                  ;; 0e:7ac7 ?? $01
     dw   data_0e_7bf5                                  ;; 0e:7ac9 ?? $02
-    dw   data_0e_7ba9                                  ;; 0e:7acb ?? $03
+    dw   soundEffectChannelUnused                      ;; 0e:7acb ?? $03
     dw   data_0e_7c0d                                  ;; 0e:7acd ?? $04
-    dw   data_0e_7ba9                                  ;; 0e:7acf ?? $05
-    dw   data_0e_7ba9                                  ;; 0e:7ad1 ?? $06
+    dw   soundEffectChannelUnused                      ;; 0e:7acf ?? $05
+    dw   soundEffectChannelUnused                      ;; 0e:7ad1 ?? $06
     dw   data_0e_7c2c                                  ;; 0e:7ad3 ?? $07
     dw   data_0e_7c39                                  ;; 0e:7ad5 ?? $08
     dw   data_0e_7c52                                  ;; 0e:7ad7 ?? $09
     dw   data_0e_7c65                                  ;; 0e:7ad9 ?? $0a
-    dw   data_0e_7ba9                                  ;; 0e:7adb ?? $0b
+    dw   soundEffectChannelUnused                      ;; 0e:7adb ?? $0b
     dw   data_0e_7c7f                                  ;; 0e:7add ?? $0c
     dw   data_0e_7c97                                  ;; 0e:7adf ?? $0d
     dw   data_0e_7c9e                                  ;; 0e:7ae1 ?? $0e
-    dw   data_0e_7ba9                                  ;; 0e:7ae3 ?? $0f
+    dw   soundEffectChannelUnused                      ;; 0e:7ae3 ?? $0f
     dw   data_0e_7cc8                                  ;; 0e:7ae5 ?? $10
-    dw   data_0e_7ba9                                  ;; 0e:7ae7 ?? $11
+    dw   soundEffectChannelUnused                      ;; 0e:7ae7 ?? $11
     dw   data_0e_7cee                                  ;; 0e:7ae9 .. $12
-    dw   data_0e_7ba9                                  ;; 0e:7aeb ?? $13
+    dw   soundEffectChannelUnused                      ;; 0e:7aeb ?? $13
     dw   data_0e_7d06                                  ;; 0e:7aed ?? $14
-    dw   data_0e_7ba9                                  ;; 0e:7aef .. $15
-    dw   data_0e_7ba9                                  ;; 0e:7af1 ?? $16
-    dw   data_0e_7ba9                                  ;; 0e:7af3 ?? $17
+    dw   soundEffectChannelUnused                      ;; 0e:7aef .. $15
+    dw   soundEffectChannelUnused                      ;; 0e:7af1 ?? $16
+    dw   soundEffectChannelUnused                      ;; 0e:7af3 ?? $17
     dw   data_0e_7d47                                  ;; 0e:7af5 ?? $18
     dw   data_0e_7d76                                  ;; 0e:7af7 ?? $19
-    dw   data_0e_7ba9                                  ;; 0e:7af9 ?? $1a
+    dw   soundEffectChannelUnused                      ;; 0e:7af9 ?? $1a
     dw   data_0e_7dc6                                  ;; 0e:7afb ?? $1b
     dw   data_0e_7dda                                  ;; 0e:7afd ?? $1c
     dw   data_0e_7dfd                                  ;; 0e:7aff ?? $1d
@@ -3361,50 +3361,50 @@ soundEffectDataChannel1:
     dw   data_0e_7e76                                  ;; 0e:7b09 ?? $22
     dw   data_0e_7e84                                  ;; 0e:7b0b ?? $23
     dw   data_0e_7e98                                  ;; 0e:7b0d ?? $24
-    dw   data_0e_7ba9                                  ;; 0e:7b0f .. $25
+    dw   soundEffectChannelUnused                      ;; 0e:7b0f .. $25
     dw   data_0e_7eb0                                  ;; 0e:7b11 ?? $26
-    dw   data_0e_7ba9                                  ;; 0e:7b13 .. $27
-    dw   data_0e_7ba9                                  ;; 0e:7b15 .. $28
+    dw   soundEffectChannelUnused                      ;; 0e:7b13 .. $27
+    dw   soundEffectChannelUnused                      ;; 0e:7b15 .. $28
     dw   data_0e_7ee8                                  ;; 0e:7b17 ?? $29
     dw   data_0e_7eef                                  ;; 0e:7b19 ?? $2a
     dw   data_0e_7f03                                  ;; 0e:7b1b ?? $2b
     dw   data_0e_7f11                                  ;; 0e:7b1d ?? $2c
     dw   data_0e_7f30                                  ;; 0e:7b1f ?? $2d
-    dw   data_0e_7ba9                                  ;; 0e:7b21 ?? $2e
+    dw   soundEffectChannelUnused                      ;; 0e:7b21 ?? $2e
     dw   data_0e_7f51                                  ;; 0e:7b23 ?? $2f
     dw   data_0e_7f6a                                  ;; 0e:7b25 ?? $30
     dw   data_0e_7f77                                  ;; 0e:7b27 ?? $31
     dw   data_0e_7f90                                  ;; 0e:7b29 .. $32
     dw   data_0e_7f97                                  ;; 0e:7b2b ?? $33
-    dw   data_0e_7ba9                                  ;; 0e:7b2d ?? $34
-    dw   data_0e_7ba9                                  ;; 0e:7b2f ?? $35
+    dw   soundEffectChannelUnused                      ;; 0e:7b2d ?? $34
+    dw   soundEffectChannelUnused                      ;; 0e:7b2f ?? $35
     dw   data_0e_7fbf                                  ;; 0e:7b31 .. $36
-    dw   data_0e_7ba9                                  ;; 0e:7b33 .. $37
+    dw   soundEffectChannelUnused                      ;; 0e:7b33 .. $37
     dw   data_0e_7fe2                                  ;; 0e:7b35 ?? $38
 
 ;@data format=p amount=57
 soundEffectDataChannel4:
     dw   data_0e_7bc9                                  ;; 0e:7b37 ?? $00
     dw   data_0e_7bea                                  ;; 0e:7b39 ?? $01
-    dw   data_0e_7ba9                                  ;; 0e:7b3b ?? $02
+    dw   soundEffectChannelUnused                      ;; 0e:7b3b ?? $02
     dw   data_0e_7bfc                                  ;; 0e:7b3d ?? $03
     dw   data_0e_7c14                                  ;; 0e:7b3f ?? $04
     dw   data_0e_7c18                                  ;; 0e:7b41 ?? $05
     dw   data_0e_7c22                                  ;; 0e:7b43 ?? $06
-    dw   data_0e_7ba9                                  ;; 0e:7b45 ?? $07
+    dw   soundEffectChannelUnused                      ;; 0e:7b45 ?? $07
     dw   data_0e_7c44                                  ;; 0e:7b47 ?? $08
     dw   data_0e_7c5d                                  ;; 0e:7b49 ?? $09
-    dw   data_0e_7ba9                                  ;; 0e:7b4b ?? $0a
+    dw   soundEffectChannelUnused                      ;; 0e:7b4b ?? $0a
     dw   data_0e_7c78                                  ;; 0e:7b4d ?? $0b
     dw   data_0e_7c90                                  ;; 0e:7b4f ?? $0c
-    dw   data_0e_7ba9                                  ;; 0e:7b51 ?? $0d
-    dw   data_0e_7ba9                                  ;; 0e:7b53 ?? $0e
+    dw   soundEffectChannelUnused                      ;; 0e:7b51 ?? $0d
+    dw   soundEffectChannelUnused                      ;; 0e:7b53 ?? $0e
     dw   data_0e_7cb7                                  ;; 0e:7b55 ?? $0f
     dw   data_0e_7cd9                                  ;; 0e:7b57 ?? $10
     dw   data_0e_7ce4                                  ;; 0e:7b59 ?? $11
-    dw   data_0e_7ba9                                  ;; 0e:7b5b .. $12
+    dw   soundEffectChannelUnused                      ;; 0e:7b5b .. $12
     dw   data_0e_7cff                                  ;; 0e:7b5d ?? $13
-    dw   data_0e_7ba9                                  ;; 0e:7b5f ?? $14
+    dw   soundEffectChannelUnused                      ;; 0e:7b5f ?? $14
     dw   data_0e_7d0d                                  ;; 0e:7b61 .. $15
     dw   data_0e_7d11                                  ;; 0e:7b63 ?? $16
     dw   data_0e_7d31                                  ;; 0e:7b65 ?? $17
@@ -3413,11 +3413,11 @@ soundEffectDataChannel4:
     dw   data_0e_7d9b                                  ;; 0e:7b6b ?? $1a
     dw   data_0e_7dd3                                  ;; 0e:7b6d ?? $1b
     dw   data_0e_7df3                                  ;; 0e:7b6f ?? $1c
-    dw   data_0e_7ba9                                  ;; 0e:7b71 ?? $1d
+    dw   soundEffectChannelUnused                      ;; 0e:7b71 ?? $1d
     dw   data_0e_7e27                                  ;; 0e:7b73 ?? $1e
     dw   data_0e_7e3f                                  ;; 0e:7b75 .. $1f
     dw   data_0e_7e5f                                  ;; 0e:7b77 ?? $20
-    dw   data_0e_7ba9                                  ;; 0e:7b79 .. $21
+    dw   soundEffectChannelUnused                      ;; 0e:7b79 .. $21
     dw   data_0e_7e7d                                  ;; 0e:7b7b ?? $22
     dw   data_0e_7e91                                  ;; 0e:7b7d ?? $23
     dw   data_0e_7e9f                                  ;; 0e:7b7f ?? $24
@@ -3425,24 +3425,24 @@ soundEffectDataChannel4:
     dw   data_0e_7ec3                                  ;; 0e:7b83 ?? $26
     dw   data_0e_7ed3                                  ;; 0e:7b85 .. $27
     dw   data_0e_7edd                                  ;; 0e:7b87 .. $28
-    dw   data_0e_7ba9                                  ;; 0e:7b89 ?? $29
+    dw   soundEffectChannelUnused                      ;; 0e:7b89 ?? $29
     dw   data_0e_7efc                                  ;; 0e:7b8b ?? $2a
     dw   data_0e_7f0a                                  ;; 0e:7b8d ?? $2b
     dw   data_0e_7f22                                  ;; 0e:7b8f ?? $2c
     dw   data_0e_7f43                                  ;; 0e:7b91 ?? $2d
     dw   data_0e_7f4d                                  ;; 0e:7b93 ?? $2e
-    dw   data_0e_7ba9                                  ;; 0e:7b95 ?? $2f
-    dw   data_0e_7ba9                                  ;; 0e:7b97 ?? $30
-    dw   data_0e_7ba9                                  ;; 0e:7b99 ?? $31
-    dw   data_0e_7ba9                                  ;; 0e:7b9b .. $32
+    dw   soundEffectChannelUnused                      ;; 0e:7b95 ?? $2f
+    dw   soundEffectChannelUnused                      ;; 0e:7b97 ?? $30
+    dw   soundEffectChannelUnused                      ;; 0e:7b99 ?? $31
+    dw   soundEffectChannelUnused                      ;; 0e:7b9b .. $32
     dw   data_0e_7fa4                                  ;; 0e:7b9d ?? $33
     dw   data_0e_7fae                                  ;; 0e:7b9f ?? $34
     dw   data_0e_7fb8                                  ;; 0e:7ba1 ?? $35
-    dw   data_0e_7ba9                                  ;; 0e:7ba3 .. $36
+    dw   soundEffectChannelUnused                      ;; 0e:7ba3 .. $36
     dw   data_0e_7fcc                                  ;; 0e:7ba5 .. $37
-    dw   data_0e_7ba9                                  ;; 0e:7ba7 ?? $38
+    dw   soundEffectChannelUnused                      ;; 0e:7ba7 ?? $38
 
-data_0e_7ba9:
+soundEffectChannelUnused:
     db   $00                                           ;; 0e:7ba9 .
 
 data_0e_7baa:
