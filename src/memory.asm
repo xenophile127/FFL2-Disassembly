@@ -833,7 +833,6 @@ wMusicVibratoEnvelopeChannel1:
 
 wMusicVibratoEnvelopePointerChannel1:
     ds 1                                               ;; cb21
-
 .high:
     ds 1                                               ;; cb22
 
@@ -944,8 +943,8 @@ wSoundEffectInstructionPointerChannel4:
     ds 1                                               ;; cbc6
 .high:
     ds 57                                              ;; cbc7
-; END OF AUDIO ENGINE WRAM
 
+; END OF AUDIO ENGINE WRAM
 wCC00:
     ds 128                                             ;; cc00
 
