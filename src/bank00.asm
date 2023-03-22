@@ -444,10 +444,10 @@ init:
     inc  B                                             ;; 00:0228 $04
 .jr_00_0229:
     push BC                                            ;; 00:0229 $c5
-    ld   HL, wC000                                     ;; 00:022a $21 $00 $c0
+    ld   HL, wShadowOAM                                ;; 00:022a $21 $00 $c0
     ld   B, $a0                                        ;; 00:022d $06 $a0
     call memclearSmall                                 ;; 00:022f $cd $6c $00
-    ld   HL, wC100                                     ;; 00:0232 $21 $00 $c1
+    ld   HL, wShadowOAM2                               ;; 00:0232 $21 $00 $c1
     ld   BC, $d00                                      ;; 00:0235 $01 $00 $0d
     call memclearBig                                   ;; 00:0238 $cd $72 $00
     ld   H, $cf                                        ;; 00:023b $26 $cf
@@ -530,7 +530,7 @@ init:
     ld   [sA780], A                                    ;; 00:02cc $ea $80 $a7
 .jr_00_02cf:
     call disableSRAM                                   ;; 00:02cf $cd $f4 $04
-    ld   HL, wC200                                     ;; 00:02d2 $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 00:02d2 $21 $00 $c2
     ld   C, $04                                        ;; 00:02d5 $0e $04
 .jr_00_02d7:
     ld   B, $04                                        ;; 00:02d7 $06 $04
@@ -1101,7 +1101,7 @@ call_00_055d:
     add  HL, DE                                        ;; 00:056e $19
     push HL                                            ;; 00:056f $e5
     ld   A, [wC709]                                    ;; 00:0570 $fa $09 $c7
-    ld   HL, wC204                                     ;; 00:0573 $21 $04 $c2
+    ld   HL, wPlayerParty.04                           ;; 00:0573 $21 $04 $c2
     call call_00_05d9                                  ;; 00:0576 $cd $d9 $05
     ld   E, L                                          ;; 00:0579 $5d
     ld   D, H                                          ;; 00:057a $54
@@ -1208,7 +1208,7 @@ call_00_05ef:
 .jr_00_05f8:
     ld   B, A                                          ;; 00:05f8 $47
     inc  B                                             ;; 00:05f9 $04
-    ld   A, [wC2A0]                                    ;; 00:05fa $fa $a0 $c2
+    ld   A, [wPartyOrder]                              ;; 00:05fa $fa $a0 $c2
     rlca                                               ;; 00:05fd $07
     rlca                                               ;; 00:05fe $07
 .jr_00_05ff:
@@ -1362,10 +1362,10 @@ call_00_06b0:
     push BC                                            ;; 00:06b0 $c5
     push DE                                            ;; 00:06b1 $d5
     push HL                                            ;; 00:06b2 $e5
-    ld   HL, wC4FF                                     ;; 00:06b3 $21 $ff $c4
+    ld   HL, wFrameCounter                             ;; 00:06b3 $21 $ff $c4
     inc  [HL]                                          ;; 00:06b6 $34
     ld   A, [HL]                                       ;; 00:06b7 $7e
-    ld   HL, wC000                                     ;; 00:06b8 $21 $00 $c0
+    ld   HL, wShadowOAM                                ;; 00:06b8 $21 $00 $c0
     and  A, $10                                        ;; 00:06bb $e6 $10
     swap A                                             ;; 00:06bd $cb $37
     or   A, H                                          ;; 00:06bf $b4
@@ -1381,7 +1381,7 @@ call_00_06b0:
     ld   B, $24                                        ;; 00:06d1 $06 $24
 .jr_00_06d3:
     ld   C, $5a                                        ;; 00:06d3 $0e $5a
-    ld   DE, wCC00                                     ;; 00:06d5 $11 $00 $cc
+    ld   DE, wShadowOAM3                               ;; 00:06d5 $11 $00 $cc
 .jr_00_06d8:
     ld   A, [HL+]                                      ;; 00:06d8 $2a
     cp   A, C                                          ;; 00:06d9 $b9
@@ -1749,7 +1749,7 @@ jp_00_08d6:
     rrca                                               ;; 00:08e0 $0f
     ret  C                                             ;; 00:08e1 $d8
 .jr_00_08e2:
-    ld   A, [wC31B]                                    ;; 00:08e2 $fa $1b $c3
+    ld   A, [wTextSpeed]                               ;; 00:08e2 $fa $1b $c3
     add  A, A                                          ;; 00:08e5 $87
     and  A, A                                          ;; 00:08e6 $a7
     ret  Z                                             ;; 00:08e7 $c8
@@ -2347,7 +2347,7 @@ data_00_0d05:
 .jr_00_0d24:
     push AF                                            ;; 00:0d24 $f5
     call call_00_0d91                                  ;; 00:0d25 $cd $91 $0d
-    ld   HL, wC204                                     ;; 00:0d28 $21 $04 $c2
+    ld   HL, wPlayerParty.04                           ;; 00:0d28 $21 $04 $c2
     ldh  A, [hFF8B]                                    ;; 00:0d2b $f0 $8b
     and  A, A                                          ;; 00:0d2d $a7
     jr   Z, .jr_00_0d33                                ;; 00:0d2e $28 $03
@@ -2644,7 +2644,7 @@ data_00_0ec5:
     call call_00_1477                                  ;; 00:0f09 $cd $77 $14
     and  A, A                                          ;; 00:0f0c $a7
     jp   NZ, init                                      ;; 00:0f0d $c2 $00 $02
-    ld   HL, wC2A1                                     ;; 00:0f10 $21 $a1 $c2
+    ld   HL, wDefeatCount                              ;; 00:0f10 $21 $a1 $c2
     ld   A, [HL]                                       ;; 00:0f13 $7e
     inc  A                                             ;; 00:0f14 $3c
     jr   Z, .jr_00_0ede                                ;; 00:0f15 $28 $c7
@@ -2712,7 +2712,7 @@ data_00_0fcc:
     db   $cd, $3e, $15, $c3, $ed, $0d                  ;; 00:0fec ??????
 
 data_00_0ff2:
-    ld   HL, wC200                                     ;; 00:0ff2 $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 00:0ff2 $21 $00 $c2
     ldh  A, [hFF8B]                                    ;; 00:0ff5 $f0 $8b
     and  A, A                                          ;; 00:0ff7 $a7
     jr   Z, .jr_00_0ffd                                ;; 00:0ff8 $28 $03
@@ -2774,7 +2774,7 @@ data_00_1032:
 .jr_00_1059:
     ld   A, [wC709]                                    ;; 00:1059 $fa $09 $c7
 .jr_00_105c:
-    ld   HL, wC204                                     ;; 00:105c $21 $04 $c2
+    ld   HL, wPlayerParty.04                           ;; 00:105c $21 $04 $c2
     call call_00_05d9                                  ;; 00:105f $cd $d9 $05
 .jr_00_1062:
     ld   B, $08                                        ;; 00:1062 $06 $08
@@ -2828,12 +2828,12 @@ data_00_1086:
 
 call_00_10b3:
     call mul_a_32                                      ;; 00:10b3 $cd $4c $00
-    ld   HL, wC21F                                     ;; 00:10b6 $21 $1f $c2
+    ld   HL, wPlayerParty.1F                           ;; 00:10b6 $21 $1f $c2
     rst  add_hl_a                                      ;; 00:10b9 $c7
     ret                                                ;; 00:10ba $c9
 
 data_00_10bb:
-    ld   HL, wC20F                                     ;; 00:10bb $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 00:10bb $21 $0f $c2
     ld   DE, $20                                       ;; 00:10be $11 $20 $00
     rst  rst_00_0030                                   ;; 00:10c1 $f7
     cp   A, $10                                        ;; 00:10c2 $fe $10
@@ -2902,13 +2902,13 @@ data_00_10bb:
     jp   jp_00_153b                                    ;; 00:112b $c3 $3b $15
 .jr_00_112e:
     ld   A, [wC709]                                    ;; 00:112e $fa $09 $c7
-    ld   HL, wC20F                                     ;; 00:1131 $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 00:1131 $21 $0f $c2
     call call_00_05d9                                  ;; 00:1134 $cd $d9 $05
     ld   A, B                                          ;; 00:1137 $78
     jr   .jr_00_1144                                   ;; 00:1138 $18 $0a
 .jp_00_113a:
     sub  A, $10                                        ;; 00:113a $d6 $10
-    ld   HL, wC2B9                                     ;; 00:113c $21 $b9 $c2
+    ld   HL, wInventory                                ;; 00:113c $21 $b9 $c2
     jr   .jr_00_1144                                   ;; 00:113f $18 $03
 .jp_00_1141:
     ld   HL, wC71D                                     ;; 00:1141 $21 $1d $c7
@@ -3004,7 +3004,7 @@ jr_00_11ba:
     ret                                                ;; 00:11ca $c9
 
 data_00_11cb:
-    ld   HL, wC207                                     ;; 00:11cb $21 $07 $c2
+    ld   HL, wPlayerParty.07                           ;; 00:11cb $21 $07 $c2
     ldh  A, [hFF8B]                                    ;; 00:11ce $f0 $8b
     and  A, A                                          ;; 00:11d0 $a7
     jr   Z, .jr_00_11d6                                ;; 00:11d1 $28 $03
@@ -3070,7 +3070,7 @@ data_00_121e:
     cp   A, $ff                                        ;; 00:1232 $fe $ff
     jp   Z, call_00_1549                               ;; 00:1234 $ca $49 $15
     add  A, A                                          ;; 00:1237 $87
-    ld   HL, wC2DA                                     ;; 00:1238 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 00:1238 $21 $da $c2
     rst  add_hl_a                                      ;; 00:123b $c7
     ld   A, [HL]                                       ;; 00:123c $7e
     and  A, $0f                                        ;; 00:123d $e6 $0f
@@ -3111,7 +3111,7 @@ data_00_124b:
     inc  HL                                            ;; 00:1280 $23
     jr   .jr_00_12b7                                   ;; 00:1281 $18 $34
 .jr_00_1283:
-    ld   HL, wC20F                                     ;; 00:1283 $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 00:1283 $21 $0f $c2
     add  A, A                                          ;; 00:1286 $87
     rst  add_hl_a                                      ;; 00:1287 $c7
     ld   A, [wC709]                                    ;; 00:1288 $fa $09 $c7
@@ -3130,13 +3130,13 @@ data_00_124b:
     sub  A, $08                                        ;; 00:1299 $d6 $08
     add  HL, DE                                        ;; 00:129b $19
 .jr_00_129c:
-    ld   DE, wC20F                                     ;; 00:129c $11 $0f $c2
+    ld   DE, wPlayerParty.0F                           ;; 00:129c $11 $0f $c2
     sub  A, $20                                        ;; 00:129f $d6 $20
     add  HL, DE                                        ;; 00:12a1 $19
     jr   .jr_00_12ae                                   ;; 00:12a2 $18 $0a
 .jr_00_12a4:
     sub  A, $10                                        ;; 00:12a4 $d6 $10
-    ld   HL, wC2B9                                     ;; 00:12a6 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 00:12a6 $21 $b9 $c2
     jr   .jr_00_12ae                                   ;; 00:12a9 $18 $03
 .jr_00_12ab:
     ld   HL, wC71D                                     ;; 00:12ab $21 $1d $c7
@@ -3156,19 +3156,19 @@ data_00_124b:
     jp   jp_00_0ebb                                    ;; 00:12bf $c3 $bb $0e
 
 data_00_12c2:
-    ld   HL, wC20B                                     ;; 00:12c2 $21 $0b $c2
+    ld   HL, wPlayerParty.0B                           ;; 00:12c2 $21 $0b $c2
     jr   jr_00_12d4                                    ;; 00:12c5 $18 $0d
 
 data_00_12c7:
-    ld   HL, wC20E                                     ;; 00:12c7 $21 $0e $c2
+    ld   HL, wPlayerParty.0E                           ;; 00:12c7 $21 $0e $c2
     jr   jr_00_12d4                                    ;; 00:12ca $18 $08
 
 data_00_12cc:
-    ld   HL, wC20C                                     ;; 00:12cc $21 $0c $c2
+    ld   HL, wPlayerParty.0C                           ;; 00:12cc $21 $0c $c2
     jr   jr_00_12d4                                    ;; 00:12cf $18 $03
 
 data_00_12d1:
-    ld   HL, wC20D                                     ;; 00:12d1 $21 $0d $c2
+    ld   HL, wPlayerParty.0D                           ;; 00:12d1 $21 $0d $c2
 
 jr_00_12d4:
     call call_00_13b6                                  ;; 00:12d4 $cd $b6 $13
@@ -3176,7 +3176,7 @@ jr_00_12d4:
     jr   jp_00_12e6                                    ;; 00:12da $18 $0a
 
 data_00_12dc:
-    ld   HL, wC2D9                                     ;; 00:12dc $21 $d9 $c2
+    ld   HL, wMagiCount                                ;; 00:12dc $21 $d9 $c2
     jr   jp_00_12e6                                    ;; 00:12df $18 $05
 
 data_00_12e1:
@@ -3205,7 +3205,7 @@ data_00_130a:
     jp   jp_00_157a                                    ;; 00:1310 $c3 $7a $15
 
 call_00_1313:
-    ld   HL, wC2A2                                     ;; 00:1313 $21 $a2 $c2
+    ld   HL, wGP                                       ;; 00:1313 $21 $a2 $c2
     rst  rst_00_0030                                   ;; 00:1316 $f7
     and  A, A                                          ;; 00:1317 $a7
     jr   Z, .jr_00_1322                                ;; 00:1318 $28 $08
@@ -3297,7 +3297,7 @@ data_00_138a:
 
 call_00_139a:
     push AF                                            ;; 00:139a $f5
-    ld   HL, wC206                                     ;; 00:139b $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 00:139b $21 $06 $c2
     ldh  A, [hFF8B]                                    ;; 00:139e $f0 $8b
     and  A, A                                          ;; 00:13a0 $a7
     jr   Z, .jr_00_13a6                                ;; 00:13a1 $28 $03
@@ -3308,7 +3308,7 @@ call_00_139a:
 
 call_00_13a8:
     push AF                                            ;; 00:13a8 $f5
-    ld   HL, wC209                                     ;; 00:13a9 $21 $09 $c2
+    ld   HL, wPlayerParty.09                           ;; 00:13a9 $21 $09 $c2
     ldh  A, [hFF8B]                                    ;; 00:13ac $f0 $8b
     and  A, A                                          ;; 00:13ae $a7
     jr   Z, .jr_00_13b4                                ;; 00:13af $28 $03
@@ -3488,7 +3488,7 @@ call_00_150a:
     xor  A, A                                          ;; 00:150a $af
     ldh  [hFF96], A                                    ;; 00:150b $e0 $96
     call call_00_0546                                  ;; 00:150d $cd $46 $05
-    ld   HL, wCC80                                     ;; 00:1510 $21 $80 $cc
+    ld   HL, wShadowOAM3.80                            ;; 00:1510 $21 $80 $cc
     ld   B, $20                                        ;; 00:1513 $06 $20
     call memclearSmall                                 ;; 00:1515 $cd $6c $00
     rst  waitForVBlank                                 ;; 00:1518 $d7
@@ -3940,7 +3940,7 @@ call_00_176c:
     ldh  A, [hFF96]                                    ;; 00:1783 $f0 $96
     bit  0, A                                          ;; 00:1785 $cb $47
     jp   Z, .jp_00_182a                                ;; 00:1787 $ca $2a $18
-    ld   HL, wCC00                                     ;; 00:178a $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 00:178a $21 $00 $cc
     ld   B, $80                                        ;; 00:178d $06 $80
     call memclearSmall                                 ;; 00:178f $cd $6c $00
     ld   HL, wC7A6                                     ;; 00:1792 $21 $a6 $c7
@@ -4048,7 +4048,7 @@ call_00_176c:
     dec  B                                             ;; 00:1826 $05
     jp   NZ, .jp_00_1797                               ;; 00:1827 $c2 $97 $17
 .jp_00_182a:
-    ld   HL, wCC90                                     ;; 00:182a $21 $90 $cc
+    ld   HL, wShadowOAM3.90                            ;; 00:182a $21 $90 $cc
     xor  A, A                                          ;; 00:182d $af
 .jr_00_182e:
     ldh  [hFF95], A                                    ;; 00:182e $e0 $95
@@ -4083,7 +4083,7 @@ call_00_176c:
     dec  B                                             ;; 00:1857 $05
     jr   NZ, .jr_00_1850                               ;; 00:1858 $20 $f6
 .jr_00_185a:
-    ld   HL, wCC80                                     ;; 00:185a $21 $80 $cc
+    ld   HL, wShadowOAM3.80                            ;; 00:185a $21 $80 $cc
     ldh  A, [hFF95]                                    ;; 00:185d $f0 $95
     inc  A                                             ;; 00:185f $3c
     cp   A, $02                                        ;; 00:1860 $fe $02
@@ -4221,11 +4221,11 @@ jp_00_194b:
     ld   [wC2A5], A                                    ;; 00:194e $ea $a5 $c2
     ld   A, [wC44C]                                    ;; 00:1951 $fa $4c $c4
     ld   [wC2A6], A                                    ;; 00:1954 $ea $a6 $c2
-    ld   A, [wC42E]                                    ;; 00:1957 $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:1957 $fa $2e $c4
     swap A                                             ;; 00:195a $cb $37
     and  A, $0f                                        ;; 00:195c $e6 $0f
     ld   C, A                                          ;; 00:195e $4f
-    ld   A, [wC42C]                                    ;; 00:195f $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:195f $fa $2c $c4
     add  A, C                                          ;; 00:1962 $81
     ld   C, A                                          ;; 00:1963 $4f
     ld   A, [wC436]                                    ;; 00:1964 $fa $36 $c4
@@ -4234,11 +4234,11 @@ jp_00_194b:
     and  A, $c0                                        ;; 00:1969 $e6 $c0
     or   A, C                                          ;; 00:196b $b1
     ld   [wC2A7], A                                    ;; 00:196c $ea $a7 $c2
-    ld   A, [wC42F]                                    ;; 00:196f $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:196f $fa $2f $c4
     swap A                                             ;; 00:1972 $cb $37
     and  A, $0f                                        ;; 00:1974 $e6 $0f
     ld   C, A                                          ;; 00:1976 $4f
-    ld   A, [wC42D]                                    ;; 00:1977 $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:1977 $fa $2d $c4
     add  A, C                                          ;; 00:197a $81
     ld   [wC2A8], A                                    ;; 00:197b $ea $a8 $c2
     ld   A, [wC434]                                    ;; 00:197e $fa $34 $c4
@@ -4262,7 +4262,7 @@ jp_00_1997:
     ld   B, A                                          ;; 00:19ab $47
     and  A, $3f                                        ;; 00:19ac $e6 $3f
     sub  A, $05                                        ;; 00:19ae $d6 $05
-    ld   [wC42C], A                                    ;; 00:19b0 $ea $2c $c4
+    ld   [wCameraX], A                                 ;; 00:19b0 $ea $2c $c4
     ld   A, B                                          ;; 00:19b3 $78
     rlca                                               ;; 00:19b4 $07
     rlca                                               ;; 00:19b5 $07
@@ -4271,11 +4271,11 @@ jp_00_1997:
     ld   A, [wC2A8]                                    ;; 00:19bb $fa $a8 $c2
     and  A, $3f                                        ;; 00:19be $e6 $3f
     sub  A, $04                                        ;; 00:19c0 $d6 $04
-    ld   [wC42D], A                                    ;; 00:19c2 $ea $2d $c4
+    ld   [wCameraY], A                                 ;; 00:19c2 $ea $2d $c4
     ld   A, $40                                        ;; 00:19c5 $3e $40
-    ld   [wC42F], A                                    ;; 00:19c7 $ea $2f $c4
+    ld   [wPlayerRelY], A                              ;; 00:19c7 $ea $2f $c4
     ld   A, $50                                        ;; 00:19ca $3e $50
-    ld   [wC42E], A                                    ;; 00:19cc $ea $2e $c4
+    ld   [wPlayerRelX], A                              ;; 00:19cc $ea $2e $c4
     ld   A, $01                                        ;; 00:19cf $3e $01
     ld   [wC466], A                                    ;; 00:19d1 $ea $66 $c4
     jr   jr_00_19f0                                    ;; 00:19d4 $18 $1a
@@ -4453,14 +4453,14 @@ jr_00_1aef:
     ret                                                ;; 00:1b36 $c9
 
 call_00_1b37:
-    ld   HL, wC010                                     ;; 00:1b37 $21 $10 $c0
+    ld   HL, wShadowOAM.10                             ;; 00:1b37 $21 $10 $c0
     xor  A, A                                          ;; 00:1b3a $af
     ld   B, $90                                        ;; 00:1b3b $06 $90
 .jr_00_1b3d:
     ld   [HL+], A                                      ;; 00:1b3d $22
     dec  B                                             ;; 00:1b3e $05
     jr   NZ, .jr_00_1b3d                               ;; 00:1b3f $20 $fc
-    ld   HL, wC110                                     ;; 00:1b41 $21 $10 $c1
+    ld   HL, wShadowOAM2.10                            ;; 00:1b41 $21 $10 $c1
     ld   B, $90                                        ;; 00:1b44 $06 $90
 .jr_00_1b46:
     ld   [HL+], A                                      ;; 00:1b46 $22
@@ -4469,14 +4469,14 @@ call_00_1b37:
     ret                                                ;; 00:1b4a $c9
 
 call_00_1b4b:
-    ld   HL, wC000                                     ;; 00:1b4b $21 $00 $c0
+    ld   HL, wShadowOAM                                ;; 00:1b4b $21 $00 $c0
     xor  A, A                                          ;; 00:1b4e $af
     ld   B, $a0                                        ;; 00:1b4f $06 $a0
 .jr_00_1b51:
     ld   [HL+], A                                      ;; 00:1b51 $22
     dec  B                                             ;; 00:1b52 $05
     jr   NZ, .jr_00_1b51                               ;; 00:1b53 $20 $fc
-    ld   HL, wC100                                     ;; 00:1b55 $21 $00 $c1
+    ld   HL, wShadowOAM2                               ;; 00:1b55 $21 $00 $c1
     ld   B, $a0                                        ;; 00:1b58 $06 $a0
 .jr_00_1b5a:
     ld   [HL+], A                                      ;; 00:1b5a $22
@@ -4523,7 +4523,7 @@ call_00_1b99:
     inc  A                                             ;; 00:1b9d $3c
     push BC                                            ;; 00:1b9e $c5
     ld   B, A                                          ;; 00:1b9f $47
-    ld   A, [wC2A0]                                    ;; 00:1ba0 $fa $a0 $c2
+    ld   A, [wPartyOrder]                              ;; 00:1ba0 $fa $a0 $c2
     rlca                                               ;; 00:1ba3 $07
     rlca                                               ;; 00:1ba4 $07
 .jr_00_1ba5:
@@ -4621,9 +4621,9 @@ call_00_1bf0:
     ld   [wC316], A                                    ;; 00:1c2e $ea $16 $c3
     ld   A, [wC2A6]                                    ;; 00:1c31 $fa $a6 $c2
     ld   [wC317], A                                    ;; 00:1c34 $ea $17 $c3
-    ld   A, [wC42C]                                    ;; 00:1c37 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:1c37 $fa $2c $c4
     ld   E, A                                          ;; 00:1c3a $5f
-    ld   A, [wC42E]                                    ;; 00:1c3b $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:1c3b $fa $2e $c4
     swap A                                             ;; 00:1c3e $cb $37
     and  A, $0f                                        ;; 00:1c40 $e6 $0f
     add  A, E                                          ;; 00:1c42 $83
@@ -4635,9 +4635,9 @@ call_00_1bf0:
     and  A, $c0                                        ;; 00:1c4b $e6 $c0
     or   A, E                                          ;; 00:1c4d $b3
     ld   [wC318], A                                    ;; 00:1c4e $ea $18 $c3
-    ld   A, [wC42D]                                    ;; 00:1c51 $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:1c51 $fa $2d $c4
     ld   E, A                                          ;; 00:1c54 $5f
-    ld   A, [wC42F]                                    ;; 00:1c55 $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:1c55 $fa $2f $c4
     swap A                                             ;; 00:1c58 $cb $37
     and  A, $0f                                        ;; 00:1c5a $e6 $0f
     add  A, E                                          ;; 00:1c5c $83
@@ -4659,7 +4659,7 @@ call_00_1c61:
     ld   B, A                                          ;; 00:1c74 $47
     and  A, $3f                                        ;; 00:1c75 $e6 $3f
     sub  A, $05                                        ;; 00:1c77 $d6 $05
-    ld   [wC42C], A                                    ;; 00:1c79 $ea $2c $c4
+    ld   [wCameraX], A                                 ;; 00:1c79 $ea $2c $c4
     ld   A, B                                          ;; 00:1c7c $78
     rlca                                               ;; 00:1c7d $07
     rlca                                               ;; 00:1c7e $07
@@ -4669,7 +4669,7 @@ call_00_1c61:
     ld   B, A                                          ;; 00:1c85 $47
     and  A, $3f                                        ;; 00:1c86 $e6 $3f
     sub  A, $04                                        ;; 00:1c88 $d6 $04
-    ld   [wC42D], A                                    ;; 00:1c8a $ea $2d $c4
+    ld   [wCameraY], A                                 ;; 00:1c8a $ea $2d $c4
     ld   A, B                                          ;; 00:1c8d $78
     and  A, $40                                        ;; 00:1c8e $e6 $40
     ld   [wC44D], A                                    ;; 00:1c90 $ea $4d $c4
@@ -4684,9 +4684,9 @@ call_00_1c61:
     or   A, B                                          ;; 00:1ca0 $b0
     ld   [wC319], A                                    ;; 00:1ca1 $ea $19 $c3
     ld   A, $40                                        ;; 00:1ca4 $3e $40
-    ld   [wC42F], A                                    ;; 00:1ca6 $ea $2f $c4
+    ld   [wPlayerRelY], A                              ;; 00:1ca6 $ea $2f $c4
     ld   A, $50                                        ;; 00:1ca9 $3e $50
-    ld   [wC42E], A                                    ;; 00:1cab $ea $2e $c4
+    ld   [wPlayerRelX], A                              ;; 00:1cab $ea $2e $c4
     ret                                                ;; 00:1cae $c9
 
 call_00_1caf:
@@ -4762,9 +4762,9 @@ call_00_1d0d:
     ld   [wC45C], A                                    ;; 00:1d2b $ea $5c $c4
     ld   A, [wC2A6]                                    ;; 00:1d2e $fa $a6 $c2
     ld   [wC45D], A                                    ;; 00:1d31 $ea $5d $c4
-    ld   A, [wC42C]                                    ;; 00:1d34 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:1d34 $fa $2c $c4
     ld   E, A                                          ;; 00:1d37 $5f
-    ld   A, [wC42E]                                    ;; 00:1d38 $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:1d38 $fa $2e $c4
     swap A                                             ;; 00:1d3b $cb $37
     and  A, $0f                                        ;; 00:1d3d $e6 $0f
     add  A, E                                          ;; 00:1d3f $83
@@ -4775,9 +4775,9 @@ call_00_1d0d:
     and  A, $c0                                        ;; 00:1d46 $e6 $c0
     or   A, E                                          ;; 00:1d48 $b3
     ld   [wC45E], A                                    ;; 00:1d49 $ea $5e $c4
-    ld   A, [wC42D]                                    ;; 00:1d4c $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:1d4c $fa $2d $c4
     ld   E, A                                          ;; 00:1d4f $5f
-    ld   A, [wC42F]                                    ;; 00:1d50 $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:1d50 $fa $2f $c4
     swap A                                             ;; 00:1d53 $cb $37
     and  A, $0f                                        ;; 00:1d55 $e6 $0f
     add  A, E                                          ;; 00:1d57 $83
@@ -4954,11 +4954,11 @@ call_00_1e21:
     ld   [wC43E], A                                    ;; 00:1e37 $ea $3e $c4
     ld   [wC43F], A                                    ;; 00:1e3a $ea $3f $c4
     ld   A, $01                                        ;; 00:1e3d $3e $01
-    ld   [wC430], A                                    ;; 00:1e3f $ea $30 $c4
+    ld   [wPlayerSpriteIndex], A                       ;; 00:1e3f $ea $30 $c4
     ld   A, $01                                        ;; 00:1e42 $3e $01
-    ld   [wC431], A                                    ;; 00:1e44 $ea $31 $c4
+    ld   [wPlayerOAMTemplatePtr], A                    ;; 00:1e44 $ea $31 $c4
     ld   A, $80                                        ;; 00:1e47 $3e $80
-    ld   [wC432], A                                    ;; 00:1e49 $ea $32 $c4
+    ld   [wPlayerOAMTemplatePtr.01], A                 ;; 00:1e49 $ea $32 $c4
     ld   A, $40                                        ;; 00:1e4c $3e $40
     ld   [wC433], A                                    ;; 00:1e4e $ea $33 $c4
     jr   .jr_00_1e62                                   ;; 00:1e51 $18 $0f
@@ -4967,7 +4967,7 @@ call_00_1e21:
     ld   [wC43E], A                                    ;; 00:1e55 $ea $3e $c4
     ld   [wC43F], A                                    ;; 00:1e58 $ea $3f $c4
     xor  A, A                                          ;; 00:1e5b $af
-    ld   [wC430], A                                    ;; 00:1e5c $ea $30 $c4
+    ld   [wPlayerSpriteIndex], A                       ;; 00:1e5c $ea $30 $c4
     call call_00_1ec2                                  ;; 00:1e5f $cd $c2 $1e
 .jr_00_1e62:
     xor  A, A                                          ;; 00:1e62 $af
@@ -5032,7 +5032,7 @@ call_00_1ec2:
     xor  A, A                                          ;; 00:1eca $af
 .jr_00_1ecb:
     push AF                                            ;; 00:1ecb $f5
-    ld   HL, wC206                                     ;; 00:1ecc $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 00:1ecc $21 $06 $c2
     call call_00_1b99                                  ;; 00:1ecf $cd $99 $1b
     pop  AF                                            ;; 00:1ed2 $f1
     bit  4, [HL]                                       ;; 00:1ed3 $cb $66
@@ -5058,22 +5058,22 @@ call_00_1ec2:
     rst  switchBankSafe                                ;; 00:1ef1 $ef
     ld   C, $00                                        ;; 00:1ef2 $0e $00
     ld   A, [HL]                                       ;; 00:1ef4 $7e
-    ld   [wC431], A                                    ;; 00:1ef5 $ea $31 $c4
+    ld   [wPlayerOAMTemplatePtr], A                    ;; 00:1ef5 $ea $31 $c4
     srl  A                                             ;; 00:1ef8 $cb $3f
     rr   C                                             ;; 00:1efa $cb $19
     ld   B, A                                          ;; 00:1efc $47
     ld   HL, $4000                                     ;; 00:1efd $21 $00 $40
     add  HL, BC                                        ;; 00:1f00 $09
     ld   A, L                                          ;; 00:1f01 $7d
-    ld   [wC432], A                                    ;; 00:1f02 $ea $32 $c4
+    ld   [wPlayerOAMTemplatePtr.01], A                 ;; 00:1f02 $ea $32 $c4
     ld   A, H                                          ;; 00:1f05 $7c
     ld   [wC433], A                                    ;; 00:1f06 $ea $33 $c4
     ret                                                ;; 00:1f09 $c9
 .jr_00_1f0a:
     ld   A, $01                                        ;; 00:1f0a $3e $01
-    ld   [wC431], A                                    ;; 00:1f0c $ea $31 $c4
+    ld   [wPlayerOAMTemplatePtr], A                    ;; 00:1f0c $ea $31 $c4
     ld   A, $80                                        ;; 00:1f0f $3e $80
-    ld   [wC432], A                                    ;; 00:1f11 $ea $32 $c4
+    ld   [wPlayerOAMTemplatePtr.01], A                 ;; 00:1f11 $ea $32 $c4
     ld   A, $40                                        ;; 00:1f14 $3e $40
     ld   [wC433], A                                    ;; 00:1f16 $ea $33 $c4
     ret                                                ;; 00:1f19 $c9
@@ -5084,7 +5084,7 @@ call_00_1f23:
     xor  A, A                                          ;; 00:1f23 $af
 .jr_00_1f24:
     push AF                                            ;; 00:1f24 $f5
-    ld   HL, wC206                                     ;; 00:1f25 $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 00:1f25 $21 $06 $c2
     call call_00_1b99                                  ;; 00:1f28 $cd $99 $1b
     pop  AF                                            ;; 00:1f2b $f1
     bit  4, [HL]                                       ;; 00:1f2c $cb $66
@@ -5223,9 +5223,9 @@ call_00_1fea:
     ld   L, A                                          ;; 00:1ff8 $6f
     ld   A, [wC44A]                                    ;; 00:1ff9 $fa $4a $c4
     ld   H, A                                          ;; 00:1ffc $67
-    ld   A, [wC42D]                                    ;; 00:1ffd $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:1ffd $fa $2d $c4
     ld   B, A                                          ;; 00:2000 $47
-    ld   A, [wC42C]                                    ;; 00:2001 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:2001 $fa $2c $c4
     ld   C, A                                          ;; 00:2004 $4f
     push DE                                            ;; 00:2005 $d5
     ret                                                ;; 00:2006 $c9
@@ -5234,9 +5234,9 @@ call_00_1fea:
     dw   .data_00_2062                                 ;; 00:200b pP
     dw   .data_00_2089                                 ;; 00:200d pP
 .data_00_200f:
-    ld   A, [wC42D]                                    ;; 00:200f $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:200f $fa $2d $c4
     dec  A                                             ;; 00:2012 $3d
-    ld   [wC42D], A                                    ;; 00:2013 $ea $2d $c4
+    ld   [wCameraY], A                                 ;; 00:2013 $ea $2d $c4
     dec  B                                             ;; 00:2016 $05
     ld   DE, hFFC0                                     ;; 00:2017 $11 $c0 $ff
     add  HL, DE                                        ;; 00:201a $19
@@ -5253,9 +5253,9 @@ call_00_1fea:
     call call_00_1fab                                  ;; 00:202f $cd $ab $1f
     ret                                                ;; 00:2032 $c9
 .data_00_2033:
-    ld   A, [wC42D]                                    ;; 00:2033 $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:2033 $fa $2d $c4
     inc  A                                             ;; 00:2036 $3c
-    ld   [wC42D], A                                    ;; 00:2037 $ea $2d $c4
+    ld   [wCameraY], A                                 ;; 00:2037 $ea $2d $c4
     ld   A, B                                          ;; 00:203a $78
     add  A, $09                                        ;; 00:203b $c6 $09
     ld   B, A                                          ;; 00:203d $47
@@ -5276,9 +5276,9 @@ call_00_1fea:
     call call_00_1fab                                  ;; 00:205e $cd $ab $1f
     ret                                                ;; 00:2061 $c9
 .data_00_2062:
-    ld   A, [wC42C]                                    ;; 00:2062 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:2062 $fa $2c $c4
     dec  A                                             ;; 00:2065 $3d
-    ld   [wC42C], A                                    ;; 00:2066 $ea $2c $c4
+    ld   [wCameraX], A                                 ;; 00:2066 $ea $2c $c4
     dec  C                                             ;; 00:2069 $0d
     ld   A, L                                          ;; 00:206a $7d
     dec  A                                             ;; 00:206b $3d
@@ -5300,9 +5300,9 @@ call_00_1fea:
     call call_00_1fab                                  ;; 00:2085 $cd $ab $1f
     ret                                                ;; 00:2088 $c9
 .data_00_2089:
-    ld   A, [wC42C]                                    ;; 00:2089 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:2089 $fa $2c $c4
     inc  A                                             ;; 00:208c $3c
-    ld   [wC42C], A                                    ;; 00:208d $ea $2c $c4
+    ld   [wCameraX], A                                 ;; 00:208d $ea $2c $c4
     ld   A, C                                          ;; 00:2090 $79
     add  A, $0b                                        ;; 00:2091 $c6 $0b
     ld   C, A                                          ;; 00:2093 $4f
@@ -5357,13 +5357,13 @@ call_00_20db:
     ld   L, A                                          ;; 00:20de $6f
     ld   A, [wC44A]                                    ;; 00:20df $fa $4a $c4
     ld   H, A                                          ;; 00:20e2 $67
-    ld   A, [wC42D]                                    ;; 00:20e3 $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:20e3 $fa $2d $c4
     ld   B, A                                          ;; 00:20e6 $47
     ld   A, $09                                        ;; 00:20e7 $3e $09
 .jr_00_20e9:
     push AF                                            ;; 00:20e9 $f5
     push HL                                            ;; 00:20ea $e5
-    ld   A, [wC42C]                                    ;; 00:20eb $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:20eb $fa $2c $c4
     ld   C, A                                          ;; 00:20ee $4f
     call call_00_2104                                  ;; 00:20ef $cd $04 $21
     call call_00_2155                                  ;; 00:20f2 $cd $55 $21
@@ -5381,7 +5381,7 @@ call_00_20db:
 
 call_00_2104:
     push HL                                            ;; 00:2104 $e5
-    ld   HL, wC400                                     ;; 00:2105 $21 $00 $c4
+    ld   HL, wTempTileBuffer                           ;; 00:2105 $21 $00 $c4
     ld   A, $0b                                        ;; 00:2108 $3e $0b
 .jr_00_210a:
     push AF                                            ;; 00:210a $f5
@@ -5415,7 +5415,7 @@ call_00_2104:
 
 call_00_212c:
     push HL                                            ;; 00:212c $e5
-    ld   HL, wC400                                     ;; 00:212d $21 $00 $c4
+    ld   HL, wTempTileBuffer                           ;; 00:212d $21 $00 $c4
     ld   A, $09                                        ;; 00:2130 $3e $09
 .jr_00_2132:
     push AF                                            ;; 00:2132 $f5
@@ -5452,7 +5452,7 @@ call_00_2155:
     call call_00_2f7f                                  ;; 00:2155 $cd $7f $2f
     rst  waitForVBlank                                 ;; 00:2158 $d7
     call call_00_1a97                                  ;; 00:2159 $cd $97 $1a
-    ld   DE, wC400                                     ;; 00:215c $11 $00 $c4
+    ld   DE, wTempTileBuffer                           ;; 00:215c $11 $00 $c4
 .jr_00_215f:
     ld   A, [DE]                                       ;; 00:215f $1a
     ld   [HL+], A                                      ;; 00:2160 $22
@@ -5480,7 +5480,7 @@ call_00_2178:
     call call_00_2f7f                                  ;; 00:2179 $cd $7f $2f
     rst  waitForVBlank                                 ;; 00:217c $d7
     call call_00_1a97                                  ;; 00:217d $cd $97 $1a
-    ld   BC, wC400                                     ;; 00:2180 $01 $00 $c4
+    ld   BC, wTempTileBuffer                           ;; 00:2180 $01 $00 $c4
 .jr_00_2183:
     ld   A, [BC]                                       ;; 00:2183 $0a
     ld   [HL+], A                                      ;; 00:2184 $22
@@ -6762,7 +6762,7 @@ call_00_2946:
 
 call_00_2952:
     push AF                                            ;; 00:2952 $f5
-    ld   HL, wC207                                     ;; 00:2953 $21 $07 $c2
+    ld   HL, wPlayerParty.07                           ;; 00:2953 $21 $07 $c2
     ld   B, $05                                        ;; 00:2956 $06 $05
 .jr_00_2958:
     ld   E, [HL]                                       ;; 00:2958 $5e
@@ -6835,17 +6835,17 @@ call_00_29a3:
     ret                                                ;; 00:29b2 $c9
 
 call_00_29b3:
-    ld   A, [wC42E]                                    ;; 00:29b3 $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:29b3 $fa $2e $c4
     swap A                                             ;; 00:29b6 $cb $37
     and  A, $0f                                        ;; 00:29b8 $e6 $0f
     add  A, [HL]                                       ;; 00:29ba $86
     ld   C, A                                          ;; 00:29bb $4f
     inc  HL                                            ;; 00:29bc $23
-    ld   A, [wC42F]                                    ;; 00:29bd $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:29bd $fa $2f $c4
     swap A                                             ;; 00:29c0 $cb $37
     and  A, $0f                                        ;; 00:29c2 $e6 $0f
     add  A, [HL]                                       ;; 00:29c4 $86
-    ld   HL, wC42D                                     ;; 00:29c5 $21 $2d $c4
+    ld   HL, wCameraY                                  ;; 00:29c5 $21 $2d $c4
     add  A, [HL]                                       ;; 00:29c8 $86
     ld   B, A                                          ;; 00:29c9 $47
     dec  HL                                            ;; 00:29ca $2b
@@ -6875,7 +6875,7 @@ call_00_29e2:
     add  A, A                                          ;; 00:29e6 $87
     ld   E, A                                          ;; 00:29e7 $5f
     ld   C, A                                          ;; 00:29e8 $4f
-    ld   A, [wC432]                                    ;; 00:29e9 $fa $32 $c4
+    ld   A, [wPlayerOAMTemplatePtr.01]                 ;; 00:29e9 $fa $32 $c4
     add  A, E                                          ;; 00:29ec $83
     ld   E, A                                          ;; 00:29ed $5f
     ld   A, [wC433]                                    ;; 00:29ee $fa $33 $c4
@@ -6883,7 +6883,7 @@ call_00_29e2:
     ld   A, [wC437]                                    ;; 00:29f2 $fa $37 $c4
     or   A, A                                          ;; 00:29f5 $b7
     jr   Z, .jr_00_2a14                                ;; 00:29f6 $28 $1c
-    ld   A, [wC431]                                    ;; 00:29f8 $fa $31 $c4
+    ld   A, [wPlayerOAMTemplatePtr]                    ;; 00:29f8 $fa $31 $c4
     cp   A, $01                                        ;; 00:29fb $fe $01
     jr   Z, .jr_00_2a14                                ;; 00:29fd $28 $15
     cp   A, $03                                        ;; 00:29ff $fe $03
@@ -6901,22 +6901,22 @@ call_00_29e2:
     ld   D, H                                          ;; 00:2a12 $54
     pop  HL                                            ;; 00:2a13 $e1
 .jr_00_2a14:
-    ld   A, [wC42F]                                    ;; 00:2a14 $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:2a14 $fa $2f $c4
     add  A, $10                                        ;; 00:2a17 $c6 $10
     ld   B, A                                          ;; 00:2a19 $47
-    ld   A, [wC42E]                                    ;; 00:2a1a $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:2a1a $fa $2e $c4
     ld   C, A                                          ;; 00:2a1d $4f
-    ld   HL, wC000                                     ;; 00:2a1e $21 $00 $c0
+    ld   HL, wShadowOAM                                ;; 00:2a1e $21 $00 $c0
     ld   A, [wC43B]                                    ;; 00:2a21 $fa $3b $c4
     ld   [wC43A], A                                    ;; 00:2a24 $ea $3a $c4
     ld   A, [wC45B]                                    ;; 00:2a27 $fa $5b $c4
     or   A, A                                          ;; 00:2a2a $b7
     jr   NZ, .jr_00_2a4d                               ;; 00:2a2b $20 $20
     call call_00_2a5d                                  ;; 00:2a2d $cd $5d $2a
-    ld   A, [wC430]                                    ;; 00:2a30 $fa $30 $c4
+    ld   A, [wPlayerSpriteIndex]                       ;; 00:2a30 $fa $30 $c4
     swap A                                             ;; 00:2a33 $cb $37
     ld   C, A                                          ;; 00:2a35 $4f
-    ld   HL, wC002                                     ;; 00:2a36 $21 $02 $c0
+    ld   HL, wShadowOAM.02                             ;; 00:2a36 $21 $02 $c0
     ld   B, $04                                        ;; 00:2a39 $06 $04
 .jr_00_2a3b:
     ld   A, [HL]                                       ;; 00:2a3b $7e
@@ -6934,7 +6934,7 @@ call_00_29e2:
     jr   NZ, .jr_00_2a3b                               ;; 00:2a4a $20 $ef
     ret                                                ;; 00:2a4c $c9
 .jr_00_2a4d:
-    ld   HL, wC000                                     ;; 00:2a4d $21 $00 $c0
+    ld   HL, wShadowOAM                                ;; 00:2a4d $21 $00 $c0
     ld   B, $10                                        ;; 00:2a50 $06 $10
     xor  A, A                                          ;; 00:2a52 $af
 .jr_00_2a53:
@@ -7624,9 +7624,9 @@ call_00_2ebc:
     ld   A, $c3                                        ;; 00:2ebd $3e $c3
     ld   [wLCDCInterruptHandler], A                    ;; 00:2ebf $ea $06 $c7
     ld   A, $95                                        ;; 00:2ec2 $3e $95
-    ld   [wC707], A                                    ;; 00:2ec4 $ea $07 $c7
+    ld   [wLCDCInterruptHandler.targetlow], A          ;; 00:2ec4 $ea $07 $c7
     ld   A, $2c                                        ;; 00:2ec7 $3e $2c
-    ld   [wC708], A                                    ;; 00:2ec9 $ea $08 $c7
+    ld   [wLCDCInterruptHandler.targethigh], A         ;; 00:2ec9 $ea $08 $c7
     ei                                                 ;; 00:2ecc $fb
     ret                                                ;; 00:2ecd $c9
 
@@ -7635,9 +7635,9 @@ call_00_2ece:
     ld   A, $c3                                        ;; 00:2ecf $3e $c3
     ld   [wLCDCInterruptHandler], A                    ;; 00:2ed1 $ea $06 $c7
     ld   A, [data_00_0013]                             ;; 00:2ed4 $fa $13 $00
-    ld   [wC707], A                                    ;; 00:2ed7 $ea $07 $c7
+    ld   [wLCDCInterruptHandler.targetlow], A          ;; 00:2ed7 $ea $07 $c7
     ld   A, [data_00_0013 + $01]                       ;; 00:2eda $fa $14 $00
-    ld   [wC708], A                                    ;; 00:2edd $ea $08 $c7
+    ld   [wLCDCInterruptHandler.targethigh], A         ;; 00:2edd $ea $08 $c7
     xor  A, A                                          ;; 00:2ee0 $af
     ldh  [rLYC], A                                     ;; 00:2ee1 $e0 $45
     ei                                                 ;; 00:2ee3 $fb
@@ -7756,7 +7756,7 @@ call_00_2f7f:
     and  A, $f0                                        ;; 00:2f84 $e6 $f0
     cp   A, $20                                        ;; 00:2f86 $fe $20
     jr   NZ, .jr_00_2f9e                               ;; 00:2f88 $20 $14
-    ld   A, [wC707]                                    ;; 00:2f8a $fa $07 $c7
+    ld   A, [wLCDCInterruptHandler.targetlow]          ;; 00:2f8a $fa $07 $c7
     cp   A, $95                                        ;; 00:2f8d $fe $95
     jr   Z, .jr_00_2f98                                ;; 00:2f8f $28 $07
     xor  A, A                                          ;; 00:2f91 $af
@@ -7769,7 +7769,7 @@ call_00_2f7f:
     pop  AF                                            ;; 00:2f9c $f1
     ret                                                ;; 00:2f9d $c9
 .jr_00_2f9e:
-    ld   A, [wC707]                                    ;; 00:2f9e $fa $07 $c7
+    ld   A, [wLCDCInterruptHandler.targetlow]          ;; 00:2f9e $fa $07 $c7
     ld   L, A                                          ;; 00:2fa1 $6f
     ld   A, [data_00_0013]                             ;; 00:2fa2 $fa $13 $00
     cp   A, L                                          ;; 00:2fa5 $bd
@@ -7810,14 +7810,14 @@ call_00_2fbf:
     sla  C                                             ;; 00:2fdb $cb $21
     jr   .jr_00_2fd6                                   ;; 00:2fdd $18 $f7
 .jr_00_2fdf:
-    ld   A, [wC42E]                                    ;; 00:2fdf $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:2fdf $fa $2e $c4
     add  A, C                                          ;; 00:2fe2 $81
-    ld   [wC42E], A                                    ;; 00:2fe3 $ea $2e $c4
+    ld   [wPlayerRelX], A                              ;; 00:2fe3 $ea $2e $c4
     ld   C, A                                          ;; 00:2fe6 $4f
     inc  L                                             ;; 00:2fe7 $2c
-    ld   A, [wC42F]                                    ;; 00:2fe8 $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:2fe8 $fa $2f $c4
     add  A, B                                          ;; 00:2feb $80
-    ld   [wC42F], A                                    ;; 00:2fec $ea $2f $c4
+    ld   [wPlayerRelY], A                              ;; 00:2fec $ea $2f $c4
     or   A, C                                          ;; 00:2fef $b1
     and  A, $0f                                        ;; 00:2ff0 $e6 $0f
     ret  NZ                                            ;; 00:2ff2 $c0
@@ -8561,9 +8561,9 @@ call_00_344b:
     ld   [wC440], A                                    ;; 00:344d $ea $40 $c4
     ld   A, $10                                        ;; 00:3450 $3e $10
     ld   [wC47F], A                                    ;; 00:3452 $ea $7f $c4
-    ld   A, [wC42D]                                    ;; 00:3455 $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:3455 $fa $2d $c4
     ld   D, A                                          ;; 00:3458 $57
-    ld   A, [wC42C]                                    ;; 00:3459 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:3459 $fa $2c $c4
     ld   E, A                                          ;; 00:345c $5f
     ld   HL, wC600                                     ;; 00:345d $21 $00 $c6
 .jp_00_3460:
@@ -8836,7 +8836,7 @@ call_00_344b:
     ld   A, [wC43D]                                    ;; 00:35dc $fa $3d $c4
     or   A, A                                          ;; 00:35df $b7
     ret  Z                                             ;; 00:35e0 $c8
-    ld   HL, wC010                                     ;; 00:35e1 $21 $10 $c0
+    ld   HL, wShadowOAM.10                             ;; 00:35e1 $21 $10 $c0
     dec  A                                             ;; 00:35e4 $3d
     jr   Z, .jr_00_360d                                ;; 00:35e5 $28 $26
     dec  A                                             ;; 00:35e7 $3d
@@ -8892,7 +8892,7 @@ call_00_344b:
     jr   .jr_00_3617                                   ;; 00:3628 $18 $ed
 
 call_00_362a:
-    ld   HL, wC010                                     ;; 00:362a $21 $10 $c0
+    ld   HL, wShadowOAM.10                             ;; 00:362a $21 $10 $c0
 .jr_00_362d:
     ld   A, L                                          ;; 00:362d $7d
     cp   A, $a0                                        ;; 00:362e $fe $a0
@@ -8948,9 +8948,9 @@ call_00_363f:
     ret                                                ;; 00:367a $c9
 
 call_00_367b:
-    ld   A, [wC42D]                                    ;; 00:367b $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:367b $fa $2d $c4
     ld   D, A                                          ;; 00:367e $57
-    ld   A, [wC42C]                                    ;; 00:367f $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:367f $fa $2c $c4
     ld   E, A                                          ;; 00:3682 $5f
     ld   A, [HL+]                                      ;; 00:3683 $2a
     and  A, $3f                                        ;; 00:3684 $e6 $3f
@@ -9225,11 +9225,11 @@ call_00_36d6:
 call_00_37f6:
     push BC                                            ;; 00:37f6 $c5
     push DE                                            ;; 00:37f7 $d5
-    ld   A, [wC42C]                                    ;; 00:37f8 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:37f8 $fa $2c $c4
     sra  C                                             ;; 00:37fb $cb $29
     add  A, C                                          ;; 00:37fd $81
     ld   C, A                                          ;; 00:37fe $4f
-    ld   A, [wC42D]                                    ;; 00:37ff $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:37ff $fa $2d $c4
     sra  B                                             ;; 00:3802 $cb $28
     add  A, B                                          ;; 00:3804 $80
     ld   B, A                                          ;; 00:3805 $47
@@ -9280,11 +9280,11 @@ call_00_37f6:
 call_00_3846:
     push BC                                            ;; 00:3846 $c5
     push DE                                            ;; 00:3847 $d5
-    ld   A, [wC42C]                                    ;; 00:3848 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:3848 $fa $2c $c4
     sra  C                                             ;; 00:384b $cb $29
     add  A, C                                          ;; 00:384d $81
     ld   C, A                                          ;; 00:384e $4f
-    ld   A, [wC42D]                                    ;; 00:384f $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:384f $fa $2d $c4
     sra  B                                             ;; 00:3852 $cb $28
     add  A, B                                          ;; 00:3854 $80
     ld   B, A                                          ;; 00:3855 $47
@@ -9786,23 +9786,23 @@ call_00_3934:
     rrca                                               ;; 00:3be7 $0f
     rrca                                               ;; 00:3be8 $0f
     ld   B, A                                          ;; 00:3be9 $47
-    ld   A, [wC42E]                                    ;; 00:3bea $fa $2e $c4
+    ld   A, [wPlayerRelX]                              ;; 00:3bea $fa $2e $c4
     swap A                                             ;; 00:3bed $cb $37
     and  A, $0f                                        ;; 00:3bef $e6 $0f
     ld   C, A                                          ;; 00:3bf1 $4f
-    ld   A, [wC42C]                                    ;; 00:3bf2 $fa $2c $c4
+    ld   A, [wCameraX]                                 ;; 00:3bf2 $fa $2c $c4
     add  A, C                                          ;; 00:3bf5 $81
     or   A, B                                          ;; 00:3bf6 $b0
     ld   [HL+], A                                      ;; 00:3bf7 $22
-    ld   A, [wC431]                                    ;; 00:3bf8 $fa $31 $c4
+    ld   A, [wPlayerOAMTemplatePtr]                    ;; 00:3bf8 $fa $31 $c4
     rrca                                               ;; 00:3bfb $0f
     rrca                                               ;; 00:3bfc $0f
     ld   B, A                                          ;; 00:3bfd $47
-    ld   A, [wC42F]                                    ;; 00:3bfe $fa $2f $c4
+    ld   A, [wPlayerRelY]                              ;; 00:3bfe $fa $2f $c4
     swap A                                             ;; 00:3c01 $cb $37
     and  A, $0f                                        ;; 00:3c03 $e6 $0f
     ld   C, A                                          ;; 00:3c05 $4f
-    ld   A, [wC42D]                                    ;; 00:3c06 $fa $2d $c4
+    ld   A, [wCameraY]                                 ;; 00:3c06 $fa $2d $c4
     add  A, C                                          ;; 00:3c09 $81
     or   A, B                                          ;; 00:3c0a $b0
     ld   [HL], A                                       ;; 00:3c0b $77
@@ -9810,7 +9810,7 @@ call_00_3934:
     ld   [wC43E], A                                    ;; 00:3c0e $ea $3e $c4
     ld   [wC43F], A                                    ;; 00:3c11 $ea $3f $c4
     xor  A, A                                          ;; 00:3c14 $af
-    ld   [wC430], A                                    ;; 00:3c15 $ea $30 $c4
+    ld   [wPlayerSpriteIndex], A                       ;; 00:3c15 $ea $30 $c4
     ld   E, $1f                                        ;; 00:3c18 $1e $1f
     ld   A, $00                                        ;; 00:3c1a $3e $00
     call call_00_0195                                  ;; 00:3c1c $cd $95 $01
@@ -9838,7 +9838,7 @@ call_00_3934:
     xor  A, A                                          ;; 00:3c4a $af
     ld   [wC446], A                                    ;; 00:3c4b $ea $46 $c4
     ld   A, $01                                        ;; 00:3c4e $3e $01
-    ld   [wC430], A                                    ;; 00:3c50 $ea $30 $c4
+    ld   [wPlayerSpriteIndex], A                       ;; 00:3c50 $ea $30 $c4
     ld   A, C                                          ;; 00:3c53 $79
     and  A, $03                                        ;; 00:3c54 $e6 $03
     push AF                                            ;; 00:3c56 $f5
@@ -9857,9 +9857,9 @@ call_00_3934:
     ld   [wC43E], A                                    ;; 00:3c69 $ea $3e $c4
     ld   [wC43F], A                                    ;; 00:3c6c $ea $3f $c4
     ld   A, $01                                        ;; 00:3c6f $3e $01
-    ld   [wC431], A                                    ;; 00:3c71 $ea $31 $c4
+    ld   [wPlayerOAMTemplatePtr], A                    ;; 00:3c71 $ea $31 $c4
     ld   A, $80                                        ;; 00:3c74 $3e $80
-    ld   [wC432], A                                    ;; 00:3c76 $ea $32 $c4
+    ld   [wPlayerOAMTemplatePtr.01], A                 ;; 00:3c76 $ea $32 $c4
     ld   A, $40                                        ;; 00:3c79 $3e $40
     ld   [wC433], A                                    ;; 00:3c7b $ea $33 $c4
     jp   jp_00_3c93                                    ;; 00:3c7e $c3 $93 $3c
@@ -10319,7 +10319,7 @@ call_00_3f4e:
     inc  [HL]                                          ;; 00:3f64 $34
     inc  HL                                            ;; 00:3f65 $23
     ld   [HL], B                                       ;; 00:3f66 $70
-    ld   HL, wC2D9                                     ;; 00:3f67 $21 $d9 $c2
+    ld   HL, wMagiCount                                ;; 00:3f67 $21 $d9 $c2
     inc  [HL]                                          ;; 00:3f6a $34
     ld   A, C                                          ;; 00:3f6b $79
     ld   [wC71D], A                                    ;; 00:3f6c $ea $1d $c7
@@ -10328,7 +10328,7 @@ call_00_3f4e:
     jp   call_00_3cab                                  ;; 00:3f75 $c3 $ab $3c
 
 call_00_3f78:
-    ld   HL, wC2B9                                     ;; 00:3f78 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 00:3f78 $21 $b9 $c2
     ld   B, $10                                        ;; 00:3f7b $06 $10
 .jr_00_3f7d:
     ld   A, [HL]                                       ;; 00:3f7d $7e
@@ -10375,7 +10375,7 @@ jp_00_3f87:
     jp   jp_00_3c93                                    ;; 00:3fbc $c3 $93 $3c
 
 jp_00_3fbf:
-    ld   HL, wC2DA                                     ;; 00:3fbf $21 $da $c2
+    ld   HL, wMagiArray                                ;; 00:3fbf $21 $da $c2
     ld   B, $1c                                        ;; 00:3fc2 $06 $1c
     xor  A, A                                          ;; 00:3fc4 $af
 .jr_00_3fc5:
@@ -10383,14 +10383,14 @@ jp_00_3fbf:
     dec  B                                             ;; 00:3fc6 $05
     jr   NZ, .jr_00_3fc5                               ;; 00:3fc7 $20 $fc
     xor  A, A                                          ;; 00:3fc9 $af
-    ld   [wC2D9], A                                    ;; 00:3fca $ea $d9 $c2
+    ld   [wMagiCount], A                               ;; 00:3fca $ea $d9 $c2
     jp   jp_00_3c93                                    ;; 00:3fcd $c3 $93 $3c
 
 jp_00_3fd0:
     ld   A, $0c                                        ;; 00:3fd0 $3e $0c
     rst  switchBankSafe                                ;; 00:3fd2 $ef
     ld   DE, $7f80                                     ;; 00:3fd3 $11 $80 $7f
-    ld   HL, wC2DA                                     ;; 00:3fd6 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 00:3fd6 $21 $da $c2
     ld   B, $08                                        ;; 00:3fd9 $06 $08
 .jr_00_3fdb:
     ld   A, [HL]                                       ;; 00:3fdb $7e
@@ -10412,5 +10412,5 @@ jp_00_3fd0:
     dec  B                                             ;; 00:3fee $05
     jr   NZ, .jr_00_3fe7                               ;; 00:3fef $20 $f6
     ld   A, $4e                                        ;; 00:3ff1 $3e $4e
-    ld   [wC2D9], A                                    ;; 00:3ff3 $ea $d9 $c2
+    ld   [wMagiCount], A                               ;; 00:3ff3 $ea $d9 $c2
     jp   jp_00_3c93                                    ;; 00:3ff6 $c3 $93 $3c

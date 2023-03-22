@@ -79,7 +79,7 @@ call_0d_4000:
 .jr_0d_4060:
     push BC                                            ;; 0d:4060 $c5
     push AF                                            ;; 0d:4061 $f5
-    ld   HL, wC200                                     ;; 0d:4062 $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 0d:4062 $21 $00 $c2
     call call_00_1918                                  ;; 0d:4065 $cd $18 $19
     push DE                                            ;; 0d:4068 $d5
     call call_0d_449a                                  ;; 0d:4069 $cd $9a $44
@@ -108,7 +108,7 @@ call_0d_4000:
     pop  AF                                            ;; 0d:408b $f1
     dec  A                                             ;; 0d:408c $3d
     jr   NZ, .jr_0d_4084                               ;; 0d:408d $20 $f5
-    ld   HL, wC2DA                                     ;; 0d:408f $21 $da $c2
+    ld   HL, wMagiArray                                ;; 0d:408f $21 $da $c2
     ld   B, $0e                                        ;; 0d:4092 $06 $0e
     ld   C, $00                                        ;; 0d:4094 $0e $00
 .jr_0d_4096:
@@ -436,7 +436,7 @@ jr_0d_4167:
     cp   A, $ff                                        ;; 0d:42a4 $fe $ff
     jp   Z, .jp_0d_4349                                ;; 0d:42a6 $ca $49 $43
     ld   [wD84C], A                                    ;; 0d:42a9 $ea $4c $d8
-    ld   HL, wC204                                     ;; 0d:42ac $21 $04 $c2
+    ld   HL, wPlayerParty.04                           ;; 0d:42ac $21 $04 $c2
     call call_00_1918                                  ;; 0d:42af $cd $18 $19
     push HL                                            ;; 0d:42b2 $e5
     ld   A, $09                                        ;; 0d:42b3 $3e $09
@@ -588,7 +588,7 @@ call_0d_437e:
     push AF                                            ;; 0d:4383 $f5
     push BC                                            ;; 0d:4384 $c5
     push DE                                            ;; 0d:4385 $d5
-    ld   HL, wC206                                     ;; 0d:4386 $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 0d:4386 $21 $06 $c2
     call call_00_1918                                  ;; 0d:4389 $cd $18 $19
     ld   E, $40                                        ;; 0d:438c $1e $40
     ld   A, [DE]                                       ;; 0d:438e $1a
@@ -1566,7 +1566,7 @@ call_0d_50e7:
     rrca                                               ;; 0d:5156 $0f
     call C, call_0d_51d6                               ;; 0d:5157 $dc $d6 $51
 .jr_0d_515a:
-    ld   HL, wCC00                                     ;; 0d:515a $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 0d:515a $21 $00 $cc
     ld   B, $a0                                        ;; 0d:515d $06 $a0
     call memclearSmall                                 ;; 0d:515f $cd $6c $00
     ld   HL, wD93F                                     ;; 0d:5162 $21 $3f $d9
@@ -1575,7 +1575,7 @@ call_0d_50e7:
     ld   A, [HL]                                       ;; 0d:5168 $7e
     ldh  [hFF91], A                                    ;; 0d:5169 $e0 $91
     ld   DE, wD943                                     ;; 0d:516b $11 $43 $d9
-    ld   HL, wCC00                                     ;; 0d:516e $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 0d:516e $21 $00 $cc
     ld   B, $08                                        ;; 0d:5171 $06 $08
 .jr_0d_5173:
     push BC                                            ;; 0d:5173 $c5
@@ -2525,7 +2525,7 @@ jp_0d_60be:
 
 call_0d_60c6:
     ld   B, $a0                                        ;; 0d:60c6 $06 $a0
-    ld   HL, wCC00                                     ;; 0d:60c8 $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 0d:60c8 $21 $00 $cc
     jp   memclearSmall                                 ;; 0d:60cb $c3 $6c $00
 
 call_0d_60ce:

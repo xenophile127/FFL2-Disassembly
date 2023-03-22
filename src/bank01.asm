@@ -1393,7 +1393,7 @@ jp_01_548e:
     jr   .jr_01_550b                                   ;; 01:5546 $18 $c3
 .jr_01_5548:
     ldh  [hFF9D], A                                    ;; 01:5548 $e0 $9d
-    ld   HL, wC20F                                     ;; 01:554a $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 01:554a $21 $0f $c2
     add  A, A                                          ;; 01:554d $87
     rst  add_hl_a                                      ;; 01:554e $c7
     ld   A, [wC709]                                    ;; 01:554f $fa $09 $c7
@@ -1474,7 +1474,7 @@ jr_01_557b:
     jr   jr_01_557b                                    ;; 01:55ce $18 $ab
 
 call_01_55d0:
-    ld   HL, wC2B9                                     ;; 01:55d0 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:55d0 $21 $b9 $c2
     add  A, A                                          ;; 01:55d3 $87
     rst  add_hl_a                                      ;; 01:55d4 $c7
     ret                                                ;; 01:55d5 $c9
@@ -1606,7 +1606,7 @@ jp_01_5616:
     ld   A, [wC709]                                    ;; 01:56d0 $fa $09 $c7
     cp   A, $04                                        ;; 01:56d3 $fe $04
     jr   Z, .jr_01_56ff                                ;; 01:56d5 $28 $28
-    ld   HL, wC205                                     ;; 01:56d7 $21 $05 $c2
+    ld   HL, wPlayerParty.05                           ;; 01:56d7 $21 $05 $c2
     call call_00_019b                                  ;; 01:56da $cd $9b $01
     ld   A, [HL]                                       ;; 01:56dd $7e
     cp   A, $03                                        ;; 01:56de $fe $03
@@ -1659,7 +1659,7 @@ jr_01_5725:
 
 call_01_572e:
     ld   A, [wC709]                                    ;; 01:572e $fa $09 $c7
-    ld   HL, wC205                                     ;; 01:5731 $21 $05 $c2
+    ld   HL, wPlayerParty.05                           ;; 01:5731 $21 $05 $c2
     call call_00_019b                                  ;; 01:5734 $cd $9b $01
     ld   A, [HL]                                       ;; 01:5737 $7e
     cp   A, $02                                        ;; 01:5738 $fe $02
@@ -1672,14 +1672,14 @@ call_01_572e:
     call call_01_5dc0                                  ;; 01:5748 $cd $c0 $5d
     jp   C, call_01_5efe                               ;; 01:574b $da $fe $5e
     ld   A, [wC709]                                    ;; 01:574e $fa $09 $c7
-    ld   HL, wC20E                                     ;; 01:5751 $21 $0e $c2
+    ld   HL, wPlayerParty.0E                           ;; 01:5751 $21 $0e $c2
     call call_00_019b                                  ;; 01:5754 $cd $9b $01
     ld   A, [wC791]                                    ;; 01:5757 $fa $91 $c7
     add  A, [HL]                                       ;; 01:575a $86
     ld   [HL], A                                       ;; 01:575b $77
 .jr_01_575c:
     ld   A, [wC709]                                    ;; 01:575c $fa $09 $c7
-    ld   HL, wC20B                                     ;; 01:575f $21 $0b $c2
+    ld   HL, wPlayerParty.0B                           ;; 01:575f $21 $0b $c2
     call call_00_019b                                  ;; 01:5762 $cd $9b $01
     ld   A, [wC792]                                    ;; 01:5765 $fa $92 $c7
     ld   B, A                                          ;; 01:5768 $47
@@ -1719,7 +1719,7 @@ call_01_572e:
     ld   E, L                                          ;; 01:5798 $5d
     ld   D, H                                          ;; 01:5799 $54
     ld   A, [wC709]                                    ;; 01:579a $fa $09 $c7
-    ld   HL, wC207                                     ;; 01:579d $21 $07 $c2
+    ld   HL, wPlayerParty.07                           ;; 01:579d $21 $07 $c2
     call call_00_019b                                  ;; 01:57a0 $cd $9b $01
     ld   B, $02                                        ;; 01:57a3 $06 $02
 .jr_01_57a5:
@@ -1786,7 +1786,7 @@ jp_01_57dc:
 
 call_01_57f8:
     ld   A, [wC709]                                    ;; 01:57f8 $fa $09 $c7
-    ld   HL, wC205                                     ;; 01:57fb $21 $05 $c2
+    ld   HL, wPlayerParty.05                           ;; 01:57fb $21 $05 $c2
     call call_00_019b                                  ;; 01:57fe $cd $9b $01
     ld   A, [HL]                                       ;; 01:5801 $7e
     cp   A, $03                                        ;; 01:5802 $fe $03
@@ -1795,7 +1795,7 @@ call_01_57f8:
     and  A, $0f                                        ;; 01:5809 $e6 $0f
     jr   Z, .jr_01_581d                                ;; 01:580b $28 $10
     ld   A, [wC709]                                    ;; 01:580d $fa $09 $c7
-    ld   HL, wC20E                                     ;; 01:5810 $21 $0e $c2
+    ld   HL, wPlayerParty.0E                           ;; 01:5810 $21 $0e $c2
     call call_00_019b                                  ;; 01:5813 $cd $9b $01
     ld   A, [wC789]                                    ;; 01:5816 $fa $89 $c7
     ld   C, A                                          ;; 01:5819 $4f
@@ -1804,7 +1804,7 @@ call_01_57f8:
     ld   [HL], A                                       ;; 01:581c $77
 .jr_01_581d:
     ld   A, [wC709]                                    ;; 01:581d $fa $09 $c7
-    ld   HL, wC20B                                     ;; 01:5820 $21 $0b $c2
+    ld   HL, wPlayerParty.0B                           ;; 01:5820 $21 $0b $c2
     call call_00_019b                                  ;; 01:5823 $cd $9b $01
     ld   A, [wC78A]                                    ;; 01:5826 $fa $8a $c7
     ld   B, A                                          ;; 01:5829 $47
@@ -1844,7 +1844,7 @@ call_01_57f8:
     ld   E, L                                          ;; 01:5859 $5d
     ld   D, H                                          ;; 01:585a $54
     ld   A, [wC709]                                    ;; 01:585b $fa $09 $c7
-    ld   HL, wC20A                                     ;; 01:585e $21 $0a $c2
+    ld   HL, wPlayerParty.0A                           ;; 01:585e $21 $0a $c2
     call call_00_019b                                  ;; 01:5861 $cd $9b $01
     push HL                                            ;; 01:5864 $e5
     ld   A, [HL-]                                      ;; 01:5865 $3a
@@ -1926,7 +1926,7 @@ call_01_58ac:
     ret                                                ;; 01:58c7 $c9
 .jr_01_58c8:
     add  A, A                                          ;; 01:58c8 $87
-    ld   HL, wC2B9                                     ;; 01:58c9 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:58c9 $21 $b9 $c2
     rst  add_hl_a                                      ;; 01:58cc $c7
 
 call_01_58cd:
@@ -2288,7 +2288,7 @@ jp_01_5a89:
     jr   .jr_01_5ad5                                   ;; 01:5b24 $18 $af
 
 call_01_5b26:
-    ld   HL, wC2DA                                     ;; 01:5b26 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:5b26 $21 $da $c2
     ld   B, $0e                                        ;; 01:5b29 $06 $0e
 .jr_01_5b2b:
     ld   A, [HL]                                       ;; 01:5b2b $7e
@@ -2319,7 +2319,7 @@ call_01_5b26:
 
 call_01_5b4f:
     add  A, A                                          ;; 01:5b4f $87
-    ld   HL, wC2DA                                     ;; 01:5b50 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:5b50 $21 $da $c2
     rst  add_hl_a                                      ;; 01:5b53 $c7
     ld   A, [HL]                                       ;; 01:5b54 $7e
     ret                                                ;; 01:5b55 $c9
@@ -2340,7 +2340,7 @@ call_01_5b56:
     ld   B, $0e                                        ;; 01:5b6a $06 $0e
     call memsetSmall                                   ;; 01:5b6c $cd $6d $00
     pop  DE                                            ;; 01:5b6f $d1
-    ld   HL, wC2DA                                     ;; 01:5b70 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:5b70 $21 $da $c2
     ld   BC, $e00                                      ;; 01:5b73 $01 $00 $0e
 .jr_01_5b76:
     ld   A, [HL]                                       ;; 01:5b76 $7e
@@ -2370,7 +2370,7 @@ call_01_5b56:
 
 call_01_5b95:
     call mul_a_32                                      ;; 01:5b95 $cd $4c $00
-    ld   HL, wC21F                                     ;; 01:5b98 $21 $1f $c2
+    ld   HL, wPlayerParty.1F                           ;; 01:5b98 $21 $1f $c2
     rst  add_hl_a                                      ;; 01:5b9b $c7
     ret                                                ;; 01:5b9c $c9
 
@@ -2407,7 +2407,7 @@ call_01_5bcd:
     ld   A, [wC709]                                    ;; 01:5bcd $fa $09 $c7
     cp   A, $ff                                        ;; 01:5bd0 $fe $ff
     jr   Z, .jr_01_5be0                                ;; 01:5bd2 $28 $0c
-    ld   HL, wC206                                     ;; 01:5bd4 $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 01:5bd4 $21 $06 $c2
     call call_00_019b                                  ;; 01:5bd7 $cd $9b $01
     ld   A, [HL]                                       ;; 01:5bda $7e
     and  A, $10                                        ;; 01:5bdb $e6 $10
@@ -2573,7 +2573,7 @@ call_01_5bcd:
     rst  add_hl_a                                      ;; 01:5cf7 $c7
     ld   A, $0f                                        ;; 01:5cf8 $3e $0f
     call readFromBank                                  ;; 01:5cfa $cd $d2 $00
-    ld   HL, wC2D9                                     ;; 01:5cfd $21 $d9 $c2
+    ld   HL, wMagiCount                                ;; 01:5cfd $21 $d9 $c2
     sub  A, [HL]                                       ;; 01:5d00 $96
     jr   NC, .jr_01_5d04                               ;; 01:5d01 $30 $01
     xor  A, A                                          ;; 01:5d03 $af
@@ -2608,7 +2608,7 @@ call_01_5d1d:
     cp   A, $ff                                        ;; 01:5d2d $fe $ff
     jr   Z, .jr_01_5d47                                ;; 01:5d2f $28 $16
     push HL                                            ;; 01:5d31 $e5
-    ld   HL, wC205                                     ;; 01:5d32 $21 $05 $c2
+    ld   HL, wPlayerParty.05                           ;; 01:5d32 $21 $05 $c2
     call call_00_019b                                  ;; 01:5d35 $cd $9b $01
     ld   A, [HL]                                       ;; 01:5d38 $7e
     pop  HL                                            ;; 01:5d39 $e1
@@ -2630,11 +2630,11 @@ call_01_5d1d:
     ret                                                ;; 01:5d4b $c9
 
 call_01_5d4c:
-    ld   HL, wC2BA                                     ;; 01:5d4c $21 $ba $c2
+    ld   HL, wInventory.01                             ;; 01:5d4c $21 $ba $c2
     ld   A, [wC709]                                    ;; 01:5d4f $fa $09 $c7
     cp   A, $ff                                        ;; 01:5d52 $fe $ff
     jr   Z, .jr_01_5d5c                                ;; 01:5d54 $28 $06
-    ld   HL, wC210                                     ;; 01:5d56 $21 $10 $c2
+    ld   HL, wPlayerParty.10                           ;; 01:5d56 $21 $10 $c2
     call call_00_019b                                  ;; 01:5d59 $cd $9b $01
 .jr_01_5d5c:
     ldh  A, [hFF9D]                                    ;; 01:5d5c $f0 $9d
@@ -2655,7 +2655,7 @@ call_01_5d67:
 
 call_01_5d6d:
     add  A, A                                          ;; 01:5d6d $87
-    ld   HL, wC20F                                     ;; 01:5d6e $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 01:5d6e $21 $0f $c2
     rst  add_hl_a                                      ;; 01:5d71 $c7
     ld   A, [wC709]                                    ;; 01:5d72 $fa $09 $c7
     jp   call_00_019b                                  ;; 01:5d75 $c3 $9b $01
@@ -2670,7 +2670,7 @@ call_01_5d7d:
     call call_01_528e                                  ;; 01:5d7f $cd $8e $52
     ld   A, [HL]                                       ;; 01:5d82 $7e
     add  A, A                                          ;; 01:5d83 $87
-    ld   HL, wC2B9                                     ;; 01:5d84 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:5d84 $21 $b9 $c2
     rst  add_hl_a                                      ;; 01:5d87 $c7
     ret                                                ;; 01:5d88 $c9
     db   $4f, $fa, $09, $c7, $21, $0b, $c2, $cd        ;; 01:5d89 ????????
@@ -2699,7 +2699,7 @@ call_01_5dc0:
     and  A, $0f                                        ;; 01:5dc3 $e6 $0f
     ret  Z                                             ;; 01:5dc5 $c8
     ld   C, A                                          ;; 01:5dc6 $4f
-    ld   HL, wC20F                                     ;; 01:5dc7 $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 01:5dc7 $21 $0f $c2
     ld   A, [wC709]                                    ;; 01:5dca $fa $09 $c7
     call call_00_019b                                  ;; 01:5dcd $cd $9b $01
     ld   B, $08                                        ;; 01:5dd0 $06 $08
@@ -2785,7 +2785,7 @@ call_01_5e43:
     ld   HL, wC7A6                                     ;; 01:5e43 $21 $a6 $c7
     ld   B, $20                                        ;; 01:5e46 $06 $20
     call memclearSmall                                 ;; 01:5e48 $cd $6c $00
-    ld   HL, wCC00                                     ;; 01:5e4b $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 01:5e4b $21 $00 $cc
     ld   B, $a0                                        ;; 01:5e4e $06 $a0
     call memclearSmall                                 ;; 01:5e50 $cd $6c $00
     ld   [wC796], A                                    ;; 01:5e53 $ea $96 $c7
@@ -2990,13 +2990,13 @@ jp_01_5f51:
     ld   [HL], C                                       ;; 01:5f8c $71
 .jr_01_5f8d:
     ldh  A, [hFF8C]                                    ;; 01:5f8d $f0 $8c
-    ld   HL, wC206                                     ;; 01:5f8f $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 01:5f8f $21 $06 $c2
     call call_00_019b                                  ;; 01:5f92 $cd $9b $01
     ld   A, [HL]                                       ;; 01:5f95 $7e
     and  A, $90                                        ;; 01:5f96 $e6 $90
     jr   NZ, .jp_01_5f62                               ;; 01:5f98 $20 $c8
     ldh  A, [hFF8D]                                    ;; 01:5f9a $f0 $8d
-    ld   HL, wC206                                     ;; 01:5f9c $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 01:5f9c $21 $06 $c2
     call call_00_019b                                  ;; 01:5f9f $cd $9b $01
     ld   A, [HL]                                       ;; 01:5fa2 $7e
     and  A, $90                                        ;; 01:5fa3 $e6 $90
@@ -3083,7 +3083,7 @@ call_01_6022:
 call_01_602e:
     push BC                                            ;; 01:602e $c5
     inc  B                                             ;; 01:602f $04
-    ld   A, [wC2A0]                                    ;; 01:6030 $fa $a0 $c2
+    ld   A, [wPartyOrder]                              ;; 01:6030 $fa $a0 $c2
     rlca                                               ;; 01:6033 $07
     rlca                                               ;; 01:6034 $07
 .jr_01_6035:
@@ -3109,10 +3109,10 @@ call_01_603e:
     dec  B                                             ;; 01:604a $05
     jr   NZ, .jr_01_6044                               ;; 01:604b $20 $f7
     ld   B, A                                          ;; 01:604d $47
-    ld   A, [wC2A0]                                    ;; 01:604e $fa $a0 $c2
+    ld   A, [wPartyOrder]                              ;; 01:604e $fa $a0 $c2
     and  A, C                                          ;; 01:6051 $a1
     or   A, B                                          ;; 01:6052 $b0
-    ld   [wC2A0], A                                    ;; 01:6053 $ea $a0 $c2
+    ld   [wPartyOrder], A                              ;; 01:6053 $ea $a0 $c2
     pop  BC                                            ;; 01:6056 $c1
     ret                                                ;; 01:6057 $c9
 
@@ -3149,7 +3149,7 @@ call_01_606e:
     ret                                                ;; 01:6079 $c9
 
 call_01_607a:
-    ld   HL, wC2DA                                     ;; 01:607a $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:607a $21 $da $c2
     ld   B, $0e                                        ;; 01:607d $06 $0e
 .jr_01_607f:
     ld   A, [HL]                                       ;; 01:607f $7e
@@ -3180,7 +3180,7 @@ call_01_607a:
 
 call_01_60a3:
     add  A, A                                          ;; 01:60a3 $87
-    ld   HL, wC2DA                                     ;; 01:60a4 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:60a4 $21 $da $c2
     rst  add_hl_a                                      ;; 01:60a7 $c7
     ld   A, [HL]                                       ;; 01:60a8 $7e
     ret                                                ;; 01:60a9 $c9
@@ -3195,7 +3195,7 @@ call_01_60aa:
     ld   A, B                                          ;; 01:60b3 $78
     cp   A, $04                                        ;; 01:60b4 $fe $04
     jr   C, .jr_01_60ac                                ;; 01:60b6 $38 $f4
-    ld   HL, wC2DA                                     ;; 01:60b8 $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:60b8 $21 $da $c2
     ld   DE, wC7E0                                     ;; 01:60bb $11 $e0 $c7
     ld   BC, $e00                                      ;; 01:60be $01 $00 $0e
 .jr_01_60c1:
@@ -3227,7 +3227,7 @@ call_01_60aa:
     ret                                                ;; 01:60e1 $c9
 
 call_01_60e2:
-    ld   HL, wC21F                                     ;; 01:60e2 $21 $1f $c2
+    ld   HL, wPlayerParty.1F                           ;; 01:60e2 $21 $1f $c2
     jp   call_00_019b                                  ;; 01:60e5 $c3 $9b $01
 
 jp_01_60e8:
@@ -3263,7 +3263,7 @@ jp_01_60e8:
 call_01_611c:
     call call_01_5df8                                  ;; 01:611c $cd $f8 $5d
     ld   A, [wC709]                                    ;; 01:611f $fa $09 $c7
-    ld   HL, wC20F                                     ;; 01:6122 $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 01:6122 $21 $0f $c2
     call call_00_019b                                  ;; 01:6125 $cd $9b $01
     ld   A, $ff                                        ;; 01:6128 $3e $ff
     ld   B, $10                                        ;; 01:612a $06 $10
@@ -3294,7 +3294,7 @@ call_01_611c:
 
 call_01_6157:
     ld   A, [wC709]                                    ;; 01:6157 $fa $09 $c7
-    ld   HL, wC200                                     ;; 01:615a $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:615a $21 $00 $c2
     call call_00_019b                                  ;; 01:615d $cd $9b $01
     ld   DE, wC7EE                                     ;; 01:6160 $11 $ee $c7
     ld   B, $04                                        ;; 01:6163 $06 $04
@@ -3366,7 +3366,7 @@ call_01_6157:
     jr   .jp_01_61b6                                   ;; 01:61e9 $18 $cb
 .jr_01_61eb:
     ld   A, [wC709]                                    ;; 01:61eb $fa $09 $c7
-    ld   HL, wC200                                     ;; 01:61ee $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:61ee $21 $00 $c2
     call call_00_019b                                  ;; 01:61f1 $cd $9b $01
     ld   E, L                                          ;; 01:61f4 $5d
     ld   D, H                                          ;; 01:61f5 $54
@@ -3391,7 +3391,7 @@ call_01_6157:
     ld   A, [BC]                                       ;; 01:6215 $0a
     cp   A, $04                                        ;; 01:6216 $fe $04
     jr   Z, .jp_01_625e                                ;; 01:6218 $28 $44
-    ld   HL, wC200                                     ;; 01:621a $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:621a $21 $00 $c2
     rst  add_hl_a                                      ;; 01:621d $c7
     inc  A                                             ;; 01:621e $3c
     ld   [BC], A                                       ;; 01:621f $02
@@ -3423,7 +3423,7 @@ call_01_6157:
     jp   .jp_01_61b6                                   ;; 01:625b $c3 $b6 $61
 .jp_01_625e:
     ld   A, [wC709]                                    ;; 01:625e $fa $09 $c7
-    ld   HL, wC200                                     ;; 01:6261 $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:6261 $21 $00 $c2
     call call_00_019b                                  ;; 01:6264 $cd $9b $01
     ld   A, $ff                                        ;; 01:6267 $3e $ff
     and  A, [HL]                                       ;; 01:6269 $a6
@@ -3468,7 +3468,7 @@ jp_01_628a:
     ld   [HL+], A                                      ;; 01:62a8 $22
     ld   [HL+], A                                      ;; 01:62a9 $22
     ld   [HL], A                                       ;; 01:62aa $77
-    ld   HL, wC207                                     ;; 01:62ab $21 $07 $c2
+    ld   HL, wPlayerParty.07                           ;; 01:62ab $21 $07 $c2
     ld   B, $04                                        ;; 01:62ae $06 $04
 .jr_01_62b0:
     call call_01_630b                                  ;; 01:62b0 $cd $0b $63
@@ -3487,7 +3487,7 @@ jp_01_628a:
     and  A, A                                          ;; 01:62cb $a7
     call NZ, call_01_5f07                              ;; 01:62cc $c4 $07 $5f
     jr   NZ, .jr_01_62fb                               ;; 01:62cf $20 $2a
-    ld   DE, wC2A2                                     ;; 01:62d1 $11 $a2 $c2
+    ld   DE, wGP                                       ;; 01:62d1 $11 $a2 $c2
     ld   HL, wC745                                     ;; 01:62d4 $21 $45 $c7
     call call_00_0168                                  ;; 01:62d7 $cd $68 $01
     jr   C, .jr_01_62f6                                ;; 01:62da $38 $1a
@@ -3558,7 +3558,7 @@ call_01_6332:
     call call_01_636c                                  ;; 01:6344 $cd $6c $63
 .jr_01_6347:
     ld   BC, $e00                                      ;; 01:6347 $01 $00 $0e
-    ld   HL, wC2DA                                     ;; 01:634a $21 $da $c2
+    ld   HL, wMagiArray                                ;; 01:634a $21 $da $c2
 .jr_01_634d:
     push HL                                            ;; 01:634d $e5
     ld   A, [HL+]                                      ;; 01:634e $2a
@@ -3585,7 +3585,7 @@ call_01_6332:
 
 call_01_636c:
     ld   [wC709], A                                    ;; 01:636c $ea $09 $c7
-    ld   HL, wC206                                     ;; 01:636f $21 $06 $c2
+    ld   HL, wPlayerParty.06                           ;; 01:636f $21 $06 $c2
     call call_00_019b                                  ;; 01:6372 $cd $9b $01
     ld   A, [HL+]                                      ;; 01:6375 $2a
     and  A, $90                                        ;; 01:6376 $e6 $90
@@ -3656,7 +3656,7 @@ call_01_636c:
     ld   A, $ff                                        ;; 01:63d2 $3e $ff
     call memsetSmall                                   ;; 01:63d4 $cd $6d $00
     ld   A, [wC709]                                    ;; 01:63d7 $fa $09 $c7
-    ld   HL, wC204                                     ;; 01:63da $21 $04 $c2
+    ld   HL, wPlayerParty.04                           ;; 01:63da $21 $04 $c2
     call call_00_019b                                  ;; 01:63dd $cd $9b $01
     ld   L, [HL]                                       ;; 01:63e0 $6e
     ld   H, $0a                                        ;; 01:63e1 $26 $0a
@@ -3691,7 +3691,7 @@ call_01_636c:
     ld   A, [HL+]                                      ;; 01:6416 $2a
     push HL                                            ;; 01:6417 $e5
     push AF                                            ;; 01:6418 $f5
-    ld   HL, wC20F                                     ;; 01:6419 $21 $0f $c2
+    ld   HL, wPlayerParty.0F                           ;; 01:6419 $21 $0f $c2
     ld   A, [wC709]                                    ;; 01:641c $fa $09 $c7
     call call_00_019b                                  ;; 01:641f $cd $9b $01
     pop  AF                                            ;; 01:6422 $f1
@@ -3861,7 +3861,7 @@ jp_01_647a:
     push DE                                            ;; 01:654f $d5
     call call_01_6669                                  ;; 01:6550 $cd $69 $66
     pop  HL                                            ;; 01:6553 $e1
-    ld   DE, wC2A2                                     ;; 01:6554 $11 $a2 $c2
+    ld   DE, wGP                                       ;; 01:6554 $11 $a2 $c2
     call call_00_0168                                  ;; 01:6557 $cd $68 $01
     jr   C, .jr_01_658c                                ;; 01:655a $38 $30
     call call_00_0165                                  ;; 01:655c $cd $65 $01
@@ -3918,7 +3918,7 @@ jp_01_647a:
     jp   Z, .jp_01_64d7                                ;; 01:65c3 $ca $d7 $64
     ld   [wC70D], A                                    ;; 01:65c6 $ea $0d $c7
     add  A, A                                          ;; 01:65c9 $87
-    ld   HL, wC2B9                                     ;; 01:65ca $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:65ca $21 $b9 $c2
     rst  add_hl_a                                      ;; 01:65cd $c7
     ld   A, [HL+]                                      ;; 01:65ce $2a
     cp   A, $ff                                        ;; 01:65cf $fe $ff
@@ -3972,12 +3972,12 @@ jp_01_647a:
     call call_01_5f07                                  ;; 01:662b $cd $07 $5f
     and  A, A                                          ;; 01:662e $a7
     jp   NZ, .jp_01_65a3                               ;; 01:662f $c2 $a3 $65
-    ld   DE, wC2A2                                     ;; 01:6632 $11 $a2 $c2
+    ld   DE, wGP                                       ;; 01:6632 $11 $a2 $c2
     ld   HL, wC760                                     ;; 01:6635 $21 $60 $c7
     call call_00_0162                                  ;; 01:6638 $cd $62 $01
     ld   A, [wC70D]                                    ;; 01:663b $fa $0d $c7
     add  A, A                                          ;; 01:663e $87
-    ld   HL, wC2B9                                     ;; 01:663f $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:663f $21 $b9 $c2
     rst  add_hl_a                                      ;; 01:6642 $c7
     ld   A, $ff                                        ;; 01:6643 $3e $ff
     ld   [HL+], A                                      ;; 01:6645 $22
@@ -3996,7 +3996,7 @@ call_01_664d:
 
 call_01_6657:
     ld   B, $10                                        ;; 01:6657 $06 $10
-    ld   HL, wC2B9                                     ;; 01:6659 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:6659 $21 $b9 $c2
 .jr_01_665c:
     ld   A, [HL]                                       ;; 01:665c $7e
     inc  A                                             ;; 01:665d $3c
@@ -4042,7 +4042,7 @@ call_01_6669:
 
 call_01_668c:
     call call_00_01cb                                  ;; 01:668c $cd $cb $01
-    ld   HL, wC200                                     ;; 01:668f $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:668f $21 $00 $c2
     ld   DE, sA600                                     ;; 01:6692 $11 $00 $a6
     ld   BC, $180                                      ;; 01:6695 $01 $80 $01
     call memcopyLarge                                  ;; 01:6698 $cd $89 $00
@@ -4122,7 +4122,7 @@ call_01_6711:
     ld   [wC70E], A                                    ;; 01:6716 $ea $0e $c7
     call call_01_675f                                  ;; 01:6719 $cd $5f $67
     jr   NC, .jr_01_672c                               ;; 01:671c $30 $0e
-    ld   A, [wC31C]                                    ;; 01:671e $fa $1c $c3
+    ld   A, [wSaveCount]                               ;; 01:671e $fa $1c $c3
     ld   [wC70D], A                                    ;; 01:6721 $ea $0d $c7
     ld   A, [wC70E]                                    ;; 01:6724 $fa $0e $c7
     add  A, $16                                        ;; 01:6727 $c6 $16
@@ -4150,7 +4150,7 @@ call_01_6711:
 call_01_674d:
     call call_00_01cb                                  ;; 01:674d $cd $cb $01
     ld   HL, sA600                                     ;; 01:6750 $21 $00 $a6
-    ld   DE, wC200                                     ;; 01:6753 $11 $00 $c2
+    ld   DE, wPlayerParty                              ;; 01:6753 $11 $00 $c2
     ld   BC, $180                                      ;; 01:6756 $01 $80 $01
     call memcopyLarge                                  ;; 01:6759 $cd $89 $00
     jp   call_00_01c8                                  ;; 01:675c $c3 $c8 $01
@@ -4178,23 +4178,23 @@ call_01_675f:
 
 call_01_6781:
     call call_01_6807                                  ;; 01:6781 $cd $07 $68
-    ld   DE, wC200                                     ;; 01:6784 $11 $00 $c2
+    ld   DE, wPlayerParty                              ;; 01:6784 $11 $00 $c2
     call memcopyLarge                                  ;; 01:6787 $cd $89 $00
     jp   call_00_01c8                                  ;; 01:678a $c3 $c8 $01
 
 call_01_678d:
-    ld   HL, wC200                                     ;; 01:678d $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:678d $21 $00 $c2
     ld   BC, $17c                                      ;; 01:6790 $01 $7c $01
     call memclearBig                                   ;; 01:6793 $cd $72 $00
     dec  A                                             ;; 01:6796 $3d
-    ld   HL, wC2B9                                     ;; 01:6797 $21 $b9 $c2
+    ld   HL, wInventory                                ;; 01:6797 $21 $b9 $c2
     ld   B, $20                                        ;; 01:679a $06 $20
     call memsetSmall                                   ;; 01:679c $cd $6d $00
     ld   A, $06                                        ;; 01:679f $3e $06
-    ld   [wC31B], A                                    ;; 01:67a1 $ea $1b $c3
+    ld   [wTextSpeed], A                               ;; 01:67a1 $ea $1b $c3
     ld   A, $e4                                        ;; 01:67a4 $3e $e4
-    ld   [wC2A0], A                                    ;; 01:67a6 $ea $a0 $c2
-    ld   HL, wC200                                     ;; 01:67a9 $21 $00 $c2
+    ld   [wPartyOrder], A                              ;; 01:67a6 $ea $a0 $c2
+    ld   HL, wPlayerParty                              ;; 01:67a9 $21 $00 $c2
     ld   B, $05                                        ;; 01:67ac $06 $05
 .jr_01_67ae:
     ld   A, $ff                                        ;; 01:67ae $3e $ff
@@ -4219,7 +4219,7 @@ call_01_67bc:
     call call_00_01cb                                  ;; 01:67c4 $cd $cb $01
     ld   HL, sA780                                     ;; 01:67c7 $21 $80 $a7
     ld   A, [HL]                                       ;; 01:67ca $7e
-    ld   [wC31C], A                                    ;; 01:67cb $ea $1c $c3
+    ld   [wSaveCount], A                               ;; 01:67cb $ea $1c $c3
     inc  A                                             ;; 01:67ce $3c
     cp   A, $64                                        ;; 01:67cf $fe $64
     jr   C, .jr_01_67d5                                ;; 01:67d1 $38 $02
@@ -4246,7 +4246,7 @@ call_01_67bc:
     call call_01_6807                                  ;; 01:67f6 $cd $07 $68
     ld   E, L                                          ;; 01:67f9 $5d
     ld   D, H                                          ;; 01:67fa $54
-    ld   HL, wC200                                     ;; 01:67fb $21 $00 $c2
+    ld   HL, wPlayerParty                              ;; 01:67fb $21 $00 $c2
     call memcopyLarge                                  ;; 01:67fe $cd $89 $00
     call call_00_01c8                                  ;; 01:6801 $cd $c8 $01
     jp   pop_all                                       ;; 01:6804 $c3 $0b $00
@@ -4269,7 +4269,7 @@ call_01_681a:
     ret                                                ;; 01:681f $c9
 
 call_01_6820:
-    ld   DE, wC200                                     ;; 01:6820 $11 $00 $c2
+    ld   DE, wPlayerParty                              ;; 01:6820 $11 $00 $c2
     ld   HL, $00                                       ;; 01:6823 $21 $00 $00
     ld   BC, $17e                                      ;; 01:6826 $01 $7e $01
 .jr_01_6829:
@@ -5197,7 +5197,7 @@ call_01_6f74:
     farcall2 call_0d_500c                              ;; 01:6f8e $cd $7d $01 $0c $50 $0d
     ld   B, A                                          ;; 01:6f94 $47
     ld   A, $06                                        ;; 01:6f95 $3e $06
-    ld   HL, wCC00                                     ;; 01:6f97 $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 01:6f97 $21 $00 $cc
     farcall2 call_0d_500f                              ;; 01:6f9a $cd $7d $01 $0f $50 $0d
     ld   B, $02                                        ;; 01:6fa0 $06 $02
     farcall2 call_0d_5006                              ;; 01:6fa2 $cd $7d $01 $06 $50 $0d

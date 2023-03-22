@@ -1104,7 +1104,7 @@ jp_0f_6098:
     ld   HL, $9800                                     ;; 0f:60b0 $21 $00 $98
     ld   BC, $800                                      ;; 0f:60b3 $01 $00 $08
     call call_00_009c                                  ;; 0f:60b6 $cd $9c $00
-    ld   HL, wCC00                                     ;; 0f:60b9 $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 0f:60b9 $21 $00 $cc
     ld   B, $a0                                        ;; 0f:60bc $06 $a0
     call memclearSmall                                 ;; 0f:60be $cd $6c $00
     rst  waitForVBlank                                 ;; 0f:60c1 $d7
@@ -1620,7 +1620,7 @@ call_0f_62e9:
     inc  HL                                            ;; 0f:63cf $23
     dec  B                                             ;; 0f:63d0 $05
     jr   NZ, .jr_0f_63c6                               ;; 0f:63d1 $20 $f3
-    ld   HL, wCC00                                     ;; 0f:63d3 $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 0f:63d3 $21 $00 $cc
     ld   B, $28                                        ;; 0f:63d6 $06 $28
     call memclearSmall                                 ;; 0f:63d8 $cd $6c $00
     rst  waitForVBlank                                 ;; 0f:63db $d7
@@ -1720,7 +1720,7 @@ call_0f_6450:
 call_0f_6459:
     ld   B, $09                                        ;; 0f:6459 $06 $09
     ld   DE, wD943                                     ;; 0f:645b $11 $43 $d9
-    ld   HL, wCC00                                     ;; 0f:645e $21 $00 $cc
+    ld   HL, wShadowOAM3                               ;; 0f:645e $21 $00 $cc
 .jr_0f_6461:
     ld   A, [DE]                                       ;; 0f:6461 $1a
     inc  DE                                            ;; 0f:6462 $13

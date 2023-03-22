@@ -7,13 +7,11 @@ INCLUDE "include/constants.inc"
 
 SECTION "wram0", WRAM0[$c000]
 
-wC000:
+wShadowOAM:
     ds 2                                               ;; c000
-
-wC002:
+.02:
     ds 14                                              ;; c002
-
-wC010:
+.10:
     ds 144                                             ;; c010
 
 wC0A0:
@@ -37,10 +35,9 @@ wC0E8:
 wC0EA:
     ds 22                                              ;; c0ea
 
-wC100:
+wShadowOAM2:
     ds 16                                              ;; c100
-
-wC110:
+.10:
     ds 144                                             ;; c110
 
 wC1A0:
@@ -88,58 +85,45 @@ wC1AF:
 wC1B0:
     ds 80                                              ;; c1b0
 
-wC200:
+wPlayerParty:
     ds 4                                               ;; c200
-
-wC204:
+.04:
     ds 1                                               ;; c204
-
-wC205:
+.05:
     ds 1                                               ;; c205
-
-wC206:
+.06:
     ds 1                                               ;; c206
-
-wC207:
+.07:
     ds 2                                               ;; c207
-
-wC209:
+.09:
     ds 1                                               ;; c209
-
-wC20A:
+.0A:
     ds 1                                               ;; c20a
-
-wC20B:
+.0B:
     ds 1                                               ;; c20b
-
-wC20C:
+.0C:
     ds 1                                               ;; c20c
-
-wC20D:
+.0D:
     ds 1                                               ;; c20d
-
-wC20E:
+.0E:
     ds 1                                               ;; c20e
-
-wC20F:
+.0F:
     ds 1                                               ;; c20f
-
-wC210:
+.10:
     ds 15                                              ;; c210
-
-wC21F:
+.1F:
     ds 97                                              ;; c21f
 
 wC280:
     ds 32                                              ;; c280
 
-wC2A0:
+wPartyOrder:
     ds 1                                               ;; c2a0
 
-wC2A1:
+wDefeatCount:
     ds 1                                               ;; c2a1
 
-wC2A2:
+wGP:
     ds 3                                               ;; c2a2
 
 wC2A5:
@@ -157,16 +141,15 @@ wC2A8:
 wC2A9:
     ds 16                                              ;; c2a9
 
-wC2B9:
+wInventory:
     ds 1                                               ;; c2b9
-
-wC2BA:
+.01:
     ds 31                                              ;; c2ba
 
-wC2D9:
+wMagiCount:
     ds 1                                               ;; c2d9
 
-wC2DA:
+wMagiArray:
     ds 28                                              ;; c2da
 
 wC2F6:
@@ -193,10 +176,10 @@ wC319:
 wC31A:
     ds 1                                               ;; c31a
 
-wC31B:
+wTextSpeed:
     ds 1                                               ;; c31b
 
-wC31C:
+wSaveCount:
     ds 1                                               ;; c31c
 
 wC31D:
@@ -229,28 +212,27 @@ wC37E:
 wC380:
     ds 128                                             ;; c380
 
-wC400:
+wTempTileBuffer:
     ds 44                                              ;; c400
 
-wC42C:
+wCameraX:
     ds 1                                               ;; c42c
 
-wC42D:
+wCameraY:
     ds 1                                               ;; c42d
 
-wC42E:
+wPlayerRelX:
     ds 1                                               ;; c42e
 
-wC42F:
+wPlayerRelY:
     ds 1                                               ;; c42f
 
-wC430:
+wPlayerSpriteIndex:
     ds 1                                               ;; c430
 
-wC431:
+wPlayerOAMTemplatePtr:
     ds 1                                               ;; c431
-
-wC432:
+.01:
     ds 1                                               ;; c432
 
 wC433:
@@ -448,7 +430,7 @@ wC47E:
 wC47F:
     ds 128                                             ;; c47f
 
-wC4FF:
+wFrameCounter:
     ds 1                                               ;; c4ff
 
 wC500:
@@ -480,11 +462,9 @@ wVBlankInterruptHandler:
 
 wLCDCInterruptHandler:
     ds 1                                               ;; c706
-
-wC707:
+.targetlow:
     ds 1                                               ;; c707
-
-wC708:
+.targethigh:
     ds 1                                               ;; c708
 
 wC709:
@@ -945,13 +925,11 @@ wSoundEffectInstructionPointerChannel4:
     ds 57                                              ;; cbc7
 
 ; END OF AUDIO ENGINE WRAM
-wCC00:
+wShadowOAM3:
     ds 128                                             ;; cc00
-
-wCC80:
+.80:
     ds 16                                              ;; cc80
-
-wCC90:
+.90:
     ds 624                                             ;; cc90
 
 wCF00:
