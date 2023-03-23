@@ -2197,7 +2197,6 @@ call_0d_54dd:
     ret                                                ;; 0d:54e7 $c9
 
 ; This flashes the screen when Excalibur is used to attack.
-; It does this by turning off the LCD very briefly, which doesn't work on many GB models including SGB.
 effectExcaliburFlash:
     push AF                                            ;; 0d:54e8 $f5
     ld   B, $02                                        ;; 0d:54e9 $06 $02
@@ -2207,18 +2206,34 @@ effectExcaliburFlash:
     ldh  A, [rLY]                                      ;; 0d:54ec $f0 $44
     cp   A, $91                                        ;; 0d:54ee $fe $91
     jr   C, .wait_vblank                               ;; 0d:54f0 $38 $fa
-    ldh  A, [rLCDC]                                    ;; 0d:54f2 $f0 $40
-    res  7, A                                          ;; 0d:54f4 $cb $bf
-    ldh  [rLCDC], A                                    ;; 0d:54f6 $e0 $40
-    ldh  [rDIV], A                                     ;; 0d:54f8 $e0 $04
-.loop_inner2:
-    ldh  A, [rDIV]                                     ;; 0d:54fa $f0 $04
-    bit  2, A                                          ;; 0d:54fc $cb $57
-    jr   Z, .loop_inner2                               ;; 0d:54fe $28 $fa
-    ldh  A, [rLCDC]                                    ;; 0d:5500 $f0 $40
-    set  7, A                                          ;; 0d:5502 $cb $ff
-    ldh  [rLCDC], A                                    ;; 0d:5504 $e0 $40
-    ld   B, $05                                        ;; 0d:5506 $06 $05
+
+    ; Save BGP
+    ldh a, [rBGP]
+    push af
+
+    ; Set BGP to white. Without this the flash is dark gray.
+    xor a, a
+    ldh [rBGP], a
+
+    ; Disable sprite and background
+    ld a, [rLCDC]
+    and a, $fc
+    ldh [rLCDC], a
+
+    ; Wait a frame
+    rst  waitForVBlank
+
+    ; Enable sprite and background
+    or a, $03
+    ldh [rLCDC], a
+
+    ; Restore BGP
+    pop af
+    ldh [rBGP], a
+
+    ; Wait another four frames
+    ld b, $04
+
 .wait_frames:
     rst  waitForVBlank                                 ;; 0d:5508 $d7
     dec  B                                             ;; 0d:5509 $05
