@@ -696,7 +696,10 @@ wC7DA:
     ds 1                                               ;; c7da
 
 wC7DB:
-    ds 3                                               ;; c7db
+    ds 2                                               ;; c7db
+
+wC7DD:
+    ds 1                                               ;; c7dd
 
 wC7DE:
     ds 1                                               ;; c7de
@@ -720,7 +723,58 @@ wC800:
     ds 20                                              ;; c800
 
 wC814:
-    ds 748                                             ;; c814
+    ds 20                                              ;; c814
+
+wC828:
+    ds 40                                              ;; c828
+
+wC850:
+    ds 1                                               ;; c850
+
+wC851:
+    ds 2                                               ;; c851
+
+wC853:
+    ds 77                                              ;; c853
+
+wC8A0:
+    ds 40                                              ;; c8a0
+
+wC8C8:
+    ds 40                                              ;; c8c8
+
+wC8F0:
+    ds 16                                              ;; c8f0
+
+wC900:
+    ds 24                                              ;; c900
+
+wC918:
+    ds 40                                              ;; c918
+
+wC940:
+    ds 1                                               ;; c940
+
+wC941:
+    ds 79                                              ;; c941
+
+wC990:
+    ds 1                                               ;; c990
+
+wC991:
+    ds 1                                               ;; c991
+
+wC992:
+    ds 1                                               ;; c992
+
+wC993:
+    ds 1                                               ;; c993
+
+wC994:
+    ds 1                                               ;; c994
+
+wC995:
+    ds 363                                             ;; c995
 
 ; START OF AUDIO ENGINE WRAM
 wMusicTempoTimeCounter:
@@ -1164,7 +1218,34 @@ wD97B:
     ds 1                                               ;; d97b
 
 wD97C:
-    ds 10                                              ;; d97c
+    ds 1                                               ;; d97c
+
+wD97D:
+    ds 1                                               ;; d97d
+
+wD97E:
+    ds 1                                               ;; d97e
+
+wD97F:
+    ds 1                                               ;; d97f
+
+wD980:
+    ds 1                                               ;; d980
+
+wD981:
+    ds 1                                               ;; d981
+
+wD982:
+    ds 1                                               ;; d982
+
+wD983:
+    ds 1                                               ;; d983
+
+wD984:
+    ds 1                                               ;; d984
+
+wD985:
+    ds 1                                               ;; d985
 
 wD986:
     ds 3                                               ;; d986
@@ -1176,7 +1257,10 @@ wD98A:
     ds 1                                               ;; d98a
 
 wD98B:
-    ds 1141                                            ;; d98b
+    ds 1                                               ;; d98b
+
+wD98C:
+    ds 1140                                            ;; d98c
 
 wDE00:
     ds 16                                              ;; de00

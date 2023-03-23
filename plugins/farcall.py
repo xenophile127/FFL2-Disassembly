@@ -3,7 +3,7 @@ from block.base import Block
 from block.code import CodeBlock
 from romInfo import RomInfo
 
-@annotation
+@annotation(priority=50)
 def FFLFarcall(memory, addr):
     label = memory.getLabel(addr)
     assert label.startswith("execute")
@@ -12,7 +12,7 @@ def FFLFarcall(memory, addr):
     # Note, ugly hack when a farcall to bank 0 is done with bank 1 active.
     RomInfo.macros[macroname] = f"call {label}\n dw \\1\n db BANK(\\1) + (BANK(\\1) == 0)"
 
-@annotation(priority=200)
+@annotation(priority=55)
 def FFLFarcall2(memory, addr):
     FFLFarcall(memory, addr)
 
