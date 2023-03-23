@@ -2196,34 +2196,36 @@ call_0d_54dd:
     pop  BC                                            ;; 0d:54e6 $c1
     ret                                                ;; 0d:54e7 $c9
 
-call_0d_54e8:
+; This flashes the screen when Excalibur is used to attack.
+; It does this by turning off the LCD very briefly, which doesn't work on many GB models including SGB.
+effectExcaliburFlash:
     push AF                                            ;; 0d:54e8 $f5
     ld   B, $02                                        ;; 0d:54e9 $06 $02
-.jr_0d_54eb:
+.loop_outer:
     push BC                                            ;; 0d:54eb $c5
-.jr_0d_54ec:
+.wait_vblank:
     ldh  A, [rLY]                                      ;; 0d:54ec $f0 $44
     cp   A, $91                                        ;; 0d:54ee $fe $91
-    jr   C, .jr_0d_54ec                                ;; 0d:54f0 $38 $fa
+    jr   C, .wait_vblank                               ;; 0d:54f0 $38 $fa
     ldh  A, [rLCDC]                                    ;; 0d:54f2 $f0 $40
     res  7, A                                          ;; 0d:54f4 $cb $bf
     ldh  [rLCDC], A                                    ;; 0d:54f6 $e0 $40
     ldh  [rDIV], A                                     ;; 0d:54f8 $e0 $04
-.jr_0d_54fa:
+.loop_inner2:
     ldh  A, [rDIV]                                     ;; 0d:54fa $f0 $04
     bit  2, A                                          ;; 0d:54fc $cb $57
-    jr   Z, .jr_0d_54fa                                ;; 0d:54fe $28 $fa
+    jr   Z, .loop_inner2                               ;; 0d:54fe $28 $fa
     ldh  A, [rLCDC]                                    ;; 0d:5500 $f0 $40
     set  7, A                                          ;; 0d:5502 $cb $ff
     ldh  [rLCDC], A                                    ;; 0d:5504 $e0 $40
     ld   B, $05                                        ;; 0d:5506 $06 $05
-.jr_0d_5508:
+.wait_frames:
     rst  waitForVBlank                                 ;; 0d:5508 $d7
     dec  B                                             ;; 0d:5509 $05
-    jr   NZ, .jr_0d_5508                               ;; 0d:550a $20 $fc
+    jr   NZ, .wait_frames                              ;; 0d:550a $20 $fc
     pop  BC                                            ;; 0d:550c $c1
     dec  B                                             ;; 0d:550d $05
-    jr   NZ, .jr_0d_54eb                               ;; 0d:550e $20 $db
+    jr   NZ, .loop_outer                               ;; 0d:550e $20 $db
     pop  AF                                            ;; 0d:5510 $f1
     ret                                                ;; 0d:5511 $c9
 
@@ -3737,7 +3739,7 @@ data_0d_5eb5:
     dw   call_0d_5378                                  ;; 0d:5eb7 ?? $01
     dw   call_0d_5427                                  ;; 0d:5eb9 ?? $02
     dw   call_0d_54c2                                  ;; 0d:5ebb ?? $03
-    dw   call_0d_54e8                                  ;; 0d:5ebd ?? $04
+    dw   effectExcaliburFlash                          ;; 0d:5ebd ?? $04
     dw   call_0d_5512                                  ;; 0d:5ebf ?? $05
     dw   call_0d_5513                                  ;; 0d:5ec1 ?? $06
     dw   call_0d_55dc                                  ;; 0d:5ec3 ?? $07
